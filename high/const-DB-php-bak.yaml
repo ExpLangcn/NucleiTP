@@ -1,0 +1,20 @@
+id: custom-config-check
+
+info:
+  name: Config File Check
+  author: SirBugs
+  severity: high
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/config/const.DB.php.bak"
+    
+    matchers:
+      - type: word
+        condition: or
+        words:
+          - "DBHOST"
+          - "DBUSER"
+          - "DBPASS"
+          - "DBNAME"
