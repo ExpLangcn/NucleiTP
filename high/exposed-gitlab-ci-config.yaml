@@ -1,0 +1,17 @@
+id: exposed-gitlab-ci-config
+info:
+  name: Exposed Gitlab CI Config
+  author: SirBugs
+  severity: high
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.gitlab-ci.yml"
+
+    matchers:
+      - type: word
+        words:
+          - "MYSQL_ROOT_PASSWORD:"
+          - "MYSQL_DATABASE:"
+        part: body
