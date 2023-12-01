@@ -1,0 +1,20 @@
+id: ecology-oa-clusterupgrade-upload
+
+info:
+  name: EcologyOA clusterupgrade - upload
+  author: unknown
+  severity: high
+  description: EcologyOA clusterupgrade interface has file upload vulnerability
+  tags: ecology-oa,upload
+
+requests:
+  - raw:
+      - |
+        GET /clusterupgrade/uploadFileClient.jsp HTTP/1.1
+        Host: {{Hostname}}
+
+    matchers:
+      - type: word
+        words:
+          - 'error,安全校验失败'
+
