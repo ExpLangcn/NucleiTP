@@ -1,0 +1,34 @@
+id: Slash-Url-Redirection
+
+info:
+  name: Slash Url Redirection
+  author: SirBugs
+  severity: low
+  description: |
+    This template checks for a URL redirection vulnerability By adding "////" after the affected domain and then the website.
+    where an attacker can redirect users to a malicious website using a specially crafted URL.
+    The template checks if the response header contains "Location: https://bing.com/".
+    Twitter@SirBagoza Github@SirBugs
+  reference:
+    - https://owasp.org/www-community/attacks/URL_Redirection_Attack
+    - https://cwe.mitre.org/data/definitions/601.html
+  tags: url-redirection
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}////http://bing.com/%2F'
+      - '{{BaseURL}}////https://bing.com/%2F'
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - 'Location: https://bing.com/%2F'
+          - 'Location: https://bing.com'
+          - 'Location: http://bing.com'
+          - 'Location: bing.com'
+      - type: status
+        status: 
+          - 302
