@@ -1,0 +1,17 @@
+id: bash-history-exposure
+info:
+  name: Bash History Exposure
+  author: yourname
+  severity: high
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/.bash_history"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "db_newmdb.sql"
+          - "mysql -u"
