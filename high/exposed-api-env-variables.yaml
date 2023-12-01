@@ -1,0 +1,18 @@
+id: exposed-env-variables
+info:
+  name: Exposed Environment Variables
+  author: SirBugs
+  severity: high
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/api/.env"
+
+    matchers:
+      - type: word
+        words:
+          - "MAIL_HOST="
+          - "MAIL_FROM_ADDRESS="
+          - "MAIL_ENCRYPTION="
+        part: body
