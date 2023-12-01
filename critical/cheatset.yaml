@@ -1,0 +1,23 @@
+id: cheatset-disclosure
+
+info:
+  name: cheatset Disclosure
+  author: SirBugs
+  severity: critical
+  description: This Template checks disclosing secret information via /cheatset
+  tags: config, secrets, leaks, cheatset, tokens, sql, tokens
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/cheatset'
+    matchers:
+      - type: word
+        part: body
+        condition: or
+        words:
+          - 'docker run'
+          - 'kubeadm init'
+          - 'kubeadm join'
+          - '--client-name'
+          - '--token'
