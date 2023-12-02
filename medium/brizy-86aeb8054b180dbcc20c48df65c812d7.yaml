@@ -1,0 +1,56 @@
+id: brizy-86aeb8054b180dbcc20c48df65c812d7
+
+info:
+  name: "Brizy - Page Builder < 1.0.114 - Missing Authorization to Settings Update"
+  author: topscoder
+  severity: medium
+  description: "The Brizy - Page Builder plugin for WordPress is vulnerable to authorization bypass due to a missing capability check and direct file access to /brizy/admin/site-settings.php in versions up to 1.0.114. This makes it possible for unauthenticated attackers to access the settings page and make modifications to the site's settings. This could be used to inject XSS."
+  reference:
+    - https://wpscan.com/vulnerability/10112
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/brizy/"
+    google-query: inurl:"/wp-content/plugins/brizy/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,brizy,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/brizy/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "brizy"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.0.114')
