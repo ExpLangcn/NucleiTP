@@ -1,0 +1,58 @@
+id: add-hierarchy-parent-to-post-8c69e602ef62402b2019221e3fa0a566
+
+info:
+  name: "Add Hierarchy (parent) to post <= 3.12 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Add Hierarchy plugin for WordPress is vulnerable to Reflected Cross-Site Scripting in versions up to, and including, 3.12 due to the use of add_query_arg/remove_query_arg with insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages via a URL that executes if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-august-3-2022/
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2763759%40add-hierarchy-parent-to-post%2Ftrunk&old=2589405%40add-hierarchy-parent-to-post%2Ftrunk&sfp_email=&sfph_mail=
+    - https://wpscan.com/vulnerability/7e949cf0-63d4-49b0-a81c-e778b3a2d837
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/add-hierarchy-parent-to-post/"
+    google-query: inurl:"/wp-content/plugins/add-hierarchy-parent-to-post/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,add-hierarchy-parent-to-post,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/add-hierarchy-parent-to-post/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "add-hierarchy-parent-to-post"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.12')
