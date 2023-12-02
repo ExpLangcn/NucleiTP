@@ -1,0 +1,58 @@
+id: careerfy-b30b16117ae8d991f10a1cbd8a88d9d4
+
+info:
+  name: "Careerfy <= 4.2.0 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Careerfy theme for WordPress is vulnerable to Reflected Cross-Site Scripting in versions up to, and including, 4.2.0 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://themeforest.net/item/careerfy-job-board-wordpress-theme/21137053
+    - https://github.com/vladvector/vladvector.github.io/blob/master/exploit/2020-07-15-careerfy-job-board-wordpress-theme-v4-2-0.txt
+    - https://www.trustwave.com/en-us/resources/security-resources/software-updates/web-application-security-modsecurity-commercial-rules-update-for-august-2020/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/careerfy/"
+    google-query: inurl:"/wp-content/themes/careerfy/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,careerfy,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/careerfy/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "careerfy"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.2.0')
