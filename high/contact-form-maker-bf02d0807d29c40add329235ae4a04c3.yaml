@@ -1,0 +1,59 @@
+id: contact-form-maker-bf02d0807d29c40add329235ae4a04c3
+
+info:
+  name: "Contact Form Maker <= 1.7.30 - Authenticated (Admin+) SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Contact Form Maker plugin for WordPress is vulnerable to blind SQL Injection via the ‘form_id’ parameter in versions before 1.7.31 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers with admin-level privileges to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - http://cinu.pl/research/wp-plugins/mail_1be1eab0d8397c7a43840d6dafd895c2.html
+    - http://blog.cinu.pl/2015/11/php-static-code-analysis-vs-top-1000-wordpress-plugins.html
+    - https://wordpress.org/plugins/contact-form-maker/#developers
+    - https://plugins.trac.wordpress.org/changeset/1195542
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-maker/"
+    google-query: inurl:"/wp-content/plugins/contact-form-maker/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-maker,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-maker/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-maker"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.7.31')
