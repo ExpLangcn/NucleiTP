@@ -1,0 +1,56 @@
+id: ajax-load-more-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "WordPress Infinite Scroll – Ajax Load More <= 2.8.1.1 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The WordPress Infinite Scroll – Ajax Load More plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'alm_save_repeater()' function called via an AJAX action in versions up to, and including, 2.8.1.2. This makes it possible for authenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-load-more/"
+    google-query: inurl:"/wp-content/plugins/ajax-load-more/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-load-more,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-load-more/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-load-more"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.8.1.1')
