@@ -1,0 +1,56 @@
+id: autoptimize-2ecfdf7e957d875bca93a4c9bd866fc9
+
+info:
+  name: "Autoptimize <= 2.1.0 - Unauthenticated Local File Inclusion"
+  author: topscoder
+  severity: critical
+  description: "The Autoptimize plugin for WordPress is vulnerable to Local File Inclusion in versions up to, and including, 2.1.0. This allows unauthenticated attackers to include and execute arbitrary files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where images and other “safe” file types can be uploaded and included. This requires both JS and CSS aggregation, and the 'Also aggregate inline CSS' option to be set."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=1681097%40autoptimize&new=1681097%40autoptimize&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/autoptimize/"
+    google-query: inurl:"/wp-content/plugins/autoptimize/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,autoptimize,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/autoptimize/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "autoptimize"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.1.0')
