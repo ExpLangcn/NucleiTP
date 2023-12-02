@@ -1,0 +1,57 @@
+id: bulletproof-security-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "BulletProof Security <= .53.2 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The BulletProof Security plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, .53.2 due to insufficient input sanitization and output escaping on the bulletproof_security_options_email[bps_send_email_cc]
+and bulletproof_security_options_email[bps_send_email_bcc] parameters. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bulletproof-security/"
+    google-query: inurl:"/wp-content/plugins/bulletproof-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bulletproof-security,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bulletproof-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bulletproof-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  .53.2')
