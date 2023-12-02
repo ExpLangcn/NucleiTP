@@ -1,0 +1,18 @@
+id: cisco-unity-express-panel-detect
+
+info:
+  name: Cisco Unity Express admin panel
+  author: joanbono
+  severity: info
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin/Common/HomePage.do"
+    headers:
+      User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/537.36 (KHTML, like Gecko)
+    matchers:
+      - type: word
+        words:
+          - '<div class="cuesLoginProductName">Cisco Unity Express - Administration</div>'
+        part: body
