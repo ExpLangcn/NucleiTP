@@ -1,0 +1,58 @@
+id: cart66-lite-5888e8c805bc46f27d60828f10d4dd62
+
+info:
+  name: "Cart66 Lite :: WordPress Ecommerce <= 1.5.4 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Cart66 Lite :: WordPress Ecommerce plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘status’ parameter in versions up to, and including, 1.5.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://packetstormsecurity.com/files/130307/
+    - https://web.archive.org/web/20191021154129/packetstormsecurity.com/files/130307/
+    - https://patchstack.com/database/vulnerability/cart66-lite/wordpress-cart66-lite-plugin-1-5-4-cross-site-scripting
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cart66-lite/"
+    google-query: inurl:"/wp-content/plugins/cart66-lite/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cart66-lite,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cart66-lite/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cart66-lite"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.5.5')
