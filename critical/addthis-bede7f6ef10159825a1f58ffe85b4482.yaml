@@ -1,0 +1,58 @@
+id: addthis-bede7f6ef10159825a1f58ffe85b4482
+
+info:
+  name: "WordPress Share Buttons Plugin – AddThis < 2.2.0 - Code Injection"
+  author: topscoder
+  severity: critical
+  description: "The WordPress Share Buttons Plugin – AddThis for WordPress is vulnerable to code injection in versions up to, and including, 2.1.3. This is due to a backdoor vulnerability. This makes it possible for attackers to execute arbitrary code via the plugin."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-share-buttons-by-addthis-backdoor-2-1-2/
+    - https://web.archive.org/web/20111227004234/http%3A//secunia.com/advisories/45027/
+    - https://wordpress.org/news/2011/06/passwords-reset/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/addthis/"
+    google-query: inurl:"/wp-content/plugins/addthis/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,addthis,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/addthis/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "addthis"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.2.0')
