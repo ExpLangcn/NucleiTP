@@ -1,0 +1,58 @@
+id: avanix-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Imediapixel Themes (Various Versions) - Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The ECOBIZ <= 3.3, Ebiz <= 1.2, Avanix <=  1.2, and Ovum (unknown version) themes for WordPress are vulnerable to Cross-Site Scripting due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/a923c84e-3641-45ec-970e-faea803897bf?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/avanix/"
+    google-query: inurl:"/wp-content/themes/avanix/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,avanix,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/avanix/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "avanix"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2')
