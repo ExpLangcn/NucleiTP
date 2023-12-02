@@ -1,0 +1,56 @@
+id: bbpress-login-register-links-on-forum-topic-pages-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "bbPress Login Register Links On Forum Topic Pages <= 2.7.5 -  Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The bbPress Login Register Links On Forum Topic Pages plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.7.5. This is due to missing nonce validation on the bbPressCustomMenu(), tomas_bbPressLoginAdminBar(), tomas_bbPressCustomLoginRedirect(), and tomas_bbPressCustomLoginLinks() function. This makes it possible for unauthenticated attackers to modify the plugin's settings via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bbpress-login-register-links-on-forum-topic-pages/"
+    google-query: inurl:"/wp-content/plugins/bbpress-login-register-links-on-forum-topic-pages/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bbpress-login-register-links-on-forum-topic-pages,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bbpress-login-register-links-on-forum-topic-pages/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bbpress-login-register-links-on-forum-topic-pages"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.7.5')
