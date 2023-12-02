@@ -1,0 +1,58 @@
+id: ads-box-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Ads Box <= 1.0 - SQL Injection
+  author: topscoder
+  severity: critical
+  description: >
+    The Ads Box plugin for WordPress is vulnerable to generic SQL Injection via the iframe_ampl.php file in versions up to, and including, 1.0 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/3ea52e59-d81c-4a3f-953e-34f8214c01d8?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/ads-box/"
+    google-query: inurl:"/wp-content/plugins/ads-box/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ads-box,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ads-box/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ads-box"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0')
