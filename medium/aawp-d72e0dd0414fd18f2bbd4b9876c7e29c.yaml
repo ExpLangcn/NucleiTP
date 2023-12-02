@@ -1,0 +1,59 @@
+id: aawp-d72e0dd0414fd18f2bbd4b9876c7e29c
+
+info:
+  name: "Amazon Affiliate <= 3.17 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Amazon Affiliate plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘tab’ parameter in versions up to, and including, 3.17 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://wpscan.com/vulnerability/ac8c01c5-3f4e-4023-996a-65c2cdd15327
+    - https://www.exploit-db.com/exploits/50643
+    - https://getaawp.com/changelog/
+    - https://ithemes.com/blog/wordpress-vulnerability-report-january-2022-part-2
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/aawp/"
+    google-query: inurl:"/wp-content/plugins/aawp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,aawp,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/aawp/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "aawp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.17')
