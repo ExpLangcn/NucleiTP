@@ -1,0 +1,56 @@
+id: commodore-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "ThemeBlvd Themes/Plugins (Various Versions) - Missing Authorization Checks"
+  author: topscoder
+  severity: high
+  description: "The following plugins and themes for WordPress are vulnerable to arbitrary option deletion and user data manipulation: Theme Blvd Shortcodes plugin <= 1.5.2 , Theme Blvd Widget Areas plugin < = 1.2.2, Theme Blvd Layout Builder plugin <= 2.0.1, Theme Blvd Sliders plugin <= 1.2.3, WP Jump Start theme <= 1.2.4, Alyeska theme <= 3.1.4, Akita theme <= 2.1.4, Arcadian Responsive theme <= 2.0.5, Swagger theme <= 2.1.4, Commodore theme <= 3.0.2, and Barely Corporate theme <= 4.1.4. This is due to missing authorization on the themeblvd_clear_options() and themeblvd_disable_nag() functions called via 'admin_init' hooks. This makes it possible for unauthenticated attackers to delete any option from the 'wp_options' table and edit any of their user metadata to 'true.'"
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/commodore/"
+    google-query: inurl:"/wp-content/unknown/commodore/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,commodore,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/commodore/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "commodore"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  3.0.2')
