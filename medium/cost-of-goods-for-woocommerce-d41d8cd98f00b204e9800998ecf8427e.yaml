@@ -1,0 +1,56 @@
+id: cost-of-goods-for-woocommerce-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Cost of Goods for WooCommerce <= 2.8.6 - Cross-Site Request Forgery in save_costs"
+  author: topscoder
+  severity: medium
+  description: "The Cost of Goods for WooCommerce plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.8.6. This is due to missing or incorrect nonce validation on the save_costs function. This makes it possible for unauthenticated attackers to edit or save of prices via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cost-of-goods-for-woocommerce/"
+    google-query: inurl:"/wp-content/plugins/cost-of-goods-for-woocommerce/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cost-of-goods-for-woocommerce,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cost-of-goods-for-woocommerce/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cost-of-goods-for-woocommerce"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.8.6')
