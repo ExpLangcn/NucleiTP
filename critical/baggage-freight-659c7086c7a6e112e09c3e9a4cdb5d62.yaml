@@ -1,0 +1,58 @@
+id: baggage-freight-659c7086c7a6e112e09c3e9a4cdb5d62
+
+info:
+  name: "Baggage Freight Shipping Australia <= 0.1.0 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Baggage Freight Shipping Australia plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation via the upload-package.php file in versions up to, and including, 0.1.0. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-baggage-freight-shipping-australia-arbitrary-file-upload-0-1-0/
+    - https://wordpress.org/plugins/baggage-freight/#developers
+    - https://packetstormsecurity.com/files/150927/WordPress-Baggage-Freight-Shipping-Australia-0.1.0-Shell-Upload.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/baggage-freight/"
+    google-query: inurl:"/wp-content/plugins/baggage-freight/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,baggage-freight,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/baggage-freight/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "baggage-freight"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.1.0')
