@@ -1,0 +1,56 @@
+id: category-page-icons-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Category and Page Icons <= 0.9.1 - Arbitrary File Upload and Deletion"
+  author: topscoder
+  severity: critical
+  description: "The Category and Page Icons plugin for WordPress is vulnerable to Arbitrary File Upload and Deletion due to a directory traversal weakness and missing file type validation in the wpdev-flash-uploader.php file in versions up to, and including, 0.9.1. This makes it possible for attackers to delete arbitrary files and upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/category-page-icons/"
+    google-query: inurl:"/wp-content/plugins/category-page-icons/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,category-page-icons,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/category-page-icons/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "category-page-icons"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  0.9.1')
