@@ -1,0 +1,56 @@
+id: contact-form-to-email-6e0e1322dbcd591a67f0368790e5f6b9
+
+info:
+  name: "Contact Form Email <= 1.3.31 - Cross-Site Request Forgery to Feedback Submission"
+  author: topscoder
+  severity: medium
+  description: "The Contact Form Email plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.3.31. This is due to missing or incorrect nonce validation on the cpcfte_feedback function. This makes it possible for unauthenticated attackers to submit plugin feedback via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2801961/contact-form-to-email/trunk?contextall=1&old=2742799&old_path=%2Fcontact-form-to-email%2Ftrunk
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-to-email/"
+    google-query: inurl:"/wp-content/plugins/contact-form-to-email/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-to-email,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-to-email/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-to-email"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3.31')
