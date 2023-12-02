@@ -1,0 +1,59 @@
+id: all-in-one-seo-pack-2da1906949861d0efadbafa8514d5f7e
+
+info:
+  name: "All in One SEO <= 2.9.1.1 - Authenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The All in One SEO plugin for WordPress is vulnerable to stored Cross-Site Scripting in versions up to, and including 2.9.1.1, via post meta values. This makes it possible for attackers with Contributor level permissions and above to inject arbitrary web scripts in administrative pages that execute whenever a user accesses the page with the stored web scripts."
+  reference:
+    - https://wordpress.org/support/topic/a-critical-vulnerability-has-been-detected-in-this-plugin/
+    - https://aioseo.com/changelog/4/
+    - https://web.archive.org/web/20200924020319/https%3A//www.ripstech.com/php-security-calendar-2018/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-all-in-one-seo-best-wordpress-seo-easily-improve-your-seo-rankings-cross-site-scripting-2-9-1-1/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-seo-pack/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-seo-pack/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-seo-pack,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-seo-pack/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-seo-pack"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.10')
