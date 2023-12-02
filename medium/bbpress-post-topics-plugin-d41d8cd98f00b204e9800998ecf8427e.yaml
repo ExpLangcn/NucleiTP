@@ -1,0 +1,58 @@
+id: bbpress-post-topics-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Post Comments as bbPress Topics <= 2.2.3 - Authenticated (Author+) Stored Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Post Comments as bbPress Topics plugin for WordPress is vulnerable to Stored Cross-Site Scripting via various parameters, such as `bbpress_topic[display-extras][xcount]` in versions up to, and including, 2.2.3 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with publishing capabilities, to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/2b072278-6627-42b2-a532-c8854c9a4921?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/bbpress-post-topics/"
+    google-query: inurl:"/wp-content/plugins/bbpress-post-topics/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bbpress-post-topics,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bbpress-post-topics/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bbpress-post-topics"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2.3')
