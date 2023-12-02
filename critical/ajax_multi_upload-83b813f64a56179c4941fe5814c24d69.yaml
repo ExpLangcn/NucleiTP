@@ -1,0 +1,59 @@
+id: ajax_multi_upload-83b813f64a56179c4941fe5814c24d69
+
+info:
+  name: "AJAX Multi Upload <= 1.1 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The AJAX Multi Upload plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'upload.php' file in versions up to, and including, 1.1. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://packetstormsecurity.com/files/114109/
+    - https://codecanyon.net/item/ajax-multi-upload-for-wordpress/144658#item-description__updates
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-ajax-multi-upload-upload-php-arbitrary-file-upload-1-1/
+    - https://wpscan.com/vulnerability/688e3961-0ead-47ca-bc55-8baadcb9dbe6
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax_multi_upload/"
+    google-query: inurl:"/wp-content/plugins/ajax_multi_upload/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax_multi_upload,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax_multi_upload/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax_multi_upload"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1')
