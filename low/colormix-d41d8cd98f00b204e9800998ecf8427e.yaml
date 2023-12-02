@@ -1,0 +1,56 @@
+id: colormix-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Colormix (All Versions) - Multiple Vulnerabilities"
+  author: topscoder
+  severity: low
+  description: "The Colormix Theme for WordPress is vulnerable to Cross-Site Scripting, Content Spoofing, and Path Traversal in all versions. This is due to inclusion of a vulnerable version of JW Player. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser, create fake content, and read the contents of arbitrary files on the server, which can contain sensitive information."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/colormix/"
+    google-query: inurl:"/wp-content/unknown/colormix/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,colormix,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/colormix/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "colormix"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '*')
