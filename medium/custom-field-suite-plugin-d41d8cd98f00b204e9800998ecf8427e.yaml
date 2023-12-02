@@ -1,0 +1,58 @@
+id: custom-field-suite-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Custom Field Suite <= 2.4 - Missing Authorization
+  author: topscoder
+  severity: medium
+  description: >
+    The Custom Field Suite plugin for WordPress is vulnerable to authorization bypass due to missing capability checks in the ajax_handler() function in versions up to, and including, 2.4.1 This makes it possible for unauthorized attackers to access and execute otherwise restricted AJAX actions, such as importing and exporting custom fields.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/0793a054-b213-4519-bc30-ce835979248b?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 6.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/custom-field-suite/"
+    google-query: inurl:"/wp-content/plugins/custom-field-suite/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-field-suite,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-field-suite/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-field-suite"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4')
