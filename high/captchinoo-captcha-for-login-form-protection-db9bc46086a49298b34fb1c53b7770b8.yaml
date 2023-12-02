@@ -1,0 +1,59 @@
+id: captchinoo-captcha-for-login-form-protection-db9bc46086a49298b34fb1c53b7770b8
+
+info:
+  name: "Captchinoo, admin login page protection with Google recaptcha <= 2.4 - Cross-Site Request Forgery to Arbitrary Plugin Installation/Activation"
+  author: topscoder
+  severity: high
+  description: "The Captchinoo, admin login page protection with Google recaptcha plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.4. This is due to missing or incorrect nonce validation on the 'cp_plugins_do_button_job_later_callback' AJAX action. This makes it possible for unauthenticated attackers to install and activate other plugins via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-april-2021-part-4/
+    - https://wpscan.com/vulnerability/3961132f-ecc1-4f41-83f1-3ac537143b38
+    - https://wordpress.org/plugins/captchinoo-captcha-for-login-form-protection/#developers
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2502276%40captchinoo-captcha-for-login-form-protection&new=2502276%40captchinoo-captcha-for-login-form-protection&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/captchinoo-captcha-for-login-form-protection/"
+    google-query: inurl:"/wp-content/plugins/captchinoo-captcha-for-login-form-protection/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,captchinoo-captcha-for-login-form-protection,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/captchinoo-captcha-for-login-form-protection/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "captchinoo-captcha-for-login-form-protection"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4')
