@@ -1,0 +1,59 @@
+id: autoresponder-gwa-811faa60451eb5ee5951ef76901f2317
+
+info:
+  name: "[GWA] AutoResponder <= 2.7.4 - Cross-Site Request Forgery to Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The [GWA] AutoResponder plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.7.4. This is due to missing nonce validation on several functions. This makes it possible for unauthenticated attackers to modify the plugin's settings and inject malicious web scripts via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://patchstack.com/database/vulnerability/gwa-autoresponder-/wordpress-gwa-autoresponder-2-3-cross-site-request-forgery-csrf-leading-to-persistent-cross-site-scripting-xss-at-subject
+    - https://patchstack.com/database/vulnerability/gwa-autoresponder-/wordpress-gwa-autoresponder-plugin-2-3-multiple-cross-site-request-forgery-csrf-vulnerabilities
+    - https://patchstack.com/database/vulnerability/gwa-autoresponder-/wordpress-gwa-autoresponder-plugin-2-3-cross-site-request-forgery-csrf-leading-to-multiple-persistent-cross-site-scripting-xss
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=538184%40autoresponder-gwa&new=538184%40autoresponder-gwa&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/autoresponder-gwa/"
+    google-query: inurl:"/wp-content/plugins/autoresponder-gwa/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,autoresponder-gwa,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/autoresponder-gwa/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "autoresponder-gwa"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.7.4')
