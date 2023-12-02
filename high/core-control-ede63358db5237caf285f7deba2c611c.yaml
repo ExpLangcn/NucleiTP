@@ -1,0 +1,58 @@
+id: core-control-ede63358db5237caf285f7deba2c611c
+
+info:
+  name: "Core Control <= 1.2.1 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "**Pending CVE-2022-1760 Import."
+  reference:
+    - https://patchstack.com/database/vulnerability/core-control-/wordpress-core-control-plugin-1-2-1-arbitrary-settings-update-via-cross-site-request-forgery-csrf-vulnerability
+    - https://wpscan.com/vulnerability/c7906b1d-25c9-4f34-bd02-66824878b88e
+    - https://plugins.trac.wordpress.org/browser/core-control/trunk/core-control.php#L69
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/core-control/"
+    google-query: inurl:"/wp-content/plugins/core-control/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,core-control,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/core-control/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "core-control"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.1')
