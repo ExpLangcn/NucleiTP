@@ -1,0 +1,26 @@
+id: api-screenshotlayer
+
+info:
+  name: screenshotlayer API Test
+  author: daffainfo
+  severity: info
+  description: Review API to scrape structured and normalized JSON review data from 10+ review platforms to build your apps or custom reports.
+  reference:
+    - https://screenshotlayer.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/screenshotlayer
+  tags: token-spray,screenshotlayer
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "http://api.screenshotlayer.com/api/capture?access_key={{token}}&url=http%3A%2F%2Ftest.test"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - 'You have specified an invalid URL'
+          - '"invalid_url"'
+          - '210'
+        condition: and
