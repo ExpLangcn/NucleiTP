@@ -1,0 +1,56 @@
+id: bcs-bertline-book-importer-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "BCS BatchLine Book Importer <= 1.5.7 - Arbitrary Product Import/Update"
+  author: topscoder
+  severity: low
+  description: "The BCS BatchLine Book Importer plugin for WordPress is vulnerable to Unauthenticated Product Import/Update in versions up to, and including, 1.5.7. This is due to improper permission checks via the wc/v3/bcsbertlinebookimport REST route. This makes it possible for unauthenticated attackers to update existing products and add new products to the vulnerable service without the required permissions."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bcs-bertline-book-importer/"
+    google-query: inurl:"/wp-content/plugins/bcs-bertline-book-importer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bcs-bertline-book-importer,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bcs-bertline-book-importer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bcs-bertline-book-importer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.5.7')
