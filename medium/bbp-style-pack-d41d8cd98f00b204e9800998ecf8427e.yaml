@@ -1,0 +1,56 @@
+id: bbp-style-pack-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "bbp style pack <= 5.5.5 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The bbp style pack plugin for WordPress is vulnerable to Stored Cross-Site Scripting via an unknown parameter in versions up to, and including, 5.5.5 due to insufficient input sanitization and output escaping. This makes it possible for  attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/49e82146-e8ad-4bc5-94a7-a4ae694b7039?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/bbp-style-pack/"
+    google-query: inurl:"/wp-content/plugins/bbp-style-pack/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bbp-style-pack,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bbp-style-pack/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bbp-style-pack"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.5.6')
