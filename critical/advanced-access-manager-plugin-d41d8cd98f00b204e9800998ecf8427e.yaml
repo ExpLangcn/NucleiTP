@@ -1,0 +1,58 @@
+id: advanced-access-manager-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Advanced Access Manager <= 5.9.8.1 - Unauthenticated Arbitrary File Read
+  author: topscoder
+  severity: critical
+  description: >
+    The Advanced Access Manager plugin for WordPress is vulnerable to Unauthenticated Arbitrary File Read in versions up to, and including, 5.9.8.1 due to insufficient validation on the aam-media parameter. This allows unauthenticated attackers to read any file on the server, including sensitive files such as wp-config.php
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/55e0f0df-7be2-4e18-988c-2cc558768eff?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-access-manager/"
+    google-query: inurl:"/wp-content/plugins/advanced-access-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-access-manager,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-access-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-access-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.9.9')
