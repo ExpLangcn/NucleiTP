@@ -1,0 +1,61 @@
+id: custom-content-type-manager-c42646ffdd173ad0ef821b36114f2616
+
+info:
+  name: "Custom Content Type Manager 0.9.8.7 - 0.9.8.8 - Malicious Backdoor"
+  author: topscoder
+  severity: critical
+  description: "The Custom Content Type Manager plugin for WordPress was injected with a malicious backdoor in versions 0.9.8.7 to 0.9.8.8 that made it possible for attackers to gain access to the server to run code by installing malicious PHP files via the added auto-update.php file."
+  reference:
+    - https://packetstormsecurity.com/files/113520/
+    - https://blog.sucuri.net/2016/03/when-wordpress-plugin-goes-bad.html
+    - https://www.wordfence.com/blog/2016/03/backdoored-wordpress-plugin-vuln-roundup/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-custom-content-type-manager-backdoor-0-9-8-8/
+    - https://wordpress.org/plugins/custom-content-type-manager/#developers
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=1364755%40custom-content-type-manager&new=1364755%40custom-content-type-manager&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/custom-content-type-manager/"
+    google-query: inurl:"/wp-content/plugins/custom-content-type-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-content-type-manager,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-content-type-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-content-type-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 0.9.8.7', '<= 0.9.8.8')

