@@ -1,0 +1,58 @@
+id: awake-9cc56d06a4d121ae41a9640ce075b8a5
+
+info:
+  name: "Awake <= 3.3 - Arbitrary File Deletion"
+  author: topscoder
+  severity: high
+  description: "The Awake Theme for WordPress is vulnerable to Arbitrary File Deletion in versions up to, and including, 3.3. This is due to the '_mysite_delete_skin_zip' parameter in the 'dl-skin.php' file. This makes it possible for unauthenticated attackers to delete any file on the server of the vulnerable service."
+  reference:
+    - https://www.exploit-db.com/exploits/30443
+    - https://web.archive.org/web/20150308194209/http%3A//www.securityfocus.com/bid/64501
+    - https://web.archive.org/web/20150509073639/http%3A//mysitemyway.com/docs/Awake_Changelog
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/awake/"
+    google-query: inurl:"/wp-content/themes/awake/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,awake,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/awake/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "awake"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.3')
