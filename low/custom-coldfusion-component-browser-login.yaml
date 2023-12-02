@@ -1,0 +1,18 @@
+id: custom-coldfusion-component-login-detect
+
+info:
+        name: Coldfusion Component Browser Login
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/CFIDE/componentutils/cfcexplorer.cfc"
+          matchers:
+                  - type: word
+                    words:
+                            - "<title>Component Browser Login</title>"
+
+

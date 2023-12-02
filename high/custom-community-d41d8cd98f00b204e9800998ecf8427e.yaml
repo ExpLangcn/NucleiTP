@@ -1,0 +1,56 @@
+id: custom-community-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Custom Community 2.0 - 2.0.24 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Custom Community theme for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘settings[custom_css]’ parameter in versions 2.0 through 2.0.24 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/custom-community/"
+    google-query: inurl:"/wp-content/unknown/custom-community/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,custom-community,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/custom-community/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-community"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 2.0 and <= 2.0.25')
