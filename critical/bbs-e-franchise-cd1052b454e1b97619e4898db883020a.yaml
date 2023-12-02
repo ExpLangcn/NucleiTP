@@ -1,0 +1,57 @@
+id: bbs-e-franchise-cd1052b454e1b97619e4898db883020a
+
+info:
+  name: "BBS e-Franchise < 1.1.4 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The BBS e-Franchise for WordPress is vulnerable to generic SQL Injection via the ‘uid’ parameter in versions up to, and including, 1.1.3 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://lenonleite.com.br/blog/2016/11/18/bbs-e-franchise-1-1-1-plugin-of-wordpress-sql-injection/
+    - https://plugins.trac.wordpress.org/changeset/1541602
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bbs-e-franchise/"
+    google-query: inurl:"/wp-content/plugins/bbs-e-franchise/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bbs-e-franchise,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bbs-e-franchise/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bbs-e-franchise"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.1.4')
