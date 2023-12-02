@@ -1,0 +1,56 @@
+id: custom-base-terms-cdeb5cea740154fad0de11589463e4c1
+
+info:
+  name: "Custom Base Terms <= 1.0.2.3 - Authenticated (Administrator+) Stored Cross-Site Scripting via 'base'"
+  author: topscoder
+  severity: medium
+  description: "The Custom Base Terms plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'base' parameter in versions up to, and including, 1.0.2.3 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2910818/custom-base-terms
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 4.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/custom-base-terms/"
+    google-query: inurl:"/wp-content/plugins/custom-base-terms/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-base-terms,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-base-terms/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-base-terms"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0.2.3')
