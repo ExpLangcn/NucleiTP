@@ -1,0 +1,59 @@
+id: async-javascript-33a0642c91c8846c20c90dfe2375423b
+
+info:
+  name: "Async Javascript <= 2.20.12.09 - Authenticated (Admin+) Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Async Javascript plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the '&aj_gtmetrix_username=' and '&aj_gtmetrix_api_key=' parameters in versions up to, and including, 2.20.12.09 due to insufficient input sanitization and output escaping. This makes it possible for authenticated (admin+) attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://m0ze.ru/vulnerability/%5B2021-05-01%5D-%5BWordPress%5D-%5BCWE-79%5D-Async-JavaScript-WordPress-Plugin-v2.20.12.09.txt
+    - https://wordpress.org/plugins/async-javascript/#developers
+    - https://wpscan.com/vulnerability/278f7c36-05f8-4b6f-9a13-11175e3f3971
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-async-javascript-cross-site-scripting-2-20-12-09/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/async-javascript/"
+    google-query: inurl:"/wp-content/plugins/async-javascript/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,async-javascript,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/async-javascript/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "async-javascript"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.20.12.09')
