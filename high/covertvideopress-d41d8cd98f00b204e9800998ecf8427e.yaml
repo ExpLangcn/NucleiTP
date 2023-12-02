@@ -1,0 +1,56 @@
+id: covertvideopress-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Covert VideoPress (All Known Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Covert VideoPress Theme for WordPress is vulnerable to Reflected Cross-Site Scripting due to inclusion of a vulnerable version of VideoJS in various versions due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/covertvideopress/"
+    google-query: inurl:"/wp-content/unknown/covertvideopress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,covertvideopress,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/covertvideopress/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "covertvideopress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '*')
