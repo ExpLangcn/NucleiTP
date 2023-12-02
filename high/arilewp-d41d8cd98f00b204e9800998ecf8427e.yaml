@@ -1,0 +1,56 @@
+id: arilewp-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Multiple Themes (Various Versions) - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "Multiple themes for WordPress are vulnerable to Reflected Cross-Site Scripting via the 'id' parameter found in the '[different-value]_customizer_notify_dismiss_action' and '[different-value]_customizer_notify_dismiss_recommended_plugins' AJAX actions in various versions due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link. The following are additional known variants of the AJAX actions: '[different-value]_customizer_notify_dismiss_recommended_action_callback' & '[different-value}_customizer_notify_dismiss_recommended_plugins_callback'"
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/arilewp/"
+    google-query: inurl:"/wp-content/unknown/arilewp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,arilewp,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/arilewp/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "arilewp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.9.7')
