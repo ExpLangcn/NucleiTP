@@ -1,0 +1,25 @@
+id: api-aviationstack
+
+info:
+  name: aviationstack API Test
+  author: daffainfo
+  severity: info
+  description: Real-time Flight Status & Global Aviation Data API
+  reference:
+    - https://aviationstack.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/aviationstack
+  tags: token-spray,aviationstack
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://api.aviationstack.com/v1/flights?access_key={{token}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"flight_date"'
+          - '"flight_status"'
+        condition: and
