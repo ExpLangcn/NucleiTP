@@ -1,0 +1,58 @@
+id: advance-menu-manager-0251e0330c46c3655c93dd834110f0e1
+
+info:
+  name: "Advanced Menu Manager <= 3.0.4 - Authenticated (Subscriber+) Menu Creation/Deletion"
+  author: topscoder
+  severity: medium
+  description: "The Advanced Menu Manager plugin for WordPress is vulnerable to Arbitrary Menu Creation/Deletion in versions up to, and including, 3.0.4. This is due to missing capability and nonce checks in its 'my_action_delete_menu' and 'my_action_create_menu_ajax' AJAX actions. This makes it possible for authenticated attackers (unauthenticated if performed via CSRF) to create and/or delete arbitrary menus."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-july-2021-part-3/#ib-toc-anchor-2
+    - https://wpscan.com/vulnerability/9146b003-6767-42e1-ae59-bbef4e8f9639
+    - https://wordpress.org/plugins/advance-menu-manager/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advance-menu-manager/"
+    google-query: inurl:"/wp-content/plugins/advance-menu-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advance-menu-manager,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advance-menu-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advance-menu-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.0.4')
