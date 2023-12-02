@@ -1,0 +1,58 @@
+id: canvas-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    WooThemes WooFramework < 5.3.10 - Remote Code Execution via Shortcodes
+  author: topscoder
+  severity: critical
+  description: >
+    The WooFramework, used for all WooThemes for WordPress, is vulnerable to Remote Code Execution in versions up to, and including, 5.3.9 via the shortcode preview feature. This makes it possible for unauthenticated attackers attackers to execute code on the server.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/0728e7ac-2091-41de-90a0-e231c4b99ab0?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/canvas/"
+    google-query: inurl:"/wp-content/themes/canvas/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,canvas,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/canvas/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "canvas"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.7.10')

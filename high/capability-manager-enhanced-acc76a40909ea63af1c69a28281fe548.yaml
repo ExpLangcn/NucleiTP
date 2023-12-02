@@ -1,0 +1,56 @@
+id: capability-manager-enhanced-acc76a40909ea63af1c69a28281fe548
+
+info:
+  name: "PublishPress Capabilities <= 1.5.8 - Authenticated SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The PublishPress Capabilities plugin for WordPress is vulnerable to SQL Injection via an unknown parameter in versions up to, and including, 1.5.8 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for role-editing-capable attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1912433
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/capability-manager-enhanced/"
+    google-query: inurl:"/wp-content/plugins/capability-manager-enhanced/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,capability-manager-enhanced,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/capability-manager-enhanced/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "capability-manager-enhanced"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.5.9')
