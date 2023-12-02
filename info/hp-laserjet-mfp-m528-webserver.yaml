@@ -1,0 +1,22 @@
+id: hp-laserjet-mfp-m528-webserver
+
+info:
+  name: HP LaserJet MFP M528 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/DeviceStatus/Index"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<strong class="product">HP LaserJet MFP M528</strong>'
+
+      - type: status
+        status:
+          - 200
