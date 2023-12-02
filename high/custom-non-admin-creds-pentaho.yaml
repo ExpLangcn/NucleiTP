@@ -1,0 +1,30 @@
+id: custom-non-admin-creds-pentaho
+
+info:
+  name: Custom-default-credentials-non-admin
+  author: 0xParthJ
+  severity: high
+  description: description
+  reference:
+    - https://www.hitachivantara.com/en-us/pdfd/training/pentaho-lesson-1-user-console-overview.pdf
+  tags: pentaho,default-login
+
+requests:
+  - raw:
+      - |-
+        POST /pentaho/j_spring_security_check HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+
+        j_username=Suzy&j_password=password&locale=en_US
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+           - 'pentaho/Home'
+           - 'JSESSIONID='
+      - type: status
+        status:
+          - 302
