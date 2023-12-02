@@ -1,0 +1,58 @@
+id: add-any-extension-to-pages-7365c62f5f82010ef7b8daf1ba81ee2b
+
+info:
+  name: "Add Any Extension to Pages <= 1.3 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Add Any Extension to Pages plugin for WordPress is vulnerable to Cross-Site Scripting via the 'REQUEST_URI' value in versions up to, and including, 1.3 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?reponame=&new=1637848%40add-any-extension-to-pages&old=1547657%40add-any-extension-to-pages
+    - https://wpscan.com/vulnerability/214b59c3-5411-4137-b1a7-3bba417e495b
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-add-any-extension-to-pages-cross-site-scripting-1-3/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/add-any-extension-to-pages/"
+    google-query: inurl:"/wp-content/plugins/add-any-extension-to-pages/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,add-any-extension-to-pages,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/add-any-extension-to-pages/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "add-any-extension-to-pages"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3')
