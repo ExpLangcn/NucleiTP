@@ -1,0 +1,62 @@
+id: 1player-071f9a68c8a9798b5f05667c8adffa67
+
+info:
+  name: "VideoJS (Various Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The S3 Video, EasySqueezePage, External 'Video for Everybody', Videopack, and 1player plugins for WordPress are vulnerable to Reflected Cross-Site Scripting due to inclusion of a vulnerable version of VideoJS in various versions due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://seclists.org/fulldisclosure/2013/May/66
+    - https://www.wordpressvideopack.com/docs/changelog/
+    - https://plugins.trac.wordpress.org/changeset/713062
+    - https://wordpress.org/plugins/external-video-for-everybody/#developers
+    - https://plugins.trac.wordpress.org/changeset/717617
+    - https://plugins.trac.wordpress.org/changeset/718576
+    - https://plugins.trac.wordpress.org/changeset/718675
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/1player/"
+    google-query: inurl:"/wp-content/plugins/1player/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,1player,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/1player/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "1player"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.4')
