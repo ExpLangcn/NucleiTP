@@ -1,0 +1,56 @@
+id: buddyforms-acf-c4cd2a4b56fa5a71193a060e094a0e4c
+
+info:
+  name: "BuddyForms ACF <= 1.3.8 - Authenticated (Contributor+) Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The BuddyForms ACF plugin for WordPress is vulnerable to Stored Cross-Site Scripting via several parameters in versions up to, and including, 1.3.8 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2766117%40buddyforms-acf%2Ftrunk&old=2725370%40buddyforms-acf%2Ftrunk&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddyforms-acf/"
+    google-query: inurl:"/wp-content/plugins/buddyforms-acf/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddyforms-acf,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddyforms-acf/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddyforms-acf"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3.8')

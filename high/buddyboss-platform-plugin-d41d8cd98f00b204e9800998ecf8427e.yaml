@@ -1,0 +1,58 @@
+id: buddyboss-platform-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Buddyboss Platform <= 1.7.8 - SQL Injection
+  author: topscoder
+  severity: high
+  description: >
+    The Buddyboss Platform plugin for WordPress is vulnerable to SQL Injection via the BP_Notifications_Notification::get_order_by_sql() and BP_Invitation::get_order_by_sql() functions in versions up to, and including, 1.7.8 due to insufficient escaping on the user-supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for subscriber-level attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/8fa97e67-08c1-4553-bada-e4c59f797207?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/buddyboss-platform/"
+    google-query: inurl:"/wp-content/plugins/buddyboss-platform/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddyboss-platform,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddyboss-platform/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddyboss-platform"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.8')
