@@ -1,0 +1,27 @@
+id: extract-bitcoin-wallet
+
+info:
+  name: Bitcoin wallets addresses extractor
+  author: cipher387
+  severity: info
+  description: Extract bitcoin wallets addresses from web page body
+  tags: osint,juicy-info,cryptocyrrency
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          -  '(bc1|[13])[a-zA-HJ-NP-Z0–9]{25,39}'
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - '(bc1|[13])[a-zA-HJ-NP-Z0–9]{25,39}'
+
+
+#url for test https://99bitcoins.com/bitcoin/rich-list/
