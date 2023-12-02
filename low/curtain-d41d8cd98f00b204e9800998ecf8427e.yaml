@@ -1,0 +1,56 @@
+id: curtain-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Curtain < 1.0.2 - Unauthenticated Maintenance Mode Enabled/Disable"
+  author: topscoder
+  severity: low
+  description: "The Curtain plugin for WordPress is vulnerable to authorization bypass in versions up to, and including 1.0.1 due to insufficient capability and nonce checking on the admin_init function. This makes it possible for unauthenticated users to arbitrarily enable and disable maintenance mode on a vulnerable site."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/curtain/"
+    google-query: inurl:"/wp-content/plugins/curtain/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,curtain,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/curtain/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "curtain"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0.2')
