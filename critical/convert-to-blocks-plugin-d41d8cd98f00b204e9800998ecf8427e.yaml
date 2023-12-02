@@ -1,0 +1,58 @@
+id: convert-to-blocks-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Minimist <= 1.2.5  - Prototype Pollution
+  author: topscoder
+  severity: critical
+  description: >
+    Minimist <=1.2.5 is vulnerable to Prototype Pollution via file index.js, function setKey() (lines 69-95). Fixed in 1.2.6. Some WordPress plugins and themes use this dependency though that doesn’t necessarily mean the plugin itself is vulnerable to exploitation.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/1f714f97-5e1a-498a-9722-1e4bb883c5c7?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/convert-to-blocks/"
+    google-query: inurl:"/wp-content/plugins/convert-to-blocks/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,convert-to-blocks,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/convert-to-blocks/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "convert-to-blocks"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.0')
