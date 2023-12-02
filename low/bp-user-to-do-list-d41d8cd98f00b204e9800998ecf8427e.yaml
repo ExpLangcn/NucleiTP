@@ -1,0 +1,56 @@
+id: bp-user-to-do-list-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Wbcom Designs Plugins (Various Versions) - Arbitrary Plugin Installation, Activation and Deactivation"
+  author: topscoder
+  severity: low
+  description: "Several WordPress plugins by Wbcom Designs were vulnerable to arbitrary plugin installation, activation and deactivation due to missing authorization checks on the wp_ajax_wbcom_manage_plugin_installation AJAX action function wbcom_do_plugin_action."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bp-user-to-do-list/"
+    google-query: inurl:"/wp-content/plugins/bp-user-to-do-list/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bp-user-to-do-list,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bp-user-to-do-list/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bp-user-to-do-list"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.0.0')
