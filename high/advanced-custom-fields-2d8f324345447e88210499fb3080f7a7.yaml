@@ -1,0 +1,57 @@
+id: advanced-custom-fields-2d8f324345447e88210499fb3080f7a7
+
+info:
+  name: "Advanced Custom Fields <= 6.0.7 - Authenticated (Contributor+) PHP Object Injection"
+  author: topscoder
+  severity: high
+  description: "The Advanced Custom Fields plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 6.0.7 via deserialization of untrusted input in custom field values. This makes it possible for authenticated attackers, with contributor-level permissions, and above to inject a PHP Object. No POP chain appears to be present in the vulnerable plugin. If a POP chain is present via an additional plugin or theme installed on the target system, it could allow the attacker to delete arbitrary files, retrieve sensitive data, or execute code."
+  reference:
+    - https://www.advancedcustomfields.com/blog/acf-6-1-0-released/#security
+    - https://plugins.trac.wordpress.org/changeset/2892912/advanced-custom-fields/trunk/includes/revisions.php
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-custom-fields/"
+    google-query: inurl:"/wp-content/plugins/advanced-custom-fields/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-custom-fields,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-custom-fields/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-custom-fields"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.12.4')
