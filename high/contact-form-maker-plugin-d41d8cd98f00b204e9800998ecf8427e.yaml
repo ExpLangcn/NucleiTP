@@ -1,0 +1,58 @@
+id: contact-form-maker-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Contact Form Maker <= 1.7.30 - Authenticated (Admin+) SQL Injection
+  author: topscoder
+  severity: high
+  description: >
+    The Contact Form Maker plugin for WordPress is vulnerable to blind SQL Injection via the ‘form_id’ parameter in versions before 1.7.31 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers with admin-level privileges to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/6ef8bf27-3b20-4d90-8d29-b9713d2c41d6?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-maker/"
+    google-query: inurl:"/wp-content/plugins/contact-form-maker/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-maker,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-maker/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-maker"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.31')

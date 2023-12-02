@@ -1,0 +1,56 @@
+id: contact-form-manager-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Contact Form Manager <= 1.4.1 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Contact Form Manager plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the 'formId' parameter for Subscriber+ attackers and 'xyz_cfm_pagelimit', 'xyz_cfm_recaptchaPrivateKey', 'xyz_cfm_recaptchaPublicKey' parameters for Admin+ attackers in versions up to, and including, 1.4.1 due to insufficient input sanitization and output escaping. Attackers can inject arbitrary web scripts in pages that execute if they successfully trick a user into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-manager/"
+    google-query: inurl:"/wp-content/plugins/contact-form-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-manager,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.4.1')
