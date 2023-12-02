@@ -1,0 +1,57 @@
+id: custom-registration-form-builder-with-submission-manager-6fcfc8e987eeca83161f237e25225ff3
+
+info:
+  name: "RegistrationMagic - Custom Registration Forms <= 3.7.9.2 - PHP Object Injection"
+  author: topscoder
+  severity: critical
+  description: "The RegistrationMagic-Custom Registration Forms plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 3.7.9.2.This vulnerability allowed attackers to cause a vulnerable website to fetch a remote file."
+  reference:
+    - https://www.wordfence.com/blog/2017/10/3-zero-day-plugin-vulnerabilities-exploited-wild/
+    - https://plugins.trac.wordpress.org/changeset/1733274/custom-registration-form-builder-with-submission-manager
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/custom-registration-form-builder-with-submission-manager/"
+    google-query: inurl:"/wp-content/plugins/custom-registration-form-builder-with-submission-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-registration-form-builder-with-submission-manager,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-registration-form-builder-with-submission-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-registration-form-builder-with-submission-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.7.9.3')
