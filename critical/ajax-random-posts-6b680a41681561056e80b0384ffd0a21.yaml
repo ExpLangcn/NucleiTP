@@ -1,0 +1,57 @@
+id: ajax-random-posts-6b680a41681561056e80b0384ffd0a21
+
+info:
+  name: "AJAX Random Posts <= 0.3.3 - PHP Object Injection"
+  author: topscoder
+  severity: critical
+  description: "The AJAX Random Posts plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 0.3.3 via deserialization of untrusted input passed through the 'data' parameter. This allows unauthenticated attackers to inject a PHP Object. The additional presence of a POP chain allows attackers to execute arbitrary PHP within the vulnerable service."
+  reference:
+    - https://en-gb.wordpress.org/plugins/ajax-random-posts/
+    - https://plugins.trac.wordpress.org/browser/ajax-random-posts/trunk/ajax_random_posts.php#L136
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-random-posts/"
+    google-query: inurl:"/wp-content/plugins/ajax-random-posts/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-random-posts,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-random-posts/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-random-posts"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.3.3')
