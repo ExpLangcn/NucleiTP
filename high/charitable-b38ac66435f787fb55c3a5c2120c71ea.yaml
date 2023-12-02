@@ -1,0 +1,58 @@
+id: charitable-b38ac66435f787fb55c3a5c2120c71ea
+
+info:
+  name: "Charitable – Donation Plugin <= 1.6.50 - Unauthenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Charitable – Donation Plugin plugin for WordPress is vulnerable to Stored Cross-Site Scripting in versions up to, and including, 1.6.50 due to insufficient input sanitization and output escaping on the 'first_name' parameter. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-july-2021-part-4/#ib-toc-anchor-26
+    - https://wpscan.com/vulnerability/e3b23f22-d019-4e20-a238-0feb59a5760f
+    - https://wordpress.org/plugins/charitable/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/charitable/"
+    google-query: inurl:"/wp-content/plugins/charitable/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,charitable,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/charitable/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "charitable"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.6.50')
