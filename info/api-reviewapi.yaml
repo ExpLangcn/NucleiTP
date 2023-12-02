@@ -1,0 +1,26 @@
+id: api-reviewapi
+
+info:
+  name: ReviewApi API Test
+  author: daffainfo
+  severity: info
+  description: Review API to scrape structured and normalized JSON review data from 10+ review platforms to build your apps or custom reports.
+  reference:
+    - https://app.reviewapi.io/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/reviewapi
+  tags: token-spray,reviewapi
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://app.reviewapi.io/api/v1/reviews?apikey={{token}}&url=https%3A%2F%2Fwww.capterra.com%2Fp%2F140650%2FRecruitee%2Freviews&amount=25"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"id"'
+          - '"state"'
+          - '"url"'
+        condition: and
