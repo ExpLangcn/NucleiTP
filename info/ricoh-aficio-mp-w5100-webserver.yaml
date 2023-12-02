@@ -1,0 +1,22 @@
+id: ricoh-aficio-mp-w5100-webserver
+
+info:
+  name: Ricoh Aficio MP W5100 
+  author: alexrydzak
+  severity: info
+  tags: ricoh,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/web/guest/en/websys/webArch/mainFrame.cgi"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<span class="modelName">Aficio MP W5100</span>'
+
+      - type: status
+        status:
+          - 200

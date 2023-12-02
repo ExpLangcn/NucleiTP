@@ -1,0 +1,22 @@
+id: ricoh-mp-c3004ex-webserver
+
+info:
+  name: Ricoh MP C3004ex Web Server 
+  author: alexrydzak
+  severity: info
+  tags: ricoh,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/web/guest/en/websys/webArch/mainFrame.cgi"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<span class="modelName">MP C3004ex</span>'
+
+      - type: status
+        status:
+          - 200
