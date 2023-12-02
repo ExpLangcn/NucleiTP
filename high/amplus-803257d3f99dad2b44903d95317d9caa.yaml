@@ -1,0 +1,59 @@
+id: amplus-803257d3f99dad2b44903d95317d9caa
+
+info:
+  name: "Amplus (Unspecified Version) - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The Amplus theme for WordPress is vulnerable to Cross-Site Request Forgery. This is due to missing or incorrect nonce validation in the 'upload-handler.php' file. This makes it possible for unauthenticated attackers to gain otherwise restricted access to administrative actions via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://packetstormsecurity.com/files/124041/
+    - https://en.0day.today/exploits/21535
+    - https://www.exploit-db.com/exploits/29669
+    - https://web.archive.org/web/20160730011803/http%3A//themeforest.net/item/amplus-responsive-multilingual-wordpress-theme/180353?ref=downloadpack
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/amplus/"
+    google-query: inurl:"/wp-content/themes/amplus/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,amplus,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/amplus/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "amplus"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')
