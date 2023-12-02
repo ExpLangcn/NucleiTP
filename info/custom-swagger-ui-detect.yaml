@@ -1,0 +1,28 @@
+id: swagger-api
+
+info:
+  name: Public Swagger API
+  author: pdteam
+  severity: info
+  tags: exposure,api,swagger
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/reporting/swagger/index.html"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "swagger:"
+          - "Swagger 2.0"
+          - "\"swagger\":"
+          - "Swagger UI"
+          - "**token**:"
+        condition: or
+
+      - type: status
+        status:
+          - 200
+
