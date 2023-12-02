@@ -1,0 +1,57 @@
+id: crayon-syntax-highlighter-b0ed1e961d192026a4d007c8770dc2c9
+
+info:
+  name: "Crayon Syntax Highlighter <= 2.6.10 - Directory Traversal"
+  author: topscoder
+  severity: medium
+  description: "The Crayon Syntax Highlighter plugin for WordPress is vulnerable to Directory Traversal in versions up to, and including, 2.6.10 via the 'data-url' parameter. This allows unauthenticated attackers to read the contents of arbitrary files on the server, potentially outside the web root, which can contain sensitive information."
+  reference:
+    - http://www.kevinsubileau.fr/informatique/hacking-securite/crayon-syntax-highlighter-local-file-disclosure-vulnerability.html
+    - https://wpscan.com/vulnerability/7904
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/crayon-syntax-highlighter/"
+    google-query: inurl:"/wp-content/plugins/crayon-syntax-highlighter/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,crayon-syntax-highlighter,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/crayon-syntax-highlighter/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "crayon-syntax-highlighter"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.7.0')
