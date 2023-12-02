@@ -1,0 +1,58 @@
+id: contest-gallery-323b96f00ad116e47f3edde3efb3b797
+
+info:
+  name: "Contest Gallery < 13.1.0.7 - Authenticated Email Address Disclosure"
+  author: topscoder
+  severity: medium
+  description: "The Contest Gallery plugin for WordPress is vulnerable to Sensitive Data Exposure in versions before 13.1.0.7 via the cg_remove_not_required_coded_csvs function due to insufficient capability checks. This makes it possible for authenticated attackers with subscriber-level privileges and above to extract sensitive data including usernames and email addresses."
+  reference:
+    - https://wpscan.com/vulnerability/71eb90f2-bad2-4de7-9335-02697aee9ffe
+    - https://wordpress.org/plugins/contest-gallery/#developers
+    - https://plugins.trac.wordpress.org/changeset/2621536
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 4.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contest-gallery/"
+    google-query: inurl:"/wp-content/plugins/contest-gallery/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contest-gallery,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contest-gallery/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contest-gallery"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 13.1.0.7')
