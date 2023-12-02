@@ -1,0 +1,35 @@
+id: antsword-backdoor
+
+info:
+  name: Antsword Backdoor Identified
+  author: ffffffff0x
+  severity: critical
+  description: The Antsword application contains a backdoor shell.
+  remediation: Reinstall Anstsword on a new system due to the target system's compromise. Follow best practices for securing PHP servers/applications via the php.ini and other mechanisms.
+  reference: https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/9
+  tags: backdoor,antsword
+  classification:
+    cwe-id: CWE-553
+    cvss-score: 10.0
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H
+
+requests:
+  - method: POST
+    path:
+      - "{{BaseURL}}/.antproxy.php"
+    headers:
+      Content-Type: application/x-www-form-urlencoded
+    body: 'ant=echo md5("antproxy.php");'
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "951d11e51392117311602d0c25435d7f"
+
+      - type: status
+        status:
+          - 200
+
+# Enhanced by cs 2022/03/31
