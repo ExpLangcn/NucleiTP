@@ -1,0 +1,58 @@
+id: ajax-search-pro-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Ajax Search Pro <= 3.5 - Cross-Site Request Forgery
+  author: topscoder
+  severity: high
+  description: >
+    The Ajax Search Pro plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 3.5. This is due to missing or incorrect nonce validation on the 'wpdreams_ajaxinputcallback' function. This makes it possible for unauthenticated attackers to execute any arbitrary function via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/2ae0d83b-a444-4141-89da-b63ce216db17?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-search-pro/"
+    google-query: inurl:"/wp-content/plugins/ajax-search-pro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-search-pro,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-search-pro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-search-pro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.5')
