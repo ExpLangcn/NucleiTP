@@ -1,0 +1,58 @@
+id: alo-easymail-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    ALO EasyMail Newsletter <= 2.9.2 - Cross-Site Request Forgery
+  author: topscoder
+  severity: medium
+  description: >
+    The Alo Easymail plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.9.2. This is due to missing or incorrect nonce validation on the import_step2 action. This makes it possible for unauthenticated attackers to import subscriber level users via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/06ec9ff7-1dd5-4b9b-8f15-cd9523a708a1?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/alo-easymail/"
+    google-query: inurl:"/wp-content/plugins/alo-easymail/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,alo-easymail,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/alo-easymail/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "alo-easymail"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.9.3')
