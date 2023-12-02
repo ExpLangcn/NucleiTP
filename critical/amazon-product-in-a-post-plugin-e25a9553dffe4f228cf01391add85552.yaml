@@ -1,0 +1,58 @@
+id: amazon-product-in-a-post-plugin-e25a9553dffe4f228cf01391add85552
+
+info:
+  name: "Amazon Product in a Post Plugin < 3.5.3 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The Amazon Product in a Post plugin for WordPress is vulnerable to generic SQL Injection via the ‘appip-cache-id’ parameter in versions up to, and including, 3.5.2 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1156267/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-amazon-product-in-a-post-sql-injection-3-5-2/
+    - https://wordpress.org/plugins/amazon-product-in-a-post-plugin/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/amazon-product-in-a-post-plugin/"
+    google-query: inurl:"/wp-content/plugins/amazon-product-in-a-post-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,amazon-product-in-a-post-plugin,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/amazon-product-in-a-post-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "amazon-product-in-a-post-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.5.3')
