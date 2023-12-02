@@ -1,0 +1,57 @@
+id: buddypress-media-09db3ed600715ed39882e0075ad496ac
+
+info:
+  name: "rtMedia for WordPress, BuddyPress and bbPress < 3.7.40 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The rtMedia for WordPress, BuddyPress and bbPress plugin for WordPress is vulnerable to generic SQL Injection via the ‘rtmedia_activity_upgrade’ method in versions up to, and including, 3.7.39 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://g0blin.co.uk/g0blin-00046/
+    - https://www.cybersecurity-help.cz/vdb/SB2015042801
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress-media/"
+    google-query: inurl:"/wp-content/plugins/buddypress-media/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress-media,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress-media/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress-media"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.7.40')
