@@ -1,0 +1,57 @@
+id: bp-profile-search-962886684fc8ab6425499db5bec8636b
+
+info:
+  name: "BP Profile Search <= 4.5.3 - PHP Object Injection"
+  author: topscoder
+  severity: critical
+  description: "The BP Profile Search plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 4.5.3 via deserialization of untrusted input from the vulnerable parameter 'bps_request'. This allows attackers to inject a PHP Object. No POP chain is present in the vulnerable plugin. If a POP chain is present via an additional plugin or theme installed on the target system, it could allow the attacker to delete arbitrary files, retrieve sensitive data, or execute code."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1528482/bp-profile-search
+    - https://wpscan.com/vulnerability/8690
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H
+    cvss-score: 9.0
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bp-profile-search/"
+    google-query: inurl:"/wp-content/plugins/bp-profile-search/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bp-profile-search,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bp-profile-search/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bp-profile-search"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.5.3')
