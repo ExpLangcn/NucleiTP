@@ -1,0 +1,59 @@
+id: angwp-eae84d4a5d4fc7d02f96307ba7a70470
+
+info:
+  name: "Adning Advertising <= 1.5.5 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Adning Advertising plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the _ning_upload_image function in versions up to, and including, 1.5.5. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://codecanyon.net/item/wp-pro-advertising-system-all-in-one-ad-manager/269693
+    - https://blog.nintechnet.com/critical-vulnerability-in-adning-advertising-plugin-actively-exploited-in-the-wild/
+    - https://www.wordfence.com/blog/2020/07/critical-vulnerabilities-patched-in-adning-advertising-plugin/
+    - https://wpscan.com/vulnerability/e9873fe3-fc06-4a52-aa32-6922cab7830c
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/angwp/"
+    google-query: inurl:"/wp-content/plugins/angwp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,angwp,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/angwp/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "angwp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.5.5')
