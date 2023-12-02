@@ -1,0 +1,58 @@
+id: alpine-photo-tile-for-instagram-3bd315144d041ec9e1636b4a162d31b2
+
+info:
+  name: "Alpine Photo Tile for Instagram < 1.2.10 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Alpine Photo Tile for Instagram plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘client_id’ parameter in versions up to, and including, 1.2.9 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://sumofpwn.nl/advisory/2016/cross_site_scripting_in_alpine_phototile_for_instagram_wordpress_plugin.html
+    - https://seclists.org/fulldisclosure/2017/Feb/94
+    - https://github.com/thealpinepress/alpine-photo-tile-for-instagram/commit/2496e60eaa059131cba9c4b24a801eb6687abad6
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/alpine-photo-tile-for-instagram/"
+    google-query: inurl:"/wp-content/plugins/alpine-photo-tile-for-instagram/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,alpine-photo-tile-for-instagram,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/alpine-photo-tile-for-instagram/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "alpine-photo-tile-for-instagram"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.2.10')
