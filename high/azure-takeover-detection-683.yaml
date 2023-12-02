@@ -1,0 +1,40 @@
+id: azure-takeover-detection
+info:
+  name: Azure takeover detection
+  author: pdteam
+  severity: high
+  tags: dns,takeover,azure
+  reference: https://godiego.co/posts/STO/
+dns:
+  - name: "{{FQDN}}"
+    type: A
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "azure-api.net"
+          - "azure-mobile.net"
+          - "azurecontainer.io"
+          - "azurecr.io"
+          - "azuredatalakestore.net"
+          - "azureedge.net"
+          - "azurefd.net"
+          - "azurehdinsight.net"
+          - "azurewebsites.net"
+          - "azurewebsites.windows.net"
+          - "blob.core.windows.net"
+          - "cloudapp.azure.com"
+          - "cloudapp.net"
+          - "database.windows.net"
+          - "redis.cache.windows.net"
+          - "search.windows.net"
+          - "servicebus.windows.net"
+          - "visualstudio.com"
+      - type: word
+        words:
+          - "NXDOMAIN"
+    extractors:
+      - type: regex
+        group: 1
+        regex:
+          - "IN\tCNAME\t(.+)"
