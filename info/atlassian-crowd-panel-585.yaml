@@ -1,0 +1,18 @@
+id: atlassian-crowd-panel
+
+info:
+  name: Atlassian Crowd panel detect
+  author: organiccrap
+  severity: info
+  tags: panel,atlassian
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/crowd/console/login.action'
+
+    matchers:
+      - type: word
+        words:
+          - <title>Atlassian Crowd - Login</title>
+        part: body
