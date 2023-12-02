@@ -1,0 +1,58 @@
+id: 404-to-301-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    404 to 301 – Redirect, Log and Notify 404 Errors <= 3.1.1 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The 404 to 301 – Redirect, Log and Notify 404 Errors plugin for WordPress is vulnerable to Reflected Cross-Site Scripting due to the use of add_query_arg without appropriate escaping on the URL in versions up to, and including, 3.1.1. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link. This is only exploitable if the plugin has been installed for a week and the review notice has not been dismissed.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/11177270-cc73-4c65-9f72-8c0a0a89bed5?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/404-to-301/"
+    google-query: inurl:"/wp-content/plugins/404-to-301/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,404-to-301,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/404-to-301/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "404-to-301"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.1.1')
