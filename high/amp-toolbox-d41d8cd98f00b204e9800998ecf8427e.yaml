@@ -1,0 +1,56 @@
+id: amp-toolbox-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "AMP ToolBox <= 2.1.1 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The AMP ToolBox plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘url’ parameter in versions up to, and including, 2.1.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/amp-toolbox/"
+    google-query: inurl:"/wp-content/plugins/amp-toolbox/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,amp-toolbox,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/amp-toolbox/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "amp-toolbox"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.1.1')
