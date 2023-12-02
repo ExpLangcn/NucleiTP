@@ -1,0 +1,58 @@
+id: allure-real-estate-theme-for-real-estate-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Allure Real Estate Theme <= 0.1.1 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Allure Real Estate Theme for WordPress is vulnerable to Cross-Site Scripting via ZeroCliboard.swf in versions up to, and including, 0.1.1 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/88290419-2086-4b43-b2b9-5d8128b208e2?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/allure-real-estate-theme-for-real-estate/"
+    google-query: inurl:"/wp-content/themes/allure-real-estate-theme-for-real-estate/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,allure-real-estate-theme-for-real-estate,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/allure-real-estate-theme-for-real-estate/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "allure-real-estate-theme-for-real-estate"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.1.1')
