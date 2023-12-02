@@ -1,0 +1,57 @@
+id: appointments-d1afe740f7de53a64b161643b18b9ca0
+
+info:
+  name: "Appointments <= 2.2.1 - Unauthenticated PHP Object Injection"
+  author: topscoder
+  severity: critical
+  description: "The Appointments plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 2.2.1 via deserialization of untrusted input from the `wpmudev_appointments` cookie. This allows unauthenticated attackers to inject a PHP Object. Attackers were actively exploiting this vulnerability with the WP_Theme() class to create backdoors."
+  reference:
+    - https://www.wordfence.com/blog/2017/10/3-zero-day-plugin-vulnerabilities-exploited-wild/
+    - https://plugins.trac.wordpress.org/changeset/1733186/appointments
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/appointments/"
+    google-query: inurl:"/wp-content/plugins/appointments/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,appointments,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/appointments/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "appointments"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.2.2')
