@@ -1,0 +1,58 @@
+id: codestyling-localization-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Code Styling Localization <= 1.99.19 - Reflected Cross Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Code Styling Localization plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 1.99.17 due to insufficient input sanitization and output escaping on the 'name' parameter. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/d53069a3-5b8e-4ee1-b4da-97ff8f58ab03?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/codestyling-localization/"
+    google-query: inurl:"/wp-content/plugins/codestyling-localization/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,codestyling-localization,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/codestyling-localization/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "codestyling-localization"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.99.19')
