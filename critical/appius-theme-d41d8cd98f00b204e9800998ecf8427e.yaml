@@ -1,0 +1,58 @@
+id: appius-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Appius Theme <= 1.0 - Arbitrary File Upload
+  author: topscoder
+  severity: critical
+  description: >
+    The Appius theme for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the uploadify.php file in versions up to, and including, 1.0. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/efbea599-3d04-42d2-9b91-6b68210d8b01?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/appius/"
+    google-query: inurl:"/wp-content/themes/appius/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,appius,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/appius/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "appius"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1')
