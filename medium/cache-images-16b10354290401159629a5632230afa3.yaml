@@ -1,0 +1,56 @@
+id: cache-images-16b10354290401159629a5632230afa3
+
+info:
+  name: "Cache Images <= 3.2 - Missing Authorization"
+  author: topscoder
+  severity: medium
+  description: "The Cache Images plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the cache_images_ajax() function in versions up to, and including, 3.1. This makes it possible for authenticated low-level attackers to upload image files to a site without the upload_files capabilities."
+  reference:
+
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cache-images/"
+    google-query: inurl:"/wp-content/plugins/cache-images/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cache-images,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cache-images/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cache-images"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.1')
