@@ -1,0 +1,29 @@
+id: apache-server-info
+
+info:
+  name: Check Apache Server Info
+  author: DoubleTake (https://twitter.com/LeDoubleTake)
+  severity: low
+  description: This template checks if the some Apache endpoints can leak information like "Server Version".
+
+  tags:
+    - server-info
+    - server-status
+    - balancer-manager
+    - apache
+    - information
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/server-info"
+      - "{{BaseURL}}/server-status"
+      - "{{BaseURL}}/balancer-manager"
+
+    matchers:
+      - type: word
+        part: response
+        words:
+          - "Server Version:"
+          
+          
