@@ -1,0 +1,57 @@
+id: buddypress-b3072fde266ee87eea39bd7a2ec7cbdd
+
+info:
+  name: "BuddyPress <= 5.1.0 - Denial of Service"
+  author: topscoder
+  severity: medium
+  description: "The BuddyPress plugin for WordPress is vulnerable to Denial of Service in versions up to, and including, 5.1.0. This makes it possible for authenticated attackers to remove another user’s avatar and/or remove any empty folder."
+  reference:
+    - https://buddypress.org/2019/12/buddypress-5-1-1/
+    - https://wpscan.com/vulnerability/4ba45acd-4035-403b-8045-523e3e2b97b9
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.1.0')

@@ -1,0 +1,59 @@
+id: buddypress-a939c4057a968226e35c2552f1948365
+
+info:
+  name: "BuddyPress <= 7.2.1 -  Insufficient Privilege De-escalation"
+  author: topscoder
+  severity: high
+  description: "The BuddyPress plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the can_user_delete_or_update( ) function from versions starting at 7.0.0 to 7.2.1. This makes it possible for recently demoted user to modify groups in which they were the original creator."
+  reference:
+    - https://codex.buddypress.org/releases/version-7-3-0/
+    - https://buddypress.org/2021/04/buddypress-7-3-0-maintenance-security-release/
+    - https://plugins.trac.wordpress.org/changeset/2514559/buddypress
+    - https://wpscan.com/vulnerability/36f64ef2-7a50-4446-b3ee-17cda6e29eb4
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 7.2.1')

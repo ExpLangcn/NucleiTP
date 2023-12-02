@@ -1,0 +1,58 @@
+id: buddypress-92f7a9b8566b848ef6a7aead9d88524a
+
+info:
+  name: "BuddyPress <= 9.0.0 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The BuddyPress plugin for WordPress is vulnerable to generic SQL Injection via the ‘BP_Notifications_Notification::get_order_by_sql()' and 'BP_Invitation::get_order_by_sql()’ parameters in versions up to, and including, 9.0.0 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthorized attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://buddypress.org/2021/08/buddypress-9-1-1-security-and-maintenance-release/
+    - https://plugins.trac.wordpress.org/changeset/2584542/
+    - https://wpscan.com/vulnerability/4eb3d56a-6ad4-4b26-952d-03874bfb9b23
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 9.0.0')
