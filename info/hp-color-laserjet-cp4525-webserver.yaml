@@ -1,0 +1,22 @@
+id: hp-color-laserjet-cp4525-webserver
+
+info:
+  name: HP Color LaserJet CP4525 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<h1>HP Color LaserJet CP4525 Printers</h1>'
+
+      - type: status
+        status:
+          - 200
