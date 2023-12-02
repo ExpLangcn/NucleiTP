@@ -1,0 +1,56 @@
+id: all-in-one-wp-security-and-firewall-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "All In One WP Security & Firewall <= 4.4.3 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The All In One WP Security & Firewall plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the tab parameter in versions up to, and including 4.4.3. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in administrative pages that execute if they can successfully trick a site administrator into performing an action such as clicking on a link. Please note that this was only exploitable on older browsers at the time of disclosure."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-wp-security-and-firewall/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-wp-security-and-firewall/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-wp-security-and-firewall,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-wp-security-and-firewall/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-wp-security-and-firewall"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  4.4.3')
