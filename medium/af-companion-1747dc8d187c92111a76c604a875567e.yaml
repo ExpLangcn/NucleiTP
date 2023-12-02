@@ -1,0 +1,57 @@
+id: af-companion-1747dc8d187c92111a76c604a875567e
+
+info:
+  name: "AF Companion <= 1.1.2 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The AF Companion plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions 1.1.0 to 1.1.2. This is due to missing or incorrect nonce validation on the aftc_install_activate_plugins action. This makes it possible for unauthenticated attackers to to enable or disable arbitrary plugins via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2647657
+    - https://wpscan.com/vulnerability/e689a698-69a7-4c5c-a861-13295115e4d4
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:L/A:N
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/af-companion/"
+    google-query: inurl:"/wp-content/plugins/af-companion/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,af-companion,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/af-companion/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "af-companion"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 1.1.0', '<= 1.1.2')
