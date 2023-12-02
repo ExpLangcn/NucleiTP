@@ -1,0 +1,24 @@
+id: api-carboninterface
+
+info:
+  name: Carbon Interface API Test
+  author: daffainfo
+  severity: info
+  reference:
+    - https://docs.carboninterface.com/#/
+    - https://github.com/daffainfo/all-about-apikey/tree/main/carboninterface/
+  tags: token-spray,carboninterface
+
+self-contained: true
+requests:
+  - raw:
+      - |
+        GET https://www.carboninterface.com/api/v1/auth HTTP/1.1
+        Host: www.carboninterface.com
+        Authorization: Bearer {{token}}
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - 'auth successful'
