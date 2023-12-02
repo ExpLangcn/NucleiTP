@@ -1,0 +1,57 @@
+id: advanced-woo-search-57d1d763827fe9eb1c7bf4a62674f986
+
+info:
+  name: "Advanced Woo Search <= 1.68 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Advanced Woo Search plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 1.68 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?reponame=&new=2079301%40advanced-woo-search&old=2077958%40advanced-woo-search
+    - https://wpscan.com/vulnerability/17f23b9c-b447-438c-8950-55387eb70038
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-woo-search/"
+    google-query: inurl:"/wp-content/plugins/advanced-woo-search/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-woo-search,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-woo-search/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-woo-search"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.68')
