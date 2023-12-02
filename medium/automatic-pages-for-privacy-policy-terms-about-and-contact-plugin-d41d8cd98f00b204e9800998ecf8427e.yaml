@@ -1,0 +1,58 @@
+id: automatic-pages-for-privacy-policy-terms-about-and-contact-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Automatic pages for Privacy Policy, Terms, About, Contact us <= 1.41 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Automatic pages plugin for WordPress is vulnerable to Reflected Cross-Site Scripting in versions up to, and including, 1.41 due to the use of add_query_arg/remove_query_arg with insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages via a URL that executes if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/d36d97fb-2fce-4248-8955-7d66919487e3?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/automatic-pages-for-privacy-policy-terms-about-and-contact/"
+    google-query: inurl:"/wp-content/plugins/automatic-pages-for-privacy-policy-terms-about-and-contact/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,automatic-pages-for-privacy-policy-terms-about-and-contact,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/automatic-pages-for-privacy-policy-terms-about-and-contact/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "automatic-pages-for-privacy-policy-terms-about-and-contact"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.41')
