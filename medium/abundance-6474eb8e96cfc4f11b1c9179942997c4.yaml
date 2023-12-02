@@ -1,0 +1,58 @@
+id: abundance-6474eb8e96cfc4f11b1c9179942997c4
+
+info:
+  name: "Abundance (All Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Abundance theme for WordPress is vulnerable to Cross-Site Scripting due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://jannefi.blogspot.com/2012/10/xss-vulnerability-in-wp-themes-by-kriesi.html
+    - https://wpscan.com/vulnerability/b74b044f-052f-4ae2-8ec5-dfade38211ce
+    - http://web.archive.org/web/20160606215743/https%3A//themeforest.net/item/abundance-ecommerce-business-theme/759562?ref=Kriesi
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/abundance/"
+    google-query: inurl:"/wp-content/themes/abundance/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,abundance,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/abundance/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "abundance"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')
