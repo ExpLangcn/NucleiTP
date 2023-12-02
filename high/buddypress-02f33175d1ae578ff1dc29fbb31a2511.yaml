@@ -1,0 +1,58 @@
+id: buddypress-02f33175d1ae578ff1dc29fbb31a2511
+
+info:
+  name: "BuddyPress <= 9.0.0 - Information Disclosure via REST API"
+  author: topscoder
+  severity: high
+  description: "The BuddyPress plugin for WordPress is vulnerable to information disclosure via REST API in versions up to, and including 9.0.0. This is due to the plugin disclosing the activation key from responses of the create_item method in the BP REST API Signup controller. This makes it possible for non-privileged attackers to obtain administrator rights by exploiting an issue in the REST API members endpoint."
+  reference:
+    - https://buddypress.org/2021/08/buddypress-9-1-1-security-and-maintenance-release/
+    - https://plugins.trac.wordpress.org/changeset/2584542/
+    - https://wpscan.com/vulnerability/05306069-808e-4ac4-b5c1-8573817cde74
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 9.0.0')
