@@ -1,0 +1,58 @@
+id: all-in-one-wp-migration-e1c8a4274ab0d5d961db4c3e3eddd6ce
+
+info:
+  name: "All-in-One WP Migration <= 6.45 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The All-in-One WP Migration plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘secret_key’ parameter in versions up to, and including, 6.45 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://wordpress.org/plugins/all-in-one-wp-migration/#developers
+    - https://vigilance.fr/vulnerability/WordPress-All-in-One-WP-Migration-Cross-Site-Scripting-23046
+    - https://github.com/mutafaf/all-in-one-wp-migration/blob/master/readme.txt
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-wp-migration/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-wp-migration/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-wp-migration,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-wp-migration/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-wp-migration"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 6.46')
