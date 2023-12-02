@@ -1,0 +1,36 @@
+id: osint-consulta-creditcard-bin-binlist
+
+info:
+  name: OSINT Consulta BIN via Binlist
+  author: Mrcl0wn / OSINT Brazuca
+  severity: info
+  description: Consulta dados de BIN via API Binlist
+  tags: bin,consulta,osint
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://lookup.binlist.net/{{BIN}}"
+    headers:
+      User-Agent: "Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0"
+    
+    #matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "number"
+      - type: status
+        status:
+          - 200
+        condition: and
+    extractors:
+          - type: json
+            part: body
+            json:
+              - '.'  # JQ like syntax for extraction
+    
+        
+        
+
