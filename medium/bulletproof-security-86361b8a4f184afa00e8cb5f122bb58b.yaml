@@ -1,0 +1,57 @@
+id: bulletproof-security-86361b8a4f184afa00e8cb5f122bb58b
+
+info:
+  name: "BulletProof Security <= .53.3 - Authenticated Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The BulletProof Security plugin for WordPress is vulnerable to Cross-Site Scripting via the ‘user-agent-ignore’ parameter in versions up to, and including, .53.3 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://www.netsparker.com/web-applications-advisories/ns-16-003-multiple-xss-vulnerabilities-identified-in-bulletproof-security/
+    - https://forum.ait-pro.com/forums/topic/bps-changelog/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bulletproof-security/"
+    google-query: inurl:"/wp-content/plugins/bulletproof-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bulletproof-security,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bulletproof-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bulletproof-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< .53.4')
