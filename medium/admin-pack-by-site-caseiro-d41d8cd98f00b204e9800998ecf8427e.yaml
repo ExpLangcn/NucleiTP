@@ -1,0 +1,56 @@
+id: admin-pack-by-site-caseiro-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Admin Pack by SITE CASEIRO <= 1.1 - Authenticated (Admin+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Admin Pack by SITE CASEIRO plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'sc_plugin_admin_personalizado_imagem' parameter in the 'admin-pack-sc.php' file in versions up to, and including, 1.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated Admin+ attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/admin-pack-by-site-caseiro/"
+    google-query: inurl:"/wp-content/plugins/admin-pack-by-site-caseiro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,admin-pack-by-site-caseiro,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/admin-pack-by-site-caseiro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "admin-pack-by-site-caseiro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.1')
