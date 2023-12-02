@@ -1,0 +1,57 @@
+id: cool-timeline-d9a189ee58dafa144af653c68e9cd502
+
+info:
+  name: "Cool Plugins (Various Versions) - Arbitrary Plugin Installation and Activation"
+  author: topscoder
+  severity: high
+  description: "Several WordPress plugins developed by Cool Plugins are vulnerable to arbitrary plugin installation and activation that can lead to remote code execution by authenticated attackers."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2705076/cool-timeline/trunk/admin/timeline-addon-page/timeline-addon-page.php
+    - https://blog.nintechnet.com/8-wordpress-plugins-fixed-high-severity-vulnerability/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cool-timeline/"
+    google-query: inurl:"/wp-content/plugins/cool-timeline/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cool-timeline,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cool-timeline/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cool-timeline"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.3.3')
