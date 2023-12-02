@@ -1,0 +1,56 @@
+id: blog2social-162fb235887efdc9c1dc34145b710d59
+
+info:
+  name: "Blog2Social <= 6.9.3 - PHP Object Injection"
+  author: topscoder
+  severity: high
+  description: "The Blog2Social plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including 6.9.3 due to the use of unserialize on user supplied input retrieved from the 'b2s-post-meta-box-best-time-settings' and 'assignList' parameters."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2704831%40blog2social%2Ftrunk&old=2701289%40blog2social%2Ftrunk&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:H
+    cvss-score: 8.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/blog2social/"
+    google-query: inurl:"/wp-content/plugins/blog2social/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,blog2social,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/blog2social/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "blog2social"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 6.9.3')
