@@ -1,0 +1,24 @@
+id: api-iqair
+
+info:
+  name: IQAir API Test
+  author: daffainfo
+  severity: info
+  reference:
+    - https://www.iqair.com/air-pollution-data-api
+    - https://github.com/daffainfo/all-about-apikey/tree/main/iqair/
+  tags: token-spray,iqair
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "http://api.airvisual.com/v2/countries?key={{token}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"data":'
+          - '"country"'
+        condition: and
