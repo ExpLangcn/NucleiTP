@@ -1,0 +1,57 @@
+id: ajax-load-more-9a34b97709b8ac129983122d9c06911b
+
+info:
+  name: "Infinite Scroll – Ajax Load More <= 5.5.4 - Authenticated (Admin+) Arbitrary File Read via Directory Traversal"
+  author: topscoder
+  severity: medium
+  description: "The WordPress Infinite Scroll – Ajax Load More plugin for WordPress is vulnerable to arbitrary file download via directory traversal due to insufficient file path validation returned via the alm_repeaters_export() function in versions up to, and including, 5.5.4. This makes it possible administrative users to download sensitive files from the server, in addition to unauthenticated users triggering administrators to retrieve sensitive files from the server due to missing nonce protection on the function."
+  reference:
+    - https://plugins.trac.wordpress.org/browser/ajax-load-more/trunk/admin/admin.php?rev=2772627#L187
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2775102%40ajax-load-more&new=2775102%40ajax-load-more&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 4.9
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-load-more/"
+    google-query: inurl:"/wp-content/plugins/ajax-load-more/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-load-more,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-load-more/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-load-more"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.5.4')

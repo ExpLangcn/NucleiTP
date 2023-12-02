@@ -1,0 +1,57 @@
+id: ajax-load-more-34d77d84285e978535a70f8eb181ecc1
+
+info:
+  name: "Ajax Load More < 2.11.2 - Local File Inclusion"
+  author: topscoder
+  severity: critical
+  description: "The Ajax Load More plugin for WordPress is vulnerable to Local File Inclusion in versions before 2.11.2 via the 'repeater' parameter. This allows unauthenticated attackers to include and execute arbitrary files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where images and other “safe” file types can be uploaded and included."
+  reference:
+    - https://seclists.org/fulldisclosure/2016/Aug/72
+    - https://sumofpwn.nl/advisory/2016/ajax_load_more_local_file_inclusion_vulnerability.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-load-more/"
+    google-query: inurl:"/wp-content/plugins/ajax-load-more/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-load-more,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-load-more/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-load-more"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.11.2')
