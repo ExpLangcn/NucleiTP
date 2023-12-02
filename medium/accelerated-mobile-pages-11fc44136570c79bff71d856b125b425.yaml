@@ -1,0 +1,60 @@
+id: accelerated-mobile-pages-11fc44136570c79bff71d856b125b425
+
+info:
+  name: "AMP for WP <= 0.9.97.19 - Missing Authorization"
+  author: topscoder
+  severity: medium
+  description: "TheAMP for WP plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the ampforwp_save_steps_data AJAX hook in versions up to, and including, 0.9.97.19. This makes it possible for authenticated attackers to make otherwise privilege locked administrative changes to the vulnerable website and create admin accounts."
+  reference:
+    - https://github.com/sybrew/the-seo-framework/issues/203#issuecomment-431602416
+    - https://threatpost.com/critical-wordpress-flaw-grants-admin-access-to-any-registered-site-user/139162/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-amp-for-wp-accelerated-mobile-pages-security-bypass-0-9-97-19/
+    - https://wpscan.com/vulnerability/9147
+    - https://www.webarxsecurity.com/amp-plugin-vulnerability/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 6.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/accelerated-mobile-pages/"
+    google-query: inurl:"/wp-content/plugins/accelerated-mobile-pages/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,accelerated-mobile-pages,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/accelerated-mobile-pages/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "accelerated-mobile-pages"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.9.97.19')
