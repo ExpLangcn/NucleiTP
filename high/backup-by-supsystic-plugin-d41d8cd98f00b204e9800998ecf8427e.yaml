@@ -1,0 +1,58 @@
+id: backup-by-supsystic-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Backup by Supsystic <= 2.3.11 - Cross-Site Request Forgery to Arbitrary File Download/Deletion
+  author: topscoder
+  severity: high
+  description: >
+    The Backup by Supsystic plugin for WordPress is vulnerable to Arbitrary File Download and Deletion in versions up to, and including, 2.3.11. This is due to various path traversal attacks and missing CSRF checks. This makes it possible for authenticated Admin+ attackers to download and delete any file on the vulnerable server and also allows unauthenticated attackers to delete files.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/7934c73c-17cf-4cec-a8da-654cee453b8f?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:H
+    cvss-score: 8.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/backup-by-supsystic/"
+    google-query: inurl:"/wp-content/plugins/backup-by-supsystic/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,backup-by-supsystic,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/backup-by-supsystic/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "backup-by-supsystic"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.3.11')
