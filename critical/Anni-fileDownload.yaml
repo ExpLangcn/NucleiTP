@@ -1,0 +1,21 @@
+id: Anni-fileDownload
+
+info:
+  name: Anni 配置文件下载
+  author: Str1am
+  severity: critical
+  reference: http://www.cnvd.org.cn/flaw/show/CNVD-2018-09319
+  tags: Anni,fileDownload
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/download.rsp"
+    matchers-condition: and
+    
+    matchers:
+      - type: word
+        words:
+          - "filename"
+        part: header
+        condition: and
