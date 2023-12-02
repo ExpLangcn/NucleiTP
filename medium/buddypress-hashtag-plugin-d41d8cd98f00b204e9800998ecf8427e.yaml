@@ -1,0 +1,58 @@
+id: buddypress-hashtag-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Wbcom Designs Plugins (Various Versions) - Arbitrary Plugin Installation, Activation and Deactivation
+  author: topscoder
+  severity: medium
+  description: >
+    Several WordPress plugins by Wbcom Designs were vulnerable to arbitrary plugin installation, activation and deactivation due to missing authorization checks on the wp_ajax_wbcom_manage_plugin_installation AJAX action function wbcom_do_plugin_action.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/74d222b9-22e9-485d-8111-d3bee505b200?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 6.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress-hashtag/"
+    google-query: inurl:"/wp-content/plugins/buddypress-hashtag/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress-hashtag,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress-hashtag/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress-hashtag"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.7.0')
