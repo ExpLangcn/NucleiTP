@@ -1,0 +1,57 @@
+id: captcha-281ae67248132e300df1758ac67805af
+
+info:
+  name: "Captcha 4.3.6 - 4.4.4 - Plugin Backdoor"
+  author: topscoder
+  severity: critical
+  description: "The Captcha plugin for WordPress contained a backdoor that injected SEO spam into unsuspecting users WordPress sites in version 4.3.6 to 4.4.4."
+  reference:
+    - https://www.wordfence.com/blog/2017/12/backdoor-captcha-plugin/
+    - https://plugins.trac.wordpress.org/changeset/1780758/captcha
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H
+    cvss-score: 9.6
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/captcha/"
+    google-query: inurl:"/wp-content/plugins/captcha/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,captcha,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/captcha/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "captcha"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 4.3.6', '<= 4.4.4')
