@@ -1,0 +1,59 @@
+id: Yes-b735594a37fe9d9606996c881ff0784c
+
+info:
+  name: "WordPress Core < 5.8.2 - ca-bundle.crt contains expired certificate DST Root CA X3"
+  author: topscoder
+  severity: medium
+  description: "WordPress Core in various versions less than version 5.8.2 contained an expired DST Root CA X3 certificate. There is no significant security risk to most WordPress users."
+  reference:
+    - https://wordpress.org/news/2021/11/wordpress-5-8-2-security-and-maintenance-release/
+    - https://core.trac.wordpress.org/ticket/54207
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N
+    cvss-score: 5.3
+    cve-id:
+  metadata:
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-core,medium
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/wp-admin/install.php"
+      - "{{BaseURL}}/feed/"
+      - "{{BaseURL}}/?feed=rss2" # alternative if /feed/ is blocked
+
+    redirects: true
+    max-redirects: 2
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: dsl
+        dsl:
+          - compare_versions(version_by_generator, '<= 5.2')
+          - compare_versions(version_by_js, '<= 5.2')
+          - compare_versions(version_by_css, '<= 5.2')
+
+      - type: status
+        status:
+          - 200
+
+    extractors:
+      - type: regex
+        name: version_by_generator
+        group: 1
+        regex:
+          - '(?m)https:\/\/wordpress.org\/\?v=([0-9.]+)'
+
+      - type: regex
+        name: version_by_js
+        group: 1
+        regex:
+          - 'wp-emoji-release\.min\.js\?ver=((\d+\.?)+)\b'
+
+      - type: regex
+        name: version_by_css
+        group: 1
+        regex:
+          - 'install\.min\.css\?ver=((\d+\.?)+)\b'

