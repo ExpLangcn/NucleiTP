@@ -1,0 +1,17 @@
+id: custom-ctc-admin-panel-detect
+
+info:
+        name: custom-ctc-admin-panel-detect-username-demo.user-password-Pass123!
+        author: 0xParthJ
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/doctc/"
+          matchers:
+                  - type: word
+                    words:
+                            - "<title>CalAmp</title>"
+
