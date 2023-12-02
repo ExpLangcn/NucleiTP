@@ -1,0 +1,58 @@
+id: booked-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Booked <= 2.2.5 - Missing Authorization on AJAX Actions
+  author: topscoder
+  severity: high
+  description: >
+    The Booked plugin for WordPress is vulnerable to authorization bypass due to missing capability checks on several functions hooked via AJAX actions in versions up to, and including, 2.2.5. This makes it possible for authenticated attackers with subscriber-level permissions and above to execute several unauthorized actions.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/9cd2ca03-e644-4bcd-b4b1-a547494fed7d?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/booked/"
+    google-query: inurl:"/wp-content/plugins/booked/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,booked,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/booked/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "booked"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2.6')
