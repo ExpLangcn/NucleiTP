@@ -1,0 +1,62 @@
+id: a3-responsive-slider-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    a3 Lazy Load <= 2.6.0 - Cross-Site Request Forgery to Settings Reset
+  author: topscoder
+  severity: high
+  description: >
+    The following plugins for WordPress are vulnerable to Cross-Site Request Forgery:
+                    
+                    a3 Lazy Load (<= 2.6.0), Contact Us Page – Contact People (<= 3.6.1), a3 Portfolio (<= 3.0.1), Dynamic Product Gallery for WooCommerce (3.0.1), a3 Responsive Slider (<= 2.2.0), Compare Products for WooCommerce (<= 2.8.2), Products Quick View for WooCommerce (<= 2.0.1), Product Sort and Display for WooCommerce (<= 2.2.2), Product Widget Slider for WooCommerce (), WP Email Template (<= 2.6.2).
+                    
+                    This is due to missing nonce validation on the reset_settings() function. This makes it possible for unauthenticated attackers to reset the plugin's settings via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/0a5a0ca6-f355-4110-a533-04e46c741ec9?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/a3-responsive-slider/"
+    google-query: inurl:"/wp-content/plugins/a3-responsive-slider/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,a3-responsive-slider,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/a3-responsive-slider/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "a3-responsive-slider"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2.0')
