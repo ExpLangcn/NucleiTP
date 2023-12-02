@@ -1,0 +1,56 @@
+id: coditor-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Coditor <= 1.1 - Remote Code Execution"
+  author: topscoder
+  severity: critical
+  description: "The Coditor plugin for WordPress is vulnerable to Remote Code Execution in versions up to, and including, 1.1 via the coditor_process_ajax function. This allows authenticated attackers at the subscriber-level or above to execute code on the server."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/coditor/"
+    google-query: inurl:"/wp-content/plugins/coditor/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,coditor,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/coditor/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "coditor"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.1')
