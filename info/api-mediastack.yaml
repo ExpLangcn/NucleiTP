@@ -1,0 +1,26 @@
+id: api-mediastack
+
+info:
+  name: mediastack API Test
+  author: daffainfo
+  severity: info
+  description: Free, Simple REST API for Live News & Blog Articles
+  reference:
+    - https://mediastack.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/mediastack
+  tags: token-spray,mediastack
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://api.mediastack.com/v1/news?access_key={{token}}&keywords=tennis&countries=us,gb,de"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"author"'
+          - '"title"'
+          - '"description"'
+        condition: and
