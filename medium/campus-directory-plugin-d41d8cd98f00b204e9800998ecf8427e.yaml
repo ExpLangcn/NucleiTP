@@ -1,0 +1,58 @@
+id: campus-directory-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Faculty Staff and Student Directory Plugin – Campus Directory <= 1.7.4 - Authenticated Stored Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Faculty Staff and Student Directory Plugin – Campus Directory plugin for WordPress is vulnerable to authenticated stored cross-site scripting via several parameters found in versions up to and including 1.7.4.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/438bbd0f-5204-4a71-9730-efa51d864832?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/campus-directory/"
+    google-query: inurl:"/wp-content/plugins/campus-directory/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,campus-directory,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/campus-directory/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "campus-directory"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.4')
