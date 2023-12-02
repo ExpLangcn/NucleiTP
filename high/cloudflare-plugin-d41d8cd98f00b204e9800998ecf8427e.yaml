@@ -1,0 +1,58 @@
+id: cloudflare-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Cloudflare < 1.3.21 - Cross-Site Scripting
+  author: topscoder
+  severity: high
+  description: >
+    The Cloudflare plugin for WordPress is vulnerable to Cross-Site Scripting via several parameters in versions before 1.3.21 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/b8d63789-16b3-443b-8dcb-67b1e5e25d20?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L
+    cvss-score: 7.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/cloudflare/"
+    google-query: inurl:"/wp-content/plugins/cloudflare/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cloudflare,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cloudflare/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cloudflare"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3.21')
