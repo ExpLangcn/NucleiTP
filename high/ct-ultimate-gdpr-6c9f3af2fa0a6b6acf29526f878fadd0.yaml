@@ -1,0 +1,56 @@
+id: ct-ultimate-gdpr-6c9f3af2fa0a6b6acf29526f878fadd0
+
+info:
+  name: "Ultimate GDPR & CCPA <= 2.4 - Unauthenticated Settings Import & Export"
+  author: topscoder
+  severity: high
+  description: "The Ultimate GDPR & CCPA plugin for WordPress is vulnerable to unauthenticated settings import and export via the export_settings & import_settings functions in versions up to, and including, 2.4. This makes it possible for unauthenticated attackers to change plugin settings and conduct attacks such as redirecting visitors to malicious sites."
+  reference:
+    - https://blog.nintechnet.com/critical-vulnerability-in-wordpress-ultimate-gdpr-ccpa-compliance-toolkit-plugin/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ct-ultimate-gdpr/"
+    google-query: inurl:"/wp-content/plugins/ct-ultimate-gdpr/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ct-ultimate-gdpr,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ct-ultimate-gdpr/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ct-ultimate-gdpr"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.5')
