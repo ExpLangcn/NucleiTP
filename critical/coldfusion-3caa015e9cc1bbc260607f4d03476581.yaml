@@ -1,0 +1,57 @@
+id: coldfusion-3caa015e9cc1bbc260607f4d03476581
+
+info:
+  name: "ColdFusion Responsive Fullscreen Video Image Audio Theme < 1.2 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The ColdFusion Responsive Fullscreen Video Image Audio Theme for WordPress is vulnerable to arbitrary file uploads due to missing file type validation via the upload_settings_image.php file in versions up to, and including, 1.1. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://en.0day.today/exploits/21431
+    - https://web.archive.org/web/20140710150050/http%3A//themeforest.net/item/coldfusion-responsive-fullscreen-video-image-audio/4381748
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/coldfusion/"
+    google-query: inurl:"/wp-content/themes/coldfusion/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,coldfusion,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/coldfusion/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "coldfusion"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.2')
