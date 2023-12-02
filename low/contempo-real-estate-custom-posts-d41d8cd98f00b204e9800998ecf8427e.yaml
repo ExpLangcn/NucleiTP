@@ -1,0 +1,56 @@
+id: contempo-real-estate-custom-posts-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Contempo Real Estate Custom Posts <= 3.2.6 - Unauthorized File Upload"
+  author: topscoder
+  severity: low
+  description: "The Contempo Real Estate Custom Posts plugin for WordPress is vulnerable to unauthorized file uploads due to a missing capability check on the ct_front_img_upload() function called via an AJAX action in versions up to, and including 3.2.6. This makes it possible for authenticated attackers with subscriber level permissions and above to upload arbitrary files to the server."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contempo-real-estate-custom-posts/"
+    google-query: inurl:"/wp-content/plugins/contempo-real-estate-custom-posts/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contempo-real-estate-custom-posts,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contempo-real-estate-custom-posts/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contempo-real-estate-custom-posts"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  3.2.6')
