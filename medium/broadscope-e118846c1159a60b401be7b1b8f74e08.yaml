@@ -1,0 +1,58 @@
+id: broadscope-e118846c1159a60b401be7b1b8f74e08
+
+info:
+  name: "Broadscope (Unknown Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Broadscope theme for WordPress is vulnerable to Cross-Site Scripting due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://jannefi.blogspot.com/2012/10/xss-vulnerability-in-wp-themes-by-kriesi.html
+    - https://kriesi.at/archives/broadscope-wordpress-business-porfolio-theme
+    - http://web.archive.org/web/20151207075030/https%3A//themeforest.net/item/broadscope-wordpress-theme/166661?ref=Kriesi
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/broadscope/"
+    google-query: inurl:"/wp-content/themes/broadscope/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,broadscope,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/broadscope/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "broadscope"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')
