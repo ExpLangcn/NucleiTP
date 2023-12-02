@@ -1,0 +1,28 @@
+id: blazor-server-files
+
+info:
+  name: Blazor default server files
+  author: Daniel_v
+  severity: medium
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/_framework/blazor.boot.json'
+      - '{{BaseURL}}/_framework/blazor.webassembly.js'
+      - '{{BaseURL}}/_framework/wasm/dotnet.wasm'
+      - '{{BaseURL}}/_framework/_bin/WebAssembly.Bindings.dll'
+
+    matchers-condition: and
+    matchers:     
+      - type: word
+        words:
+          - 'cacheBootResources:'
+          - 'Blazor'
+          - 'debugBuild'
+          - 'blazorLogical'
+          - 'asm'
+      
+      - type: status
+        status:
+          - 200
