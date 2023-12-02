@@ -1,0 +1,23 @@
+id: custom-Jboss-JMS-Invocation-Layer
+
+info:
+  name: CVE-2017-7504 - JBossMQ JMS Invocation Layer
+  author: 0xParthJ
+  severity: high
+  reference: https://www.youtube.com/watch?v=jVMr4eeJ2Po
+  tags: unauth
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/jbossmq-httpil/HTTPServerILServlet/'
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<title>JBossMQ HTTP-IL Servlet</title>'
+
+      - type: status
+        status:
+          - 200
