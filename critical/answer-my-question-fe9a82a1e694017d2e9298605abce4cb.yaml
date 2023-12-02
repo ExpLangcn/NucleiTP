@@ -1,0 +1,58 @@
+id: answer-my-question-fe9a82a1e694017d2e9298605abce4cb
+
+info:
+  name: "Answer My Question <= 1.3 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The Answer My Question plugin for WordPress is vulnerable to generic SQL Injection via the 'id' parameter in the 'modal.php' file in versions up to, and including, 1.3 due to insufficient escaping on the user-supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://lenonleite.com.br/en/2016/11/11/answer-my-question-1-3-plugin-for-wordpress-sql-injection/
+    - https://wpscan.com/vulnerability/9888ee42-a414-45ea-ba8c-3cdcc0e8d860
+    - https://wordpress.org/plugins/answer-my-question/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/answer-my-question/"
+    google-query: inurl:"/wp-content/plugins/answer-my-question/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,answer-my-question,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/answer-my-question/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "answer-my-question"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3')
