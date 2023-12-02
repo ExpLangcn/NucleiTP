@@ -1,0 +1,56 @@
+id: casso-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Casso – Tự động xác nhận thanh toán chuyển khoản ngân hàng <= 2.8.6 - Authenticated (Admin+) Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Casso plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's settings in versions up to, and including, 2.8.6 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers with administrative level permissions to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/casso-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang/"
+    google-query: inurl:"/wp-content/plugins/casso-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,casso-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/casso-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "casso-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.8.6')
