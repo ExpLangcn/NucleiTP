@@ -1,0 +1,57 @@
+id: amazon-affiliate-link-localizer-3e6b0794d274a22198ec583b9db374b8
+
+info:
+  name: "Amazon Affiliate Link Localizer <= 1.8.2 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Amazon Affiliate Link Localizer plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 1.8.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://plugins.svn.wordpress.org/amazon-affiliate-link-localizer/trunk/readme.txt
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=682728%40amazon-affiliate-link-localizer&new=682728%40amazon-affiliate-link-localizer&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/amazon-affiliate-link-localizer/"
+    google-query: inurl:"/wp-content/plugins/amazon-affiliate-link-localizer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,amazon-affiliate-link-localizer,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/amazon-affiliate-link-localizer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "amazon-affiliate-link-localizer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.8.2')
