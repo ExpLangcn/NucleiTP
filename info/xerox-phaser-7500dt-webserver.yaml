@@ -1,0 +1,22 @@
+id: xerox-phaser-7500dt-webserver
+
+info:
+  name: Xerox Phaser 7500DT Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/home.html"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<div id="headertitle">Phaser 7500</div>'
+
+      - type: status
+        status:
+          - 200
