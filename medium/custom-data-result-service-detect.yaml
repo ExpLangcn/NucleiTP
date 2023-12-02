@@ -1,0 +1,20 @@
+id: custom-datapump-source-code-detect
+
+info:
+  name: Custom datapump source code detect
+  author: pdteam
+  severity: medium
+  tags: config,exposure
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/connect/results/api-docs/service.json'
+    matchers:
+      - type: word
+        words:
+          - 'swagger'
+          - 'info'
+        condition: and
+
+
