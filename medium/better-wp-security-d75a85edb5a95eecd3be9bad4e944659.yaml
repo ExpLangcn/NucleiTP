@@ -1,0 +1,57 @@
+id: better-wp-security-d75a85edb5a95eecd3be9bad4e944659
+
+info:
+  name: "iThemes Security < 7.9.1 and iThemes Security Pro < 6.8.4 - Hidden Login Bypass"
+  author: topscoder
+  severity: medium
+  description: "It is possible to bypass the hidden login page functionality in iThemes Security < 7.9.1 and iThemes Security Pro < 6.8.4"
+  reference:
+    - https://secupress.me/blog/ithemes-security-7-9-1-hide-backend-bypass/
+    - https://plugins.trac.wordpress.org/changeset/2515054/better-wp-security
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-wp-security/"
+    google-query: inurl:"/wp-content/plugins/better-wp-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-wp-security,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-wp-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-wp-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 7.9.1')

@@ -1,0 +1,57 @@
+id: better-wp-security-de0aa17c6c429208081c05b6ea9e7712
+
+info:
+  name: "iThemes Security <= 4.6.12 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The iThemes Security plugin for WordPress is vulnerable to Stored Cross-Site Scripting via several parameters in versions up to, and including, 4.6.12 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://web.archive.org/web/20150920001612/https%3A//ithemes.com/2015/04/14/security-release-for-ithemes-security-update-to-v4-6-13-or-v1-14-18-pro-immediately/
+    - https://web.archive.org/web/20150526075731/http%3A//securitysucks.info/advisories/ssa-2015-0001-ithemes-security-4-6-12-stored-xss/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-wp-security/"
+    google-query: inurl:"/wp-content/plugins/better-wp-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-wp-security,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-wp-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-wp-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 4.6.13')
