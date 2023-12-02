@@ -1,0 +1,58 @@
+id: citybook-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    CityBook <= 2.4.3 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The CityBook plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the 'distance', 'address_lat', and 'address_lng' parameters in versions up to, and including, 2.4.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/722d3a5e-40dc-4153-b8ce-4a94ae391896?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/citybook/"
+    google-query: inurl:"/wp-content/themes/citybook/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,citybook,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/citybook/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "citybook"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4.3')
