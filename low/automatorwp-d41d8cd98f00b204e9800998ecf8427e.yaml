@@ -1,0 +1,56 @@
+id: automatorwp-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "AutomatorWP <= 2.5.8 - Cross Site Request Forgery via bulk_delete"
+  author: topscoder
+  severity: low
+  description: "The AutomatorWP plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.5.8. This is due to missing or incorrect nonce validation on the bulk_delete() function. This makes it possible for unauthenticated attackers to bulk delete CT objects via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/automatorwp/"
+    google-query: inurl:"/wp-content/plugins/automatorwp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,automatorwp,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/automatorwp/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "automatorwp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.5.8')
