@@ -1,0 +1,57 @@
+id: comment-rating-d0f784f531c4c046ececfbe1646df93f
+
+info:
+  name: "Comment Rating <= 2.9.32 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The Comment Rating plugin for WordPress is vulnerable to generic SQL Injection via the 'ck_ips' parameter in versions up to, and including, 2.9.32 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://packetstormsecurity.com/files/120569/
+    - https://wordpress.org/plugins/comment-rating/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/comment-rating/"
+    google-query: inurl:"/wp-content/plugins/comment-rating/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,comment-rating,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/comment-rating/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "comment-rating"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.9.32')
