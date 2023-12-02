@@ -1,0 +1,45 @@
+id: osint-consulta-cnpj-receitaws
+
+info:
+  name: OSINT Consulta CNPJ Receitaws
+  author: Mrcl0wn / OSINT Brazuca
+  severity: info
+  description: Consulta dados de CNPJ via API receitaws.com.br
+  tags: cnpj,consulta,osint
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://www.receitaws.com.br/v1/cnpj/{{CNPJ}}"
+    headers:
+      User-Agent: "Mozilla/5.0 (Android 4.4; Mobile; rv:41.0) Gecko/41.0 Firefox/41.0"
+      Referer: "https://www.receitaws.com.br/v1/cnpj/{{CNPJ}}"
+    
+    cookie-reuse: yes
+    #matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "cnpj"
+      - type: status
+        status:
+          - 200
+      - type: dsl
+        dsl:
+          - 'wait_for(10)'
+        condition: or
+
+      - type: status
+        status:
+          - 429
+      - type: dsl
+        dsl:
+          - 'wait_for(20)'
+        condition: and
+    extractors:
+          - type: json
+            part: body
+            json:
+              - '.'  # JQ like syntax for extraction
