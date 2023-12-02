@@ -1,0 +1,58 @@
+id: beautiful-and-responsive-cookie-consent-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Beautiful Cookie Consent Banner <= 2.10.0 - Missing Authorization to Settings Update
+  author: topscoder
+  severity: high
+  description: >
+    The Beautiful Cookie Consent Banner plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the nsc_bar_save_submitted_form_fields() function called via and admin_init hook in versions up to, and including, 2.10.0. This makes it possible for unauthenticated attackers to modify the plugin's settings and inject malicious web scripts. Please note this is still vulnerable to Cross-Site Request Forgery attacks.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/aee6fea2-dbf6-4155-ba3f-f85ea3520504?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 7.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/beautiful-and-responsive-cookie-consent/"
+    google-query: inurl:"/wp-content/plugins/beautiful-and-responsive-cookie-consent/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,beautiful-and-responsive-cookie-consent,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/beautiful-and-responsive-cookie-consent/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "beautiful-and-responsive-cookie-consent"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.10.0')
