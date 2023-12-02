@@ -1,0 +1,57 @@
+id: backup-and-restore-for-wp-77ee95992dd9c948cd03853087bb01ca
+
+info:
+  name: "Backup and Restore plugin – WordPress <= 1.0.3 - Authenticated (Admin+) Arbitrary File Deletion"
+  author: topscoder
+  severity: medium
+  description: "The Backup and Restore plugin – WordPress plugin for WordPress is vulnerable to Arbitrary File Deletion via the 'folder_name' parameter in versions up to, and including, 1.0.3. This is due to insufficient sanitization and validation of user-supplied input. This makes it possible for authenticated attackers with admin-level privileges to arbitrarily delete files on the server."
+  reference:
+    - https://wpscan.com/vulnerability/3c457ce0-8737-4a6a-9580-b00cd3dc2136
+    - https://wordpress.org/plugins/backup-and-restore-for-wp/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:H
+    cvss-score: 5.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/backup-and-restore-for-wp/"
+    google-query: inurl:"/wp-content/plugins/backup-and-restore-for-wp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,backup-and-restore-for-wp,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/backup-and-restore-for-wp/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "backup-and-restore-for-wp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0.3')
