@@ -1,0 +1,58 @@
+id: bp-group-documents-60ceee66598c2298c365a2576e27c303
+
+info:
+  name: "BP Group Documents <= 1.2.1 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The BP Group Documents plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.2.1. This is due to missing or incorrect nonce validation. This makes it possible for unauthenticated attackers to modify any group document's name and description; the fields are also susceptible to XSS, via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://seclists.org/fulldisclosure/2014/Feb/170
+    - https://wordpress.org/plugins/bp-group-documents/#developers
+    - https://security.dxw.com/advisories/csrf-vulnerability-in-bp-group-documents-1-2-1/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bp-group-documents/"
+    google-query: inurl:"/wp-content/plugins/bp-group-documents/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bp-group-documents,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bp-group-documents/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bp-group-documents"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.1')
