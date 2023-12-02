@@ -1,0 +1,57 @@
+id: booking-calendar-contact-form-c65e276959351fb77245591de7230046
+
+info:
+  name: "Booking Calendar Contact Form <= 1.0.23 - Shortcode SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Booking Calendar Contact Form plugin for WordPress is vulnerable to SQL Injection via the ‘calendar’ atrribute in versions up to, and including, 1.0.23 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-booking-calendar-contact-form-multiple-vulnerabilities-1-0-23/
+    - https://packetstormsecurity.com/files/135657/WordPress-Booking-Calendar-Contact-Form-1.0.23-Shortcode-SQL-Injection.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:H
+    cvss-score: 8.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/booking-calendar-contact-form/"
+    google-query: inurl:"/wp-content/plugins/booking-calendar-contact-form/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,booking-calendar-contact-form,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/booking-calendar-contact-form/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "booking-calendar-contact-form"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0.23')
