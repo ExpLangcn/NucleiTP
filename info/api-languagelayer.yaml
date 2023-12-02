@@ -1,0 +1,26 @@
+id: api-languagelayer
+
+info:
+  name: languagelayer API Test
+  author: daffainfo
+  severity: info
+  description: Language Detection JSON API supporting 173 languages
+  reference:
+    - https://languagelayer.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/languagelayer
+  tags: token-spray,languagelayer
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://api.languagelayer.com/detect?access_key={{token}}&query=The%20pessimist%20complains%20about%20the%20wind%3B%20the%20optimist%20expects%20it%20to%20change%3B%20the%20realist%20adjusts%20the%20sails"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"language_code"'
+          - '"language_name"'
+          - '"probability"'
+        condition: and
