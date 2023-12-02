@@ -1,0 +1,60 @@
+id: allure-real-estate-theme-for-placester-6369fe6eb2f8fc4d6e747a4d469a1919
+
+info:
+  name: "Allure Real Estate Theme for Placester <= 0.1.1 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Allure Real Estate Theme for Placester theme for WordPress is vulnerable to Cross-Site Scripting via the 'ZeroClipboard.swf' file in versions up to, and including, 0.1.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://en.0day.today/exploits/20396
+    - https://vulners.com/wpvulndb/WPVDB-ID%3A024C80F8-0D36-4980-8A7C-D88F55F9A5D8
+    - https://wpscan.com/vulnerability/024c80f8-0d36-4980-8a7c-d88f55f9a5d8
+    - https://wordpress.org/themes/allure-real-estate-theme-for-placester/
+    - https://themes.trac.wordpress.org/log/allure-real-estate-theme-for-placester/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/allure-real-estate-theme-for-placester/"
+    google-query: inurl:"/wp-content/themes/allure-real-estate-theme-for-placester/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,allure-real-estate-theme-for-placester,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/allure-real-estate-theme-for-placester/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "allure-real-estate-theme-for-placester"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.1.1')
