@@ -1,0 +1,60 @@
+id: cherry-plugin-10e90184e935e318fb6118f56edb0f78
+
+info:
+  name: "Cherry Plugin < 1.2.7 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Cherry Plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation and lack of access control via the upload.php file in versions up to, and including, 1.2.6. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://support.alertlogic.com/hc/en-us/articles/115003048083-06-19-17-WordPress-CMS-Cherry-Plugin-Arbitrary-File-Upload-RCE
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-cherry-multiple-vulnerabilities-1-2-6/
+    - https://github.com/CherryFramework/cherry-plugin/issues/6
+    - https://github.com/CherryFramework/cherry-plugin/commit/95c6cfc54fbba1577ca623c2662f2127755b148a
+    - https://www.pluginvulnerabilities.com/2016/06/22/old-vulnerability-report-arbitrary-file-viewing-vulnerability-in-cherry-plugin/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cherry-plugin/"
+    google-query: inurl:"/wp-content/plugins/cherry-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cherry-plugin,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cherry-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cherry-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.2.7')
