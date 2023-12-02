@@ -1,0 +1,56 @@
+id: bepro-listings-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "BePro Listings <= 2.2.0020 - Unauthenticated Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The BePro Listings plugin for WordPress is vulnerable to unauthenticated arbitrary file uploads in versions up to, and including, 2.2.0020 due to insufficient file type validation on the bepro_listings_save() function. This makes it possible for unauthenticated attackers to upload arbitrary files on the server that may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bepro-listings/"
+    google-query: inurl:"/wp-content/plugins/bepro-listings/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bepro-listings,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bepro-listings/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bepro-listings"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.2.0020')
