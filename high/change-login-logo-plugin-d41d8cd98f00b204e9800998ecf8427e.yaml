@@ -1,0 +1,58 @@
+id: change-login-logo-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Change WordPress Login Logo <= 1.1.4 - Stored Cross-Site Scripting
+  author: topscoder
+  severity: high
+  description: >
+    The Change WordPress Login Logo plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the height and width parameters in versions up to, and including, 1.1.4 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/9d1e8703-4ad3-42c5-a20d-f1bd31522a8b?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/change-login-logo/"
+    google-query: inurl:"/wp-content/plugins/change-login-logo/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,change-login-logo,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/change-login-logo/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "change-login-logo"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.5')
