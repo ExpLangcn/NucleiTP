@@ -1,0 +1,58 @@
+id: builder-contact-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Contact Builder by Themify <= 1.4.5 - Email Injection
+  author: topscoder
+  severity: medium
+  description: >
+    The Contact Builder by Themify plugin is vulnerable to email injection in versions up to, and including 1.4.5. This makes it possible for attackers to forward contact form submissions as a "copy" to the contact-email supplied even when the setting is disabled. In addition, the contact-message does not do any input sanitization allowing HTML to be injected into the message content. This was being actively exploited to craft phishing emails and sending those via the vulnerable sites.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/0232a3a5-e91e-4213-8c21-900fc805bad7?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N
+    cvss-score: 5.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/builder-contact/"
+    google-query: inurl:"/wp-content/plugins/builder-contact/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,builder-contact,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/builder-contact/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "builder-contact"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.4.5')
