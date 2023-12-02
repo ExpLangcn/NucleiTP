@@ -1,0 +1,57 @@
+id: all-in-one-seo-pack-2277948e4e1a45bd3da91ea7499c646a
+
+info:
+  name: "All in One SEO <= 2.2.6.1 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The All in One SEO plugin for WordPress is vulnerable to Reflected Cross-Site Scripting in versions up to, and including, 2.2.6.1 due to insufficient input sanitization and output escaping on add_query_arg and remove_query_arg. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://blog.sucuri.net/2015/04/security-advisory-xss-vulnerability-affecting-multiple-wordpress-plugins.html
+    - https://web.archive.org/web/20160508074631/http%3A//semperfiwebdesign.com/blog/all-in-one-seo-pack/all-in-one-seo-pack-release-history/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-seo-pack/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-seo-pack/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-seo-pack,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-seo-pack/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-seo-pack"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.2.6.2')
