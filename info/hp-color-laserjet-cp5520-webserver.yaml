@@ -1,0 +1,22 @@
+id: hp-color-laserjet-cp5520-webserver
+
+info:
+  name: HP Color LaserJet CP5520 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: ricoh,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/DeviceStatus/Index"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<strong class="product">HP Color LaserJet CP5520 Series</strong>'
+
+      - type: status
+        status:
+          - 200
