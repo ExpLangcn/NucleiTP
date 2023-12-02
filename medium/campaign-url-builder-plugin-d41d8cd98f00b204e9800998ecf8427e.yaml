@@ -1,0 +1,58 @@
+id: campaign-url-builder-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Campaign URL Builder <= 1.8.1 - Authenticated (Admin+) Stored Cross-Site Scripting via Create Link
+  author: topscoder
+  severity: medium
+  description: >
+    The Campaign URL Builder plugin for WordPress is vulnerable to Stored Cross-Site Scripting via multiple form fields within the Create Link tab of the settings page in versions up to, and including, 1.8.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrative-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/06294c35-6d58-4270-b143-757831fc5da6?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 4.4
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/campaign-url-builder/"
+    google-query: inurl:"/wp-content/plugins/campaign-url-builder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,campaign-url-builder,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/campaign-url-builder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "campaign-url-builder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.8.1')
