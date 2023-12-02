@@ -1,0 +1,27 @@
+id: api-climatiq
+
+info:
+  name: Climatiq API Test
+  author: daffainfo
+  severity: info
+  reference:
+    - https://docs.climatiq.io/
+    - https://github.com/daffainfo/all-about-apikey/tree/main/climatiq/
+  tags: token-spray,climatiq
+
+self-contained: true
+requests:
+  - raw:
+      - |
+        GET https://beta3.api.climatiq.io/search?query=light+duty+trucks&year=2021 HTTP/1.1
+        Host: beta3.api.climatiq.io
+        Authorization: Bearer {{token}}
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"current_page"'
+          - '"last_page"'
+          - '"total_results"'
+        condition: and
