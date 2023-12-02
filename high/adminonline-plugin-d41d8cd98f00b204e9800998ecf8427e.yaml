@@ -1,0 +1,58 @@
+id: adminonline-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    AdminOnline (Unspecified Version) - Directly Traversal/Arbitrary File Read
+  author: topscoder
+  severity: high
+  description: >
+    The AdminOnline plugin for WordPress is vulnerable to Directly Traversal/Arbitrary File Read via the 'file' parameter in the 'download.php' file. This makes it possible for unauthenticated attackers to read/download otherwise restricted files.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/fe926435-ef91-4717-8612-31c053771491?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/adminonline/"
+    google-query: inurl:"/wp-content/plugins/adminonline/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,adminonline,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/adminonline/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "adminonline"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= *')
