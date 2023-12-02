@@ -1,0 +1,56 @@
+id: contextual-related-posts-4f28ca0300cec43e0e0ab2248609191f
+
+info:
+  name: "Contextual Related Posts <= 3.3.1 - Missing Authorization in crp_ajax_clearcache"
+  author: topscoder
+  severity: medium
+  description: "The Contextual Related Posts plugin for WordPress is vulnerable to unauthorized modification of data due to a missing capability check on the crp_ajax_clearcache function in versions up to, and including, 3.3.1. This makes it possible for authenticated attackers, with subscriber-level permissions and above, to clear the Contextual Related Posts cache."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2867183/contextual-related-posts
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contextual-related-posts/"
+    google-query: inurl:"/wp-content/plugins/contextual-related-posts/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contextual-related-posts,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contextual-related-posts/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contextual-related-posts"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.3.1')
