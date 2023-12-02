@@ -1,0 +1,24 @@
+id: api-fixer
+
+info:
+  name: Fixer API Test
+  author: daffainfo
+  severity: info
+  reference:
+    - https://fixer.io/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/fixer/
+  tags: token-spray,fixer
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://data.fixer.io/api/symbols?access_key={{token}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"success":'
+          - '"symbols"'
+        condition: and
