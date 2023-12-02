@@ -1,0 +1,59 @@
+id: better-wp-security-12a88e0c003f78571f0d05843d841074
+
+info:
+  name: "iThemes Security <= 5.6.1 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The iThemes Security for WordPress is vulnerable to Stored Cross-Site Scripting via multiple parameters in versions up to, and including, 5.6.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.
+
+'Security Fix: Updated log output to prevent specific kinds of logged requests from displaying without sanitization. Thanks to Slavco Mihajloski for contacting us about this issue.' ~ https://wordpress.org/plugins/better-wp-security/#developers"
+  reference:
+    - https://web.archive.org/web/20191101093340/https%3A//medium.com/websec/xss-vulnerability-in-ithemes-security-formerly-better-wp-security-5-6-1-2fba71f96f5d
+    - https://wordpress.org/plugins/better-wp-security/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-wp-security/"
+    google-query: inurl:"/wp-content/plugins/better-wp-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-wp-security,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-wp-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-wp-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 5.6.2')
