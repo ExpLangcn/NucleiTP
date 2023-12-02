@@ -1,0 +1,58 @@
+id: buddypress-media-e818da5e531ddf03fb10bf07e50afbb6
+
+info:
+  name: "rtMedia for WordPress, BuddyPress and bbPress <= 4.2 - Arbitary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The rtMedia for WordPress, BuddyPress and bbPress for WordPress is vulnerable to Direct file access in versions up to, and including, 4.2. This is due to the 'rtUploadAttachment.php' file preventing direct access to the the file. This makes it possible for unauthenticated attackers to access the file directly which triggers execution and lets unauthenticated users upload files."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1558952
+    - https://wordpress.org/plugins/buddypress-media/#developers
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-rtmedia-for-wordpress-buddypress-and-bbpress-multiple-unspecified-vulnerabilities-4-2/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress-media/"
+    google-query: inurl:"/wp-content/plugins/buddypress-media/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress-media,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress-media/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress-media"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 4.2.1')
