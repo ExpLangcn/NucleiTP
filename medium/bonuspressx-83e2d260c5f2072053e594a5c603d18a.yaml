@@ -1,0 +1,58 @@
+id: bonuspressx-83e2d260c5f2072053e594a5c603d18a
+
+info:
+  name: "Bonuspressx (All Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Bonuspressx plugin for WordPress is vulnerable to Cross-Site Scripting via the 'n' parameter in the 'ar_submit.php' file due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://packetstormsecurity.com/files/126595/
+    - https://www.globalsecuritymag.com/Vigil-nce-WordPress-Bonuspressx%2C20140528%2C45319.html
+    - https://wpscan.com/vulnerability/04ea0485-4b2f-4fae-8fa0-54d73ef35128
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bonuspressx/"
+    google-query: inurl:"/wp-content/plugins/bonuspressx/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bonuspressx,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bonuspressx/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bonuspressx"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')
