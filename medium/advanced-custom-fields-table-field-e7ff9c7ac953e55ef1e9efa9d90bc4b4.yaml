@@ -1,0 +1,58 @@
+id: advanced-custom-fields-table-field-e7ff9c7ac953e55ef1e9efa9d90bc4b4
+
+info:
+  name: "Advanced Custom Fields: Table Field < 1.1.13 - Authenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Advanced Custom Fields: Table Field plugin for WordPress is vulnerable to Stored Cross-Site Scripting in versions before 1.1.13 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://advisories.dxw.com/advisories/xss-in-advanced-custom-fields-table-field-could-allow-authenticated-users-to-do-almost-anything-an-admin-user-can/
+    - https://wordpress.org/plugins/advanced-custom-fields-table-field/#developers
+    - https://plugins.trac.wordpress.org/changeset/1464722
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-custom-fields-table-field/"
+    google-query: inurl:"/wp-content/plugins/advanced-custom-fields-table-field/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-custom-fields-table-field,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-custom-fields-table-field/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-custom-fields-table-field"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.1.13')
