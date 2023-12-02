@@ -1,0 +1,56 @@
+id: animate-everything-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Freemius SDK <= 2.4.2 - Missing Authorization Checks"
+  author: topscoder
+  severity: high
+  description: "The Freemius SDK, as used by hundreds of WordPress plugin and theme developers, was vulnerable to Cross-Site Request Forgery and Information disclosure due to missing capability checks and nonce protection on the _get_debug_log, _get_db_option, and the _set_db_option functions in versions up to, and including 2.4.2. Any WordPress plugin or theme running a version of Freemius less than 2.4.2 is vulnerable."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/animate-everything/"
+    google-query: inurl:"/wp-content/plugins/animate-everything/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,animate-everything,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/animate-everything/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "animate-everything"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '*')
