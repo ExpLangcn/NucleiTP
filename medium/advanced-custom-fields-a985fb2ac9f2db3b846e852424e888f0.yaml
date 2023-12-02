@@ -1,0 +1,58 @@
+id: advanced-custom-fields-a985fb2ac9f2db3b846e852424e888f0
+
+info:
+  name: "Advanced Custom Fields <= 5.7.11 - PHP Object Injection"
+  author: topscoder
+  severity: medium
+  description: "Advanced Custom Fields before 5.7.12 fails to sanitize user-supplied input before passing it to the unserialize() function. This allows low-level authenticated users to call PHP Objects and possibly achieve remote code execution if a usable gadget is present in a plugin or theme installed on the same site as the vulnerable plugin."
+  reference:
+    - http://web.archive.org/web/20191201124514/https%3A//medium.com/websec/wordpress-acf-5-7-10-unserialize-of-user-input-ac17cc473e0d
+    - https://wpscan.com/vulnerability/14d0223a-4aca-4069-82f2-ba22e354daad
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-advanced-custom-fields-php-object-injection-5-7-10/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-custom-fields/"
+    google-query: inurl:"/wp-content/plugins/advanced-custom-fields/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-custom-fields,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-custom-fields/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-custom-fields"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.7.11')
