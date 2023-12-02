@@ -1,0 +1,59 @@
+id: 404-to-301-f913917bd486699a31da9e6bb3d2b29a
+
+info:
+  name: "404 to 301 <= 2.3.0 - Unauthenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The 404 to 301 plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'Referer' and 'User-Agent' HTTP Headers in versions before 2.3.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://gist.github.com/ldionmarcil/6793df929449f8781bb1e213d7e75e23
+    - https://github.com/joel-james/404-to-301/commit/7a4e2798eca79828c1611988289e06b6d9c18b61
+    - https://sumofpwn.nl/advisory/2016/stored_cross_site_scripting_vulnerability_in_404_to_301_wordpress_plugin.html
+    - https://seclists.org/fulldisclosure/2016/Nov/46
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/404-to-301/"
+    google-query: inurl:"/wp-content/plugins/404-to-301/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,404-to-301,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/404-to-301/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "404-to-301"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.3.0')
