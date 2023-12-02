@@ -1,0 +1,58 @@
+id: bng-gateway-for-woocommerce-087406cdf6eb3464703324d78c0d0ceb
+
+info:
+  name: "BNG Gateway For WooCommerce <= 1.6.10 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The BNG Gateway For WooCommerce plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.6.10. This is due to missing or incorrect nonce validation on several functions. This makes it possible for unauthenticated attackers to add, edit, and delete payment methods via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-july-7-2021/
+    - https://wpscan.com/vulnerability/32089eee-e034-4460-9996-e7324d00eb1b
+    - https://wordpress.org/plugins/bng-gateway-for-woocommerce/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bng-gateway-for-woocommerce/"
+    google-query: inurl:"/wp-content/plugins/bng-gateway-for-woocommerce/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bng-gateway-for-woocommerce,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bng-gateway-for-woocommerce/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bng-gateway-for-woocommerce"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.6.10')
