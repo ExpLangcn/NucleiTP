@@ -1,0 +1,56 @@
+id: arabic-font-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Arabic Font <= 1.2 Cross-Site Request Forgery to Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Arabic Font plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'arabic-font.php' and '/inc/panel.php' files in versions up to, and including, 1.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthorized attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/arabic-font/"
+    google-query: inurl:"/wp-content/plugins/arabic-font/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,arabic-font,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/arabic-font/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "arabic-font"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.2')
