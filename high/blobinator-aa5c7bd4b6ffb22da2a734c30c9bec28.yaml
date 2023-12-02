@@ -1,0 +1,59 @@
+id: blobinator-aa5c7bd4b6ffb22da2a734c30c9bec28
+
+info:
+  name: "KONTXT Content Advisor <= 2.2 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The KONTXT Content Advisor plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.2. This is due to missing or incorrect nonce validation on the blobinator_process_text function. This makes it possible for unauthenticated attackers to edit posts via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-july-7-2021/
+    - https://wpscan.com/vulnerability/aec27da2-dd61-4bd5-9163-a999716f6cb6
+    - https://plugins.trac.wordpress.org/changeset/2503522
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2503516%40blobinator&old=2502760%40blobinator&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/blobinator/"
+    google-query: inurl:"/wp-content/plugins/blobinator/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,blobinator,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/blobinator/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "blobinator"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2')
