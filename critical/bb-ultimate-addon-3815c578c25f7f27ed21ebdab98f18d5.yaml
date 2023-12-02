@@ -1,0 +1,60 @@
+id: bb-ultimate-addon-3815c578c25f7f27ed21ebdab98f18d5
+
+info:
+  name: "Ultimate Addons for Beaver Builder <= 1.24.0 - Missing Authentication Bypass"
+  author: topscoder
+  severity: critical
+  description: "The Ultimate Addons for Beaver Builder plugin for WordPress is vulnerable to authorization bypass due to missing capability checks on the get-google-data() and get-facebook-data() functions in versions up to, and including, 1.24.0. This makes it possible for unauthorized attackers to log into any account on the associated service, including admin."
+  reference:
+    - https://www.malcare.com/blog/critical-vulnerability-ultimate-addons-wpastra-elementor-beaver-builder/
+    - https://www.ultimatebeaver.com/security-update-1241/
+    - https://www.webarxsecurity.com/critical-vulnerability-in-ultimate-add-ons-elementor/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-ultimate-addons-for-beaver-builder-security-bypass-1-24-0/
+    - https://wpscan.com/vulnerability/90f55278-73c2-44d2-8670-054ebc0953db
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bb-ultimate-addon/"
+    google-query: inurl:"/wp-content/plugins/bb-ultimate-addon/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bb-ultimate-addon,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bb-ultimate-addon/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bb-ultimate-addon"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.24.0')
