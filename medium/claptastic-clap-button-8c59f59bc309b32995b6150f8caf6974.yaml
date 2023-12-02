@@ -1,0 +1,57 @@
+id: claptastic-clap-button-8c59f59bc309b32995b6150f8caf6974
+
+info:
+  name: "Claptastic Clap! Button <= 1.3 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Claptastic Clap! Button plugin for WordPress is vulnerable to Cross-Site Scripting via several parameters in versions up to, and including, 1.3 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://packetstormsecurity.com/files/136443/
+    - https://wordpress.org/plugins/claptastic-clap-button/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/claptastic-clap-button/"
+    google-query: inurl:"/wp-content/plugins/claptastic-clap-button/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,claptastic-clap-button,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/claptastic-clap-button/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "claptastic-clap-button"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3')
