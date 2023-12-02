@@ -1,0 +1,57 @@
+id: booking-df6e7822bd1886a8546ac9ae1c7e8e88
+
+info:
+  name: "Booking Calendar <= 6.2 - Authenticated (Editor+) SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Booking Calendar plugin for WordPress is vulnerable to generic SQL Injection via the booking ID field in versions up to, and including, 6.2 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for Editor-level attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://seclists.org/fulldisclosure/2016/Aug/1
+    - https://sumofpwn.nl/advisory/2016/sql_injection_vulnerability_in_booking_calendar_wordpress_plugin.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/booking/"
+    google-query: inurl:"/wp-content/plugins/booking/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,booking,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/booking/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "booking"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 6.2.1')
