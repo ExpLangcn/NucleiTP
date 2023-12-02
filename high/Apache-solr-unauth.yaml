@@ -1,0 +1,25 @@
+id: Apache-solr-unauth
+
+info:
+  name: Apache solr 未授权访问
+  author: Str1am
+  severity: high
+  reference: https://www.tuicool.com/articles/n2iuq2v
+  tags: solr,unauth
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/solr/"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "Solr Admin"
+          - "js/angular/controllers/core-overview.js"
+          - "js/angular/controllers/dataimport.js"
+        part: body
+        condition: and
