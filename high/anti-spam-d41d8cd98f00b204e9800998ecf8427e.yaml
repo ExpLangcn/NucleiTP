@@ -1,0 +1,56 @@
+id: anti-spam-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Titan Anti-spam & Security <= 4.1 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Titan Anti-spam & Security plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 4.1 due to insufficient input sanitization and output escaping on the `antspm-q` and `antspm-e-email-url-website` parameters. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/anti-spam/"
+    google-query: inurl:"/wp-content/plugins/anti-spam/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,anti-spam,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/anti-spam/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "anti-spam"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.2')
