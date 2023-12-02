@@ -1,0 +1,56 @@
+id: crelly-slider-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Crelly Slider <= 1.1.1 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The Crelly Slider plugin for WordPress is vulnerable to SQL Injection via the 'id' parameter found in the ~/wordpress/admin.php file in versions up to, and including, 1.1.1 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for authenticated attackers with administrative privileges to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/crelly-slider/"
+    google-query: inurl:"/wp-content/plugins/crelly-slider/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,crelly-slider,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/crelly-slider/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "crelly-slider"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.1.1')
