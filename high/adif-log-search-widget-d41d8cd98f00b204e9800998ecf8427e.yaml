@@ -1,0 +1,56 @@
+id: adif-log-search-widget-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "ADIF Log Search Widget <= 1.0f - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The ADIF Log Search Widget plugin for WordPress is vulnerable to Cross-Site Scripting via the 'call' parameter in versions up to, and including, 1.0f due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/adif-log-search-widget/"
+    google-query: inurl:"/wp-content/plugins/adif-log-search-widget/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,adif-log-search-widget,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/adif-log-search-widget/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "adif-log-search-widget"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.0f')
