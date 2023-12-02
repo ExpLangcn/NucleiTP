@@ -1,0 +1,58 @@
+id: agritourismo-theme-27af8804f3c9c41bb849c85af7eac232
+
+info:
+  name: "Various Orange themes (Various Unspecified Versions) - Cross-Site Request Forgery to Arbitrary File Upload"
+  author: topscoder
+  severity: high
+  description: "Various Orange themes for WordPress are vulnerable to arbitrary file uploads due to a Cross-Site Request Forgery vulnerability in the '/functions/upload-handler.php' file. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible."
+  reference:
+    - https://packetstormsecurity.com/files/123999/
+    - https://packetstormsecurity.com/files/124232/
+    - https://en.0day.today/exploits/21516
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/agritourismo-theme/"
+    google-query: inurl:"/wp-content/themes/agritourismo-theme/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,agritourismo-theme,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/agritourismo-theme/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "agritourismo-theme"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')
