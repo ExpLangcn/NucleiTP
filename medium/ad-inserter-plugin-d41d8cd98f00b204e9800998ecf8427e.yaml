@@ -1,0 +1,58 @@
+id: ad-inserter-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Ad Inserter <= 1.5.5 - Cross-Site Request Forgery to Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Ad Inserter plugin for WordPress is vulnerable to Cross-Site Scripting via the 'ai-active-tab' parameter in versions up to, and including, 1.5.5 due to insufficient input sanitization and output escaping and missing nonce validation. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/427c29e6-9bbe-4094-a2a2-46945525f5b3?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 4.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/ad-inserter/"
+    google-query: inurl:"/wp-content/plugins/ad-inserter/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ad-inserter,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ad-inserter/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ad-inserter"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.5.5')
