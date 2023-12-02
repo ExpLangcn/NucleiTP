@@ -1,0 +1,26 @@
+id: api-sportdataapi
+
+info:
+  name: SportdataAPI API Test
+  author: daffainfo
+  severity: info
+  description: Get sports data from all over the world with our sports data API
+  reference:
+    - https://app.sportdataapi.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/sportdataapi
+  tags: token-spray,sportdataapi
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://app.sportdataapi.com/api/v1/soccer/countries?apikey={{token}}&continent=Europe"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"id"'
+          - '"name"'
+          - '"country_code"'
+        condition: and
