@@ -1,0 +1,22 @@
+id: hp-color-laserjet-mfp-m577-webserver
+
+info:
+  name: HP Color LaserJet MFP M577 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/DeviceStatus/Index"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<strong class="product">HP Color LaserJet MFP M577</strong>'
+
+      - type: status
+        status:
+          - 200
