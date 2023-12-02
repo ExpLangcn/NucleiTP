@@ -1,0 +1,60 @@
+id: better-wp-security-935e3ca64df8dbabc40b284aaccb67eb
+
+info:
+  name: "iThemes Security < 3.4.4 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The iThemes Security plugin for WordPress is vulnerable to Stored Cross-Site Scripting via several parameters in versions up to, and including, 3.4.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://seclists.org/bugtraq/2012/Oct/9
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=599012%40better-wp-security&new=599012%40better-wp-security&sfp_email=&sfph_mail=
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-ithemes-security-formerly-better-wp-security-multiple-cross-site-scripting-vulnerabilities-3-4-3/
+    - https://wordpress.org/support/topic/plugin-better-wp-security-security-focus-identifies-possible-wp-better-security-vunerability/
+    - https://packetstormsecurity.com/files/116317/Better-WP-Security-3.4.3-Cross-Site-Scripting.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-wp-security/"
+    google-query: inurl:"/wp-content/plugins/better-wp-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-wp-security,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-wp-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-wp-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.4.4')

@@ -1,0 +1,58 @@
+id: better-wp-security-55a5e199de16052269edcaa8ec63b6fc
+
+info:
+  name: "Better WP Security <= 3.5.3 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Better WP Security plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'inc/secure.php' file in versions up to, and including, 3.5.3 due to insufficient input sanitization and output escaping on logged data. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://github.com/wpscanteam/wpscan/issues/251
+    - https://wpscan.com/vulnerability/aca181eb-a018-4010-90fe-1746c7a1e976
+    - http://web.archive.org/web/20191021091912/https%3A//packetstormsecurity.com/files/122615/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-wp-security/"
+    google-query: inurl:"/wp-content/plugins/better-wp-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-wp-security,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-wp-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-wp-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.5.3')
