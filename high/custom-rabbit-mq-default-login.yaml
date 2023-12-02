@@ -1,0 +1,39 @@
+id: rabbit-mq-default-login
+
+info:
+  name: Rabbit-MQ Default Login
+  author: 0xParthJ
+  severity: high
+  description: Rabbit-Mq default login credentials were discovered.
+  reference:
+    - https://github.com/
+  classification:
+    cwe-id: CWE-798
+  tags: rabbitmq,default-login
+
+requests:
+  - raw:
+      - |
+        GET /api/whoami HTTP/1.1
+        Host: {{Hostname}}
+        authorization: Basic {{base64(username + ':' + password)}}
+    payloads:
+      username:
+        - guest
+      password:
+        - guest
+    attack: pitchfork
+
+    matchers-condition: and
+    matchers:
+
+      - type: word
+        words:
+          - "guest"
+          - "administrator"  
+        part: body
+        condition: and
+
+      - type: status
+        status:
+          - 200
