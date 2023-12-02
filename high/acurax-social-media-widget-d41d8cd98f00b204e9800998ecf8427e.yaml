@@ -1,0 +1,56 @@
+id: acurax-social-media-widget-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Social Media Widget by Acurax < 2.2 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Social Media Widget by Acurax plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘acx_si_theme, acx_si_twitter, acx_si_facebook, acx_si_youtube, acx_si_linkedin, acx_si_gplus, acx_si_credi, $acx_si_icon_size, acx_si_display, acx_si_pinterest, acx_si_feed’ parameters in versions up to, and including, 2.2 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/acurax-social-media-widget/"
+    google-query: inurl:"/wp-content/plugins/acurax-social-media-widget/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,acurax-social-media-widget,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/acurax-social-media-widget/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "acurax-social-media-widget"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2')
