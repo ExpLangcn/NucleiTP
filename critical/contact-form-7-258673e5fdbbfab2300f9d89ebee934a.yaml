@@ -1,0 +1,59 @@
+id: contact-form-7-258673e5fdbbfab2300f9d89ebee934a
+
+info:
+  name: "Contact Form 7 <= 3.5.2 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Contact Form 7 plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation on contact form uploads in versions up to, and including, 3.5.2. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://packetstormsecurity.com/files/124154/
+    - https://wpscan.com/vulnerability/f307ec17-da98-424f-b784-7cb63351aa8e
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-contact-form-7-arbitrary-file-upload-3-5-3/
+    - https://seclists.org/fulldisclosure/2014/Feb/0
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-7/"
+    google-query: inurl:"/wp-content/plugins/contact-form-7/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-7,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-7/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-7"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.5.2')
