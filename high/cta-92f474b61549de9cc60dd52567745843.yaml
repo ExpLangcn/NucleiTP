@@ -1,0 +1,58 @@
+id: cta-92f474b61549de9cc60dd52567745843
+
+info:
+  name: "WordPress Calls to Action < 2.2.8 - Unauthenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The WordPress Calls to Action plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘shortcode’ parameter in versions before 2.2.8 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://g0blin.co.uk/g0blin-00026/
+    - https://wordpress.org/plugins/cta/#developers
+    - https://plugins.trac.wordpress.org/changeset/1066536
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cta/"
+    google-query: inurl:"/wp-content/plugins/cta/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cta,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cta/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cta"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.2.8')
