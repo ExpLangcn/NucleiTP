@@ -1,0 +1,56 @@
+id: advanced-local-pickup-for-woocommerce-37c1920a619e06d9c2993bde1d737772
+
+info:
+  name: "Advanced Local Pickup for WooCommerce <= 1.5.2 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The Advanced Local Pickup for WooCommerce for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.5.2. This is due to missing or incorrect nonce validation on the functions wclp_update_state_dropdown_fun, wclp_update_work_hours_list_fun, wclp_update_edit_location_form_fun, and wclp_apply_work_hours_fun. This makes it possible for unauthenticated attackers to invoke those functions resulting in plugin settings changes via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2889033/advanced-local-pickup-for-woocommerce/trunk/include/wc-local-pickup-admin.php?contextall=1&old=2817660&old_path=%2Fadvanced-local-pickup-for-woocommerce%2Ftrunk%2Finclude%2Fwc-local-pickup-admin.php
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-local-pickup-for-woocommerce/"
+    google-query: inurl:"/wp-content/plugins/advanced-local-pickup-for-woocommerce/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-local-pickup-for-woocommerce,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-local-pickup-for-woocommerce/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-local-pickup-for-woocommerce"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.5.2')
