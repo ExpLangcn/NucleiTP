@@ -1,0 +1,58 @@
+id: choices-651a75e830c8a8d44f8eb2c1fc5f8f47
+
+info:
+  name: "Choices (All Versions) - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Choices theme for WordPress is vulnerable to Reflected Cross-Site Scripting due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://jannefi.blogspot.com/2012/10/xss-vulnerability-in-wp-themes-by-kriesi.html
+    - https://wpscan.com/vulnerability/383d2908-b35f-4617-850c-85e17a8b0bbf
+    - http://web.archive.org/web/20181208050719/https%3A//themeforest.net/item/choices-responsive-business-and-portfolio/2536338
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/choices/"
+    google-query: inurl:"/wp-content/themes/choices/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,choices,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/choices/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "choices"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')
