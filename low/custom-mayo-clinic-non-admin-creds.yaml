@@ -1,0 +1,17 @@
+id: custom-mayo-non-admin-creds
+
+info:
+        name: custom-mayo-non-admin-creds
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/approvals"
+
+          matchers:
+                  - type: word
+                    words:
+                            - "<title>datasetlib-upload-front-end</title>"

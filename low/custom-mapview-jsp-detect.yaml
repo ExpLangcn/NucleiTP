@@ -1,0 +1,16 @@
+id: custom-map-view-detect
+
+info:
+        name: custom-map-view-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/mapviewer/demo/mapclient.jsp"
+          matchers:
+                  - type: word
+                    words:
+                            - "<title>MapView JSP Client Demo</title>"
