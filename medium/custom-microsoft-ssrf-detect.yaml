@@ -1,0 +1,19 @@
+id: custom-microsoft-ssrf-detect
+
+info:
+  name: Custom Microsoft SSRF Detect
+  author: 0xParthJ
+  severity: medium
+  tags: config,exposure
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/op/generate.aspx'
+    matchers:
+      - type: word
+        words:
+          - 'Enter the address'
+          - 'Open the document'
+        condition: and
+
