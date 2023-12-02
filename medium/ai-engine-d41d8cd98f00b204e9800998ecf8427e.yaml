@@ -1,0 +1,56 @@
+id: ai-engine-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "AI Engine: ChatGPT Chatbot, Content Generator, GPT 3 & 4, Ultra-Customizable <= 1.6.82 - Authenticated (Admin+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The AI Engine: ChatGPT Chatbot, Content Generator, GPT 3 & 4, Ultra-Customizable plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the plugin's settings in versions up to, and including,  1.6.82 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ai-engine/"
+    google-query: inurl:"/wp-content/plugins/ai-engine/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ai-engine,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ai-engine/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ai-engine"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.6.83')
