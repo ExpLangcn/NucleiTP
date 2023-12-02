@@ -1,0 +1,61 @@
+id: buddypress-xprofile-custom-fields-type-4635da6788b0ae81be6b2209587e6da1
+
+info:
+  name: "BuddyPress Xprofile Custom Fields Type <= 2.6.3 - Arbitrary File Deletion"
+  author: topscoder
+  severity: medium
+  description: "The BuddyPress Xprofile Custom Fields Type plugin for WordPress is vulnerable to Arbitrary File Deletion in versions up to, and including, 2.6.3. This is due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers with low-level privileges and above to arbitrarily delete files, such as wp-config.php."
+  reference:
+    - https://lenonleite.com.br/2018/01/08/13-17-wordpress-plugins-with-over-150000-270000-active-downloads-with-the-same-security-issues/
+    - https://lenonleite.com.br/en/publish-exploits/plugin-buddypress-xprofile-custom-fields-type-2-6-3-rce-unlink/
+    - https://wordpress.org/plugins/buddypress-xprofile-custom-fields-type/#developers
+    - https://wpscan.com/vulnerability/9058
+    - https://www.exploit-db.com/exploits/44432
+    - https://www.youtube.com/watch?v=uIO_DvWCM3s
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:N/A:H
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress-xprofile-custom-fields-type/"
+    google-query: inurl:"/wp-content/plugins/buddypress-xprofile-custom-fields-type/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress-xprofile-custom-fields-type,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress-xprofile-custom-fields-type/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress-xprofile-custom-fields-type"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.6.3')
