@@ -1,0 +1,58 @@
+id: adaptive-images-a8360d2b8db5465d06a1177b81db0e77
+
+info:
+  name: "Adaptive Images <= 0.6.68 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Adaptive Images plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘REQUEST_URI’ in versions up to, and including, 0.6.68 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2655683
+    - https://wpscan.com/vulnerability/eef137af-408c-481c-8493-afe6ee2105d0
+    - https://patchstack.com/database/vulnerability/adaptive-images/wordpress-adaptive-images-for-wordpress-plugin-0-6-68-reflected-cross-site-scripting-xss-vulnerability
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/adaptive-images/"
+    google-query: inurl:"/wp-content/plugins/adaptive-images/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,adaptive-images,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/adaptive-images/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "adaptive-images"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.6.68')
