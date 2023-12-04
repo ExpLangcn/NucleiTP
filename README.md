@@ -10,5 +10,3 @@
 <img width="524" alt="image" src="https://github.com/ExpLangcn/NucleiTP/assets/52586866/bbaacd7e-0d4b-4959-80dd-f92d4617d132">
 
 **关注仓库变动 快速获取最新 Poc**
-
-test
