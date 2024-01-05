@@ -1,0 +1,56 @@
+id: 123contactform-for-wordpress-46d8ece8c33a034f0d831490b9e6e81a
+
+info:
+  name: "123ContactForm for WordPress <= 1.5.6 - Arbitrary Post Creation"
+  author: topscoder
+  severity: high
+  description: "The 123ContactForm for WordPress plugin for WordPress is vulnerable to Arbitrary Post Creation in versions up to, and including, 1.5.6. This is due to incorrect signature validation on the cfp_new_post function. This makes it possible for unauthenticated attackers to create arbitrary posts."
+  reference:
+    - https://blog.sucuri.net/2021/01/critical-vulnerabilities-in-123contactform-for-wordpress-wordpress-plugin.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/123contactform-for-wordpress/"
+    google-query: inurl:"/wp-content/plugins/123contactform-for-wordpress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,123contactform-for-wordpress,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/123contactform-for-wordpress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "123contactform-for-wordpress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.5.6')
