@@ -1,0 +1,28 @@
+id: symfony-fuck-you
+
+info:
+  name: Symfony Fuck Your configuration file - Detect
+  author: Trevigroup Cyber
+  severity: critical
+  description: Symfony database configuration file was detected and may contain database credentials.
+  reference: https://symfony.com/legacy/doc/reference/1_3/en/07-Databases
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 9.8
+    cwe-id: CWE-200
+  tags: config,exposure,symfony
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/app_dev.php/_profiler/open?file=app/config/parameters.yml"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        part: body
+        words:
+          - "parameters:"
+# Enhanced by md on 2023/05/20
