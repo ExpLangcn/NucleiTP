@@ -1,0 +1,37 @@
+id: xmlrpc.php
+info:
+  name: XMLRPC
+  author: th3_r3sistanc3
+  severity: info
+  description: description
+  reference:
+    - https://
+  tags: tags
+requests:
+  - raw:
+      - |
+        POST /xmlrpc.php HTTP/2
+        Host: {{Hostname}}
+        Cookie: OptanonConsent=isGpcEnabled=0&datestamp=Thu+Jun+29+2023+00%3A32%3A36+GMT%2B0530+(India+Standard+Time)&version=202304.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&landingPath=NotLandingPage&groups=1%3A1%2C2%3A0%2C4%3A0&AwaitingReconsent=false
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.5
+        Accept-Encoding: gzip, deflate
+        Upgrade-Insecure-Requests: 1
+        Sec-Fetch-Dest: document
+        Sec-Fetch-Mode: navigate
+        Sec-Fetch-Site: none
+        Sec-Fetch-User: ?1
+        Te: trailers
+        Content-Length: 133
+
+        <?xml version="1.0" encoding="utf-8"?>
+        <methodCall>
+        <methodName>system.listMethods</methodName>
+        <params></params>
+        </methodCall>
+    matchers:
+      - type: word
+        part: body
+        words:
+          - system.multicall

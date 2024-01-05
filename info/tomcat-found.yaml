@@ -1,0 +1,61 @@
+id: tomcat-found
+info:
+  name: Tomcat_found
+  author: th3_r3sistanc3
+  severity: info
+  description: description
+  reference:
+    - https://
+  tags: tags
+requests:
+  - raw:
+      - |+
+        GET /manager/html HTTP/1.1
+        Host: {{Hostname}}
+        Cookie: JSESSIONID=6515DF133BFB4C72B7EB38162F9D686F; _abck=FA9EB4959751C82B015C32C13C34B2E4~0~YAAQmTLUF4lg59yGAQAA88Rj4QkesiIFMQO5zPGuCwtqKAlQDk8FJiH/F7iG+VnZ2e2ZVOXMx6EY5Wvob7YqbgCiF4enK1hLmLu4ezUPiq+N5wJhm5dppFaiL7ER3nErfcgrQuIRQ5KsKEv6tyyj103hzXJv19Fhb3EC3RBLkPk18FDrRYdmvj/l4deK8sllEIncO3MmU9wSsmcYLU3hZp54N4ApsIUIlmVvlxb8rFwObg3y2YbeQEZb3xtJ8PmH/eLz7jbzkQexKprdlmStZEJMArOj4t+mtX46YjlLWsSq+GxOjfYLYKfkPr26uCdcxpx4hQBpHRDfVRvKeuuvMEUZ8rkaBm8DYn2jXdjThI40fgSityM0713G8O7bplmPFpnB9R1fLvDS9LvU947wcoixiqOC1rmn~-1~||-1||~-1; _scid=dedac07f-cf8b-4b83-86ae-47200fec39e6; _ga_KSLX93CENV=GS1.1.1678818652.1.1.1678820273.59.0.0; _ga=GA1.2.1692553598.1678818652; FPID=FPID2.2.yvsrfRvRDJ2Kf%2FhgGTxR%2BoV0xdlL%2FyV4TfQPV0%2BLbTY%3D.1678818652; crl8.fpcuid=3c0fddfc-742d-4dba-8b9f-9f6b2b9b375e; _cs_c=0; _cs_id=b91eb2af-cb7a-affe-c01d-ad97aa37d0bc.1678818653.1.1678820276.1678818653.1.1712982653871; _sctr=1|1678818600000
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.5
+        Accept-Encoding: gzip, deflate
+        Upgrade-Insecure-Requests: 1
+        Sec-Fetch-Dest: document
+        Sec-Fetch-Mode: navigate
+        Sec-Fetch-Site: none
+        Sec-Fetch-User: ?1
+        Te: trailers
+        Connection: close
+
+      - |+
+        GET /manager/ HTTP/1.1
+        Host: {{Hostname}}
+        Cookie: JSESSIONID=6515DF133BFB4C72B7EB38162F9D686F; _abck=FA9EB4959751C82B015C32C13C34B2E4~0~YAAQmTLUF4lg59yGAQAA88Rj4QkesiIFMQO5zPGuCwtqKAlQDk8FJiH/F7iG+VnZ2e2ZVOXMx6EY5Wvob7YqbgCiF4enK1hLmLu4ezUPiq+N5wJhm5dppFaiL7ER3nErfcgrQuIRQ5KsKEv6tyyj103hzXJv19Fhb3EC3RBLkPk18FDrRYdmvj/l4deK8sllEIncO3MmU9wSsmcYLU3hZp54N4ApsIUIlmVvlxb8rFwObg3y2YbeQEZb3xtJ8PmH/eLz7jbzkQexKprdlmStZEJMArOj4t+mtX46YjlLWsSq+GxOjfYLYKfkPr26uCdcxpx4hQBpHRDfVRvKeuuvMEUZ8rkaBm8DYn2jXdjThI40fgSityM0713G8O7bplmPFpnB9R1fLvDS9LvU947wcoixiqOC1rmn~-1~||-1||~-1; _scid=dedac07f-cf8b-4b83-86ae-47200fec39e6; _ga_KSLX93CENV=GS1.1.1678818652.1.1.1678820273.59.0.0; _ga=GA1.2.1692553598.1678818652; FPID=FPID2.2.yvsrfRvRDJ2Kf%2FhgGTxR%2BoV0xdlL%2FyV4TfQPV0%2BLbTY%3D.1678818652; crl8.fpcuid=3c0fddfc-742d-4dba-8b9f-9f6b2b9b375e; _cs_c=0; _cs_id=b91eb2af-cb7a-affe-c01d-ad97aa37d0bc.1678818653.1.1678820276.1678818653.1.1712982653871; _sctr=1|1678818600000
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.5
+        Accept-Encoding: gzip, deflate
+        Upgrade-Insecure-Requests: 1
+        Sec-Fetch-Dest: document
+        Sec-Fetch-Mode: navigate
+        Sec-Fetch-Site: none
+        Sec-Fetch-User: ?1
+        Te: trailers
+        Connection: close
+
+
+    matchers-condition: or
+    matchers:
+      - type: status
+        status:
+          - 401
+      - type: word
+        part: header
+        words:
+          - 401 Unauthorized
+      - type: word
+        part: body
+        words:
+          - manager
+      - type: word
+        part: body
+        words:
+          - tomcat

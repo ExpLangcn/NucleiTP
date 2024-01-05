@@ -1,0 +1,21 @@
+id: check-clockwork-latest
+
+info:
+  name: Check for /__clockwork/latest
+  author: SirBugs
+  severity: info
+  reference: https://example.com/reference
+  tags: leaks, information, clockwork, latest
+
+requests:
+  - method: GET
+    path:
+      - "/__clockwork/latest"
+
+    matchers:
+      - type: word
+        words:
+          - "\"headers\":"
+          - "\"uri\":"
+        condition: and
+        part: body

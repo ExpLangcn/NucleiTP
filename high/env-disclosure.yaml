@@ -1,0 +1,20 @@
+id: env-disclose
+
+info:
+  name: env.js Disclosure
+  author: SirBugs
+  severity: high
+  description: This Template checks disclosing secret information via /assets/env.js
+  tags: env, env.js, js
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/assets/env.js'
+    matchers:
+      - type: word
+        part: body
+        condition: or
+        words:
+          - '["env"]'
+          - 'Environment variables'

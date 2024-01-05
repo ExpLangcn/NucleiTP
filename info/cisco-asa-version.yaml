@@ -1,0 +1,34 @@
+id: cisco-asa-version
+info:
+  name: Cisco ASA version
+  author: gtrrnr
+  severity: info
+  description: Detects Cisco ASA device and extracts the version from the response.
+
+http:
+  - raw:
+      - |
+        POST / HTTP/1.1
+        Host: {{Hostname}}
+        X-Aggregate-Auth: 1
+        Connection: close
+
+        <?xml version="1.0" encoding="UTF-8"?>
+        <config-auth client="vpn" type="init" aggregate-auth-version="2">
+        <version who="vpn">3.1.337</version>
+        <device-id device-type="Nuclei" platform-version="3.1.3.3.7">mac-intel</device-id>
+        </config-auth>
+
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200'
+          - 'contains(body, "config-auth")'
+          - 'contains(body, "<version who=")'
+        condition: and
+
+    extractors:
+      - type: regex
+        group: 1
+        regex:
+          - "<version who=\"sg\">(.+)</version>"

@@ -1,0 +1,24 @@
+id: Django-Debug-Disclosure
+info:
+  name: Django Debug Configuration Disclosure
+  description: 'Attacker can view the config file which contains the username and password'
+  author: Hacktify Cyber Security (@hacktifycs)
+  severity: critical
+  tags: django,sde
+  reference: |
+    - null
+
+requests:
+  - method: POST
+    path:
+      - '{{BaseURL}}/admin/login/?next=/admin/' #endpoint
+    cookie-reuse: true
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: regex
+        regex:
+          - 'DB'
+        part: body

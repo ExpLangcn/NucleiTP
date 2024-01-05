@@ -1,0 +1,42 @@
+id: wp-json_info
+info:
+  name: wp-json_info
+  author: th3_r3sistanc3
+  severity: low
+  description: User information leak
+  reference:
+    - https://
+    - http://
+    
+  tags: tags
+requests:
+  - raw:
+      - |+
+        GET /wp-json/wp/v2/users/ HTTP/2
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Firefox/102.0
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.5
+        Accept-Encoding: gzip, deflate
+        Upgrade-Insecure-Requests: 1
+        Sec-Fetch-Dest: document
+        Sec-Fetch-Mode: navigate
+        Sec-Fetch-Site: none
+        Sec-Fetch-User: ?1
+        Te: trailers
+        Connection: close
+
+    matchers-condition: or
+    matchers:
+      - type: word
+        part: body
+        words:
+          - name
+      - type: word
+        part: body
+        words:
+          - description
+      - type: word
+        part: body
+        words:
+          - id
