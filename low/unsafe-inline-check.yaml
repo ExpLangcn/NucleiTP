@@ -1,0 +1,49 @@
+id: unsafe-inline-check
+
+info:
+  name: Unsafe Inline Check
+  author: [Your Name Here]
+  severity: low
+  description: Checks for unsafe inline in HTML files.
+
+tags:
+  - html
+  - inline-script
+
+# Define the requests to be made by the template
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    matchers:
+      - type: word
+        words:
+          - '<script>'
+    script: |
+      response = http.get("/")
+      if '<script>' in response.text:
+        htmlhint_output = subprocess.run(["echo", response.text, "|", "htmlhint", "--config=htmlhint.yaml", "-"], capture_output=True, text=True, shell=True)
+
+        if "inline-script-disabled" not in htmlhint_output.stdout:
+          info("No unsafe inline found.")
+          return
+
+        security_warning("Unsafe inline found in HTML file!")
+      else:
+        info("No inline scripts found in HTML file.")
+
+# Define the HTMLHint configuration file
+htmlhint:
+  "tag-pair": true
+  "tagname-lowercase": true
+  "attr-lowercase": true
+  "attr-value-double-quotes": true
+  "doctype-first": false
+  "spec-char-escape": true
+  "id-unique": true
+  "head-script-disabled": true
+  "style-disabled": true
+  "inline-script-disabled": true
+  "space-tab-mixed-disabled": "space"
+  "attr-no-duplication": true
+  "alt-require": true
