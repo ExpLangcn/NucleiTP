@@ -1,0 +1,101 @@
+id: bitrix-landing-rce
+
+info:
+  name: Bitrix Landing module RCE version based detection
+  author: gtrrnr,vulnspace
+  severity: High
+  description: A vulnerability in the landing module of the 1C-Bitrix Site Management content management system (CMS) is caused by synchronization errors when using a shared resource. Exploitation of the vulnerability can allow a remote attacker to execute OS commands on the vulnerable host, gain control over resources or gain access to internal network.
+  reference:
+    - https://bdu.fstec.ru/vul/2023-05857
+    - https://www.bitrix24.com/features/box/box-versions.php?module=landing
+  tags: bitrix,rce
+  metadata:
+    max-request: 3
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/bitrix/components/bitrix/landing.sites/templates/.default/style.css"
+      - "{{BaseURL}}/components/bitrix/landing.sites/templates/.default/style.css"
+      - "{{BaseURL}}/bx/components/bitrix/landing.sites/templates/.default/style.css"
+
+    host-redirects: true
+    stop-at-first-match: true
+    max-redirects: 3
+    matchers-condition: or
+    matchers:
+
+      - type: dsl
+        name: "landing (22.200.0) August 8, 2022"
+        dsl:
+          - "status_code==200 && (\"9fbebe45f8d33fa108dfb947d0fb4656\" == md5(body))"
+
+      - type: dsl
+        name: "landing (22.100.0) July 5, 2022"
+        dsl:
+          - "status_code==200 && (\"b319495dd5f16817406386b5dc63c146\" == md5(body))"
+
+      - type: dsl
+        name: "landing (22.0.0) April 18, 2022"
+        dsl:
+          - "status_code==200 && (\"e64a234d4771590d79e1809f66fc7043\" == md5(body))"
+
+      - type: dsl
+        name: "landing (21.900.0) November 12, 2021"
+        dsl:
+          - "status_code==200 && (\"c49de48decdf1fd2acaf7853925183be\" == md5(body))"
+
+      - type: dsl
+        name: "landing (21.700.0) September 7, 2021"
+        dsl:
+          - "status_code==200 && (\"0c4c0547c37ad53cbb1eda4ddbf15e33\" == md5(body))"
+
+      - type: dsl
+        name: "landing (21.500.0) July 16, 2021"
+        dsl:
+          - "status_code==200 && (\"c2adce7a16e8572f9a5728288a2fac81\" == md5(body))"
+
+      - type: dsl
+        name: "landing (21.200.0) April 21, 2021"
+        dsl:
+          - "status_code==200 && (\"a871c4967c7c937597890d7b5c3d960a\" == md5(body))"
+
+      - type: dsl
+        name: "landing (20.4.500) September 15, 2020"
+        dsl:
+          - "status_code==200 && (\"9dc7150c6bd61d298d147b7ea67e8a8b\" == md5(body))"
+
+      - type: dsl
+        name: "landing (20.4.0) July 10, 2020"
+        dsl:
+          - "status_code==200 && (\"b3ec699b40523a8412a0d56ed76f43bc\" == md5(body))"
+
+      - type: dsl
+        name: "landing (20.2.100) February 27, 2020"
+        dsl:
+          - "status_code==200 && (\"c8c32f0232ac2a4bb46856f12a6a4b09\" == md5(body))"
+
+      - type: dsl
+        name: "landing (20.2.0) January 20, 2020"
+        dsl:
+          - "status_code==200 && (\"5a530921bbc5d6923d20b75c4ba99b4d\" == md5(body))"
+
+      - type: dsl
+        name: "landing (20.0.0) November 26, 2019"
+        dsl:
+          - "status_code==200 && (\"ef14e227a8f17a3c1a76ce4290dcd9c6\" == md5(body))"
+
+      - type: dsl
+        name: "landing (19.0.200) August 22, 2019"
+        dsl:
+          - "status_code==200 && (\"0fa4366725041880aca1a79d451806f4\" == md5(body))"
+
+      - type: dsl
+        name: "landing (19.0.0) August 2, 2019"
+        dsl:
+          - "status_code==200 && (\"dfa4536c8b721d8c67065a9fd60c05ed\" == md5(body))"
+
+      - type: dsl
+        name: "landing (18.5.8) October 18, 2018"
+        dsl:
+          - "status_code==200 && (\"8f20968cc2e35bedf95777bcc6c39987\" == md5(body))"

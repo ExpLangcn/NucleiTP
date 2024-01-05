@@ -1,0 +1,38 @@
+id: CVE-2023-002
+
+info:
+  name: Bitrix24 <=20.0.0 - imagepg.php content spoofing 
+  author: crlf,metascan
+  severity: medium
+  description: The Web Application Firewall in Bitrix24 up to and including 20.0.0 allows Content Spoofing via the img parameter to the bitrix/tools/imagepg.php URI.
+  reference:
+    - https://github.com/cr1f/writeups/blob/main/attacking_bitrix.pdf
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:L/I:N/A:N
+    cvss-score: 4.3
+    cve-id: CVE-2023-002
+    cwe-id: CWE-345
+  tags: cve,cve2023,xss,bitrix,spoofing
+
+http:
+  - method: GET
+    path:
+      - '{{BaseURL}}/bitrix/tools/imagepg.php?img=//metascan.ru/assets/images/logo.svg'
+
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+
+      - type: word
+        part: header
+        words:
+          - text/html
+
+      - type: word
+        part: body
+        words:
+          - 'img src="//metascan.ru/assets/images/logo.svg"'
+
+      - type: status
+        status:
+          - 200
