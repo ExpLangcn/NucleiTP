@@ -1,0 +1,38 @@
+id: multiple-parameters-link-manipulation-erickfernandox
+
+info:
+  name: Link Manipulation via Multiple Parameters
+  author: erickfernandox
+  severity: medium
+  description: |
+    It is possible to manipulate links allowing open redirect or XSS via multiple parameters
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cwe-id: CWE-601
+  metadata:
+    max-request: 3
+  tags: redirect, xss, generic
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/?protocol=A&domain=C&subdomain=B&host=X"
+
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:                    
+          - '"A://B.C'
+          - '"https://B.C'          
+          
+      - type: status
+        status:
+          - 200     
+          - 404
+          - 302
+          - 301
+          
+        condition: or

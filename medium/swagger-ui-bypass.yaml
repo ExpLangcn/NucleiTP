@@ -1,0 +1,31 @@
+id: swagger-page
+
+info:
+  name: Verificação de Swagger em URLs
+  author: [erickfernandox]
+  severity: medium
+  description: |
+      Este template verifica varios caminhos possiveis nas URLs para achar paginas de Swagger UI.
+  tags: 
+    - injection
+    - swagger
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/swagger/..;/swagger/index.html"
+      - "{{BaseURL}}/swagger-ui/..;/swagger-ui/index.html"
+      - "{{BaseURL}}/api/..;/api/"
+      - "{{BaseURL}}/api/..;/api/docs/"
+      - "{{BaseURL}}/api-doc/..;/api-doc"
+      - "{{BaseURL}}/api-docs/..;/api-docs"      
+      - "{{BaseURL}}/docs/..;/docs/index.html"      
+      - "{{BaseURL}}/api/..;/api/swagger-ui.html"
+      - "{{BaseURL}}/swagger/..;/swagger/ui/index"      
+      - "{{BaseURL}}/api/..;/api/swagger/index.html"
+      - "{{BaseURL}}/v1/..;/v1/"     
+      
+    matchers:
+      - type: word
+        words:
+          - "swagger-ui-"  

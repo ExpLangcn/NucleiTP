@@ -1,0 +1,40 @@
+id: phpmyadmin-setup
+
+info:
+  name: PhpMyAdmin Setup File - Detect
+  author: 0xpugazh
+  severity: medium
+  description: Multiple phpMyAdmin setup files were detected.
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cwe-id: CWE-200
+  metadata:
+    verified: true
+    max-request: 4
+    shodan-query: http.html:"phpMyAdmin"
+  tags: phpmyadmin,misconfig
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/phpmyadmin/setup/"
+      - "{{BaseURL}}/setup/index.php"
+      - "{{BaseURL}}/admin/"
+      - "{{BaseURL}/phpMyAdminOLD/setup/index.php"
+
+    stop-at-first-match: true
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "You want to configure phpMyAdmin using web interface"
+          - "<title>phpMyAdmin setup</title>"
+        condition: or
+
+      - type: status
+        status:
+          - 200
+

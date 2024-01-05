@@ -1,0 +1,24 @@
+id: Jitong-EWEBS-phpinfo-leak
+
+info:
+    name: 极通EWEBSphpinfo泄露
+    author: Master先生
+    tags: phpinfo,Jitong
+    severity: high
+    description: 极通EWEBS访问testweb.php造成phpinfo泄露
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/testweb.php"
+    
+    redirects: false
+
+    matchers-condition: and
+    matchers:
+      - type: dsl
+        condition: and
+        dsl:
+          - "contains(Content-Type, 'text/html')"
+          - "contains(body, 'http://www.php.net/')"
+          - "status_code == 200"

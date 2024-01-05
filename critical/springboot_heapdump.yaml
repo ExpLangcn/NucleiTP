@@ -1,0 +1,60 @@
+id: springboot-heapdump
+
+info:
+  name: Spring Boot  Heap Dump
+  author: booboo
+  severity: critical
+  tags: springboot
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/heapdump"
+      - "{{BaseURL}}/actuator/heapdump"
+      - "{{BaseURL}}/heapdump"
+      - "{{BaseURL}}/admin/heapdump"
+      - "{{BaseURL}}/..;/admin/heapdump"
+      - "{{BaseURL}}/..;/admin/actuator/heapdump"
+      - "{{BaseURL}}//actuator/heapdump"
+      - "{{BaseURL}}/%2f/heapdump"
+      - "{{BaseURL}}/%2f/actuator/heapdump"
+      - "{{BaseURL}}/%2e/heapdump"
+      - "{{BaseURL}}/%2e/actuator/heapdump"
+      - "{{BaseURL}}/%2e%2e/heapdump"
+      - "{{BaseURL}}/%2e%2e/actuator/heapdump"
+      - "{{BaseURL}}/..;/%2e/heapdump"
+      - "{{BaseURL}}/..;/%2e/actuator/heapdump"
+      - "{{BaseURL}}/dump"
+      - "{{BaseURL}}/actuator/dump"
+      - "{{BaseURL}}/dump"
+      - "{{BaseURL}}/admin/dump"
+      - "{{BaseURL}}/..;/admin/dump"
+      - "{{BaseURL}}/..;/admin/actuator/dump"
+      - "{{BaseURL}}//actuator/dump"
+      - "{{BaseURL}}/%2f/dump"
+      - "{{BaseURL}}/%2f/actuator/dump"
+      - "{{BaseURL}}/%2e/dump"
+      - "{{BaseURL}}/%2e/actuator/dump"
+      - "{{BaseURL}}/%2e%2e/dump"
+      - "{{BaseURL}}/%2e%2e/actuator/dump"
+      - "{{BaseURL}}/..;/%2e/dump"
+      - "{{BaseURL}}/..;/%2e/actuator/dump"
+
+ 
+
+    stop-at-first-match: true
+    max-size: 2097152 # 2MB - Max Size to read from server response
+    matchers-condition: and
+    matchers:
+
+      - type: binary
+        part: body
+        binary:
+          - "4a4156412050524f46494c45" # "JAVA PROFILE"
+          - "4850524f46" # "HPROF"
+          - "1f8b080000000000" # Gunzip magic byte
+        condition: or
+
+      - type: status
+        status:
+          - 200
