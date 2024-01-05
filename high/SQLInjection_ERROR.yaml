@@ -1,0 +1,39 @@
+id: SQLInjection_ERROR
+
+info:
+  name: SQLINJECTION Detection
+  author: mrco24
+  severity: High
+
+requests:
+  - method: GET
+
+    path:
+      - "{{BaseURL}}'"
+      - "{{BaseURL}}1 or 1"
+      - "{{BaseURL}}/"
+      - "{{BaseURL}}//"
+      - "{{BaseURL}};"
+      - "{{BaseURL}}-- or #" 
+      - "{{BaseURL}}' OR '1"
+      - "{{BaseURL}}' OR 1 -- -"
+      - "{{BaseURL}}'='"
+      - "{{BaseURL}}'LIKE'"
+      - "{{BaseURL}}'=0--+"
+      - "{{BaseURL}}OR 1=1"
+      - "{{BaseURL}}' OR 'x'='x"
+      - "{{BaseURL}}' AND id IS NULL; --"
+
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - "SQL syntax.*MySQL|Warning.*mysql_.*|valid MySQL result|MySqlClient.|mysqli_error|mysqli_query"
+          - "PostgreSQL.*ERROR|Warning.*Wpg_.*|valid PostgreSQL resultNpgsql."
+#          - "Driver.* SQL[-_ ]*Server|OLE DB.* SQL Server|(W|A)SQL Server.*Driver|Warning.*mssql_.*|(W|A)SQL Server.*[0-9a-fA-F]{8}|(?s)Exception.*WSystem.Data.SqlClient.|(?s)Exception.*WRoadhouse.Cms.)"
+          - "Microsoft Access Driver|JET Database Engine|Access Database Engine"
+          - "ORA-[0-9][0-9][0-9][0-9]|Oracle error|Oracle.*Driver|Warning.*Woci_.*|Warning.*Wora_.*"
+          - "CLI Driver.*DB2|DB2 SQL error|bdb2_w+"
+          - "SQLite/JDBCDriver|SQLite.Exception|System.Data.SQLite.SQLiteException|Warning.*sqlite_.*|Warning.*SQLite3::|SQLITE_ERROR"
+          - "(?i)Warning.*sybase.*|Sybase message|Sybase.*Server message.*"

