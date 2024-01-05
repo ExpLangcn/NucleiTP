@@ -1,0 +1,76 @@
+id: comprehensive-swagger-ui-version-detection
+
+info:
+  name: Comprehensive Swagger UI Version Detection
+  author: brinhosa
+  severity: info
+  description: Attempts to detect Swagger UI version from a comprehensive list of common paths.
+
+requests:
+  - method: GET
+    path:
+      # Combined and sorted list of unique Swagger UI endpoints
+      - "{{BaseURL}}/api-doc"
+      - "{{BaseURL}}/api-docs"
+      - "{{BaseURL}}/api/package_search/v4/documentation"
+      - "{{BaseURL}}/api/swagger"
+      - "{{BaseURL}}/api/swagger-ui.html"
+      - "{{BaseURL}}/api/v1"
+      - "{{BaseURL}}/api/v2"
+      - "{{BaseURL}}/api/v3"
+      - "{{BaseURL}}/api/2/explore/"
+      - "{{BaseURL}}/apidoc"
+      - "{{BaseURL}}/apidocs"
+      - "{{BaseURL}}/application"
+      - "{{BaseURL}}/backoffice/v1/ui"
+      - "{{BaseURL}}/build/reference/web-api/explore"
+      - "{{BaseURL}}/core/latest/swagger-ui/index.html"
+      - "{{BaseURL}}/csp/gateway/slc/api/swagger-ui.html"
+      - "{{BaseURL}}/doc"
+      - "{{BaseURL}}/docs"
+      - "{{BaseURL}}/documentation"
+      - "{{BaseURL}}/internal/docs"
+      - "{{BaseURL}}/rest/v1"
+      - "{{BaseURL}}/rest/v3/doc"
+      - "{{BaseURL}}/swagger"
+      - "{{BaseURL}}/swagger-resources"
+      - "{{BaseURL}}/swagger-ui"
+      - "{{BaseURL}}/swagger-ui.html"
+      - "{{BaseURL}}/swagger-ui/index.html"
+      - "{{BaseURL}}/swagger.json"
+      - "{{BaseURL}}/swagger/index.html"
+      - "{{BaseURL}}/swagger/swagger-ui.htm"
+      - "{{BaseURL}}/swagger/ui"
+      - "{{BaseURL}}/swagger/v1/swagger.json"
+      - "{{BaseURL}}/swaggerui"
+      - "{{BaseURL}}/ui"
+      - "{{BaseURL}}/ui/"
+      - "{{BaseURL}}/v1"
+      - "{{BaseURL}}/v1.0"
+      - "{{BaseURL}}/v1.1"
+      - "{{BaseURL}}/v2"
+      - "{{BaseURL}}/v2.0"
+      - "{{BaseURL}}/v3"
+      - "{{BaseURL}}/v1.x/swagger-ui.html"
+      - "{{BaseURL}}/swagger/swagger-ui.html"
+      - "{{BaseURL}}/swagger/index.html"
+
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - "Version: ([\\d\\.]+)"
+          - "\\?v=([\\d.]+)"
+        group: 1
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "Version:"
+          - "?v="
+        part: body
+
+      - type: status
+        status:
+          - 200
