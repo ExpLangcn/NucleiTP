@@ -1,0 +1,58 @@
+id: 001-prime-strategy-translate-accelerator-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    001 Prime Strategy Translate Accelerator <= 1.1.1 - Missing Authorization
+  author: topscoder
+  severity: medium
+  description: >
+    The 001 Prime Strategy Translate Accelerator plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the  update_psta_settings() function called via a plugins_loaded action in versions up to, and including, 1.1.1. This makes it possible for unauthenticated attackers to delete the plugin's cache.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/217d68dc-6133-4b7e-9d8f-bb8fc18f1c12?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L
+    cvss-score: 6.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/001-prime-strategy-translate-accelerator/"
+    google-query: inurl:"/wp-content/plugins/001-prime-strategy-translate-accelerator/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,001-prime-strategy-translate-accelerator,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/001-prime-strategy-translate-accelerator/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "001-prime-strategy-translate-accelerator"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.1')

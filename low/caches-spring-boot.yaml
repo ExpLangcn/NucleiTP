@@ -1,0 +1,31 @@
+id: caches-spring-boot
+
+info:
+  name: Detect caches spring boot Actuator
+  author: ELSFA7110
+  severity: low
+  description: the caches endpoint provides access to the application’s caches.
+  tags: springboot,exposure
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/actuator/caches"
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "cacheManagers"
+        condition: or
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "application/json"
+          - "application/vnd.spring-boot.actuator"
+          - "application/vnd.spring-boot.actuator.v1+json"
+          - "application/vnd.spring-boot.actuator.v2+json"
+        condition: or
+        part: header
