@@ -1,0 +1,25 @@
+id: subdomain-takeover
+info:
+    name: Subdomain Takeover Detection
+    author: Sergey Zybnev <https://github.com/szybnev>
+    severity: medium
+    Description: Find general, aws, github-pages, azure, heroku domain takeover.
+requests:
+    - method: GET
+      path:
+          - "{{BaseURL}}"
+      matchers:
+          - type: word
+            part: body
+            words:
+                - "NoSuchBucket"
+                - "Domain not configured"
+                - "Herokuapp not found"
+                - "Github Pages 404"
+                - "Domain uses DO name serves with no records in DO."
+                - "Repository not found"
+                - "There isn't a GitHub Pages site here."
+                - "The specified container does not exist"
+                - "Web app not found"
+                - "NoSuchBucket"
+                - "The specified bucket does not exist"
