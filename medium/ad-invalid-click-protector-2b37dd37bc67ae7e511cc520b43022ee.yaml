@@ -1,0 +1,56 @@
+id: ad-invalid-click-protector-2b37dd37bc67ae7e511cc520b43022ee
+
+info:
+  name: "Ad Invalid Click Protector (AICP) <= 1.2.5.2 - Reflected Cross-Site Scripting and Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The  Ad Invalid Click Protector (AICP) WordPress plugin is vulnerable to Reflected Cross-Site Scripting via the page parameter and Cross-Site Request Forgery that allows attackers to delete banned users."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2705149%40ad-invalid-click-protector&new=2705149%40ad-invalid-click-protector&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ad-invalid-click-protector/"
+    google-query: inurl:"/wp-content/plugins/ad-invalid-click-protector/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ad-invalid-click-protector,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ad-invalid-click-protector/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ad-invalid-click-protector"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.5.2')

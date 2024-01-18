@@ -1,0 +1,62 @@
+id: canvas-85dba4da99018ec5002875cc774204af
+
+info:
+  name: "WooThemes WooFramework < 5.3.10 - Remote Code Execution via Shortcodes"
+  author: topscoder
+  severity: critical
+  description: "The WooFramework, used for all WooThemes for WordPress, is vulnerable to Remote Code Execution in versions up to, and including, 5.3.9 via the shortcode preview feature. This makes it possible for unauthenticated attackers attackers to execute code on the server."
+  reference:
+    - https://blog.sucuri.net/2012/04/new-woothemes-vulnerability-patched-update-framework-now.html
+    - http://web.archive.org/web/20150521014235/https%3A//gist.github.com/jasongill/2523147
+    - http://dzv365zjfbd8v.cloudfront.net/changelogs/canvas/changelog.txt
+    - https://s3.amazonaws.com/wooframework/functions-changelog.txt
+    - https://dzv365zjfbd8v.cloudfront.net/changelogs/woostore/changelog.txt
+    - https://dzv365zjfbd8v.cloudfront.net/changelogs/sentient/changelog.txt
+    - https://dzv365zjfbd8v.cloudfront.net/changelogs/wootique/changelog.txt
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/canvas/"
+    google-query: inurl:"/wp-content/themes/canvas/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,canvas,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/canvas/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "canvas"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.7.10')

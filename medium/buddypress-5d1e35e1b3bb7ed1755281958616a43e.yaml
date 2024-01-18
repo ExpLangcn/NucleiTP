@@ -1,0 +1,59 @@
+id: buddypress-5d1e35e1b3bb7ed1755281958616a43e
+
+info:
+  name: "BuddyPress <= 7.2.0 - Authorization Bypass to Friend Invite"
+  author: topscoder
+  severity: medium
+  description: "The BuddyPress plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the buddypress/v1/groups/invites REST-API endpoint in versions up to, and including, 7.2.0. This makes it possible for a member to invite another member to join a group without being friends when that group restricted invites to friends only."
+  reference:
+    - https://codex.buddypress.org/releases/version-7-2-1/
+    - https://buddypress.org/2021/03/buddypress-7-2-1-security-release/
+    - https://wpscan.com/vulnerability/26be48e8-0fa8-4c5b-846e-af46e27822cb
+    - https://buddypress.trac.wordpress.org/changeset/12860
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 7.2.0')

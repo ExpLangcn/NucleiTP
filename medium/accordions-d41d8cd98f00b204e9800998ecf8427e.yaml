@@ -1,0 +1,56 @@
+id: accordions-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Accordion <= 2.2.43 - Authenticated (Admin+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Accordion plugin for WordPress is vulnerable to Stored Cross-Site Scripting via parameter keys through accordion imports in versions up to, and including, 2.2.40 due to insufficient input sanitization and output escaping. This makes it possible for attackers with administrative privileges to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/accordions/"
+    google-query: inurl:"/wp-content/plugins/accordions/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,accordions,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/accordions/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "accordions"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.2.40')

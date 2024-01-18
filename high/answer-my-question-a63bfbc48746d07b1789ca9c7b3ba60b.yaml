@@ -1,0 +1,60 @@
+id: answer-my-question-a63bfbc48746d07b1789ca9c7b3ba60b
+
+info:
+  name: "Answer My Question < 1.2 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Answer My Question plugin for WordPress is vulnerable to Cross-Site Scripting via several parameters in versions before 1.2 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://plugins.trac.wordpress.org/ticket/1576
+    - https://plugins.trac.wordpress.org/browser/answer-my-question/trunk/readme.txt
+    - https://web.archive.org/web/20191021090426/https%3A//www.securityfocus.com/archive/1/524625/30/0/threaded
+    - https://wordpress.org/plugins/answer-my-question/#developers
+    - https://plugins.trac.wordpress.org/changeset/600481
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/answer-my-question/"
+    google-query: inurl:"/wp-content/plugins/answer-my-question/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,answer-my-question,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/answer-my-question/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "answer-my-question"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.2')

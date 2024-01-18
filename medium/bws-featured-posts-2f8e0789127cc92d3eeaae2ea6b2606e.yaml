@@ -1,0 +1,59 @@
+id: bws-featured-posts-2f8e0789127cc92d3eeaae2ea6b2606e
+
+info:
+  name: "Featured Posts by BestWebSoft < 1.0.1 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Featured Posts by BestWebSoft plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘category’ parameter in versions before 1.0.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - http://jvn.jp/en/jp/JVN24834813/index.html
+    - https://wordpress.org/plugins/bws-featured-posts/#developers
+    - https://plugins.trac.wordpress.org/changeset/1639162
+    - https://web.archive.org/web/20191101101637/http%3A//www.defensecode.com%3A80/advisories/DC-2017-02-014_50_WordPress_plugins_by_BestWebSoft_Advisory.pdf
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bws-featured-posts/"
+    google-query: inurl:"/wp-content/plugins/bws-featured-posts/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bws-featured-posts,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bws-featured-posts/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bws-featured-posts"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.0.1')

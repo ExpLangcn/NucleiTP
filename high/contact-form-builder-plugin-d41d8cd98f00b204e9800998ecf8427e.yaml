@@ -1,0 +1,58 @@
+id: contact-form-builder-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    WDContactFormBuilder <= 1.0.24 - Authenticated Blind SQL Injection
+  author: topscoder
+  severity: high
+  description: >
+    The Contact Form Builder plugin for WordPress is vulnerable to blind SQL Injection via the 'order_by' parameter in versions up to, and including, 1.0.24 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for authenticated Admin+ attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/7d55c2b8-c05e-419b-8c2d-8c07c8655c17?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-builder/"
+    google-query: inurl:"/wp-content/plugins/contact-form-builder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-builder,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-builder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-builder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0.24')

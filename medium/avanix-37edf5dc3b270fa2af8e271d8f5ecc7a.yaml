@@ -1,0 +1,60 @@
+id: avanix-37edf5dc3b270fa2af8e271d8f5ecc7a
+
+info:
+  name: "Imediapixel Themes (Various Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The ECOBIZ <= 3.3, Ebiz <= 1.2, Avanix <=  1.2, and Ovum (unknown version) themes for WordPress are vulnerable to Cross-Site Scripting due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://jannefi.blogspot.com/2012/10/xss-vulnerability-in-imediapixel.html
+    - http://web.archive.org/web/20121102131422/https%3A//themeforest.net/item/ebiz-corporate-and-business-wordpress-theme/160125?sso?WT.ac=portfolio_item&WT.seg_1=portfolio_item&WT.z_author=imediapixel
+    - http://web.archive.org/web/20140712183056/https%3A//themeforest.net/item/avanix-responsive-business-wordpress-theme/2902029?sso?WT.ac=portfolio_item&WT.seg_1=portfolio_item&WT.z_author=imediapixel
+    - http://web.archive.org/web/20121102131556/https%3A//themeforest.net/item/ovum-clean-and-minimalist-business-theme/127356?sso?WT.ac=portfolio_item&WT.seg_1=portfolio_item&WT.z_author=imediapixel
+    - http://web.archive.org/web/20210513070409/https%3A//themeforest.net/item/ecobiz-business-wordpress-theme/238701
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/avanix/"
+    google-query: inurl:"/wp-content/themes/avanix/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,avanix,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/avanix/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "avanix"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2')

@@ -1,0 +1,58 @@
+id: construct-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Construct <= 1.4 - Arbitrary File Download
+  author: topscoder
+  severity: high
+  description: >
+    The Construct Theme for WordPress is vulnerable to Arbitrary File Download in versions up to, and including, 1.4. This is due to the '_mysite_download_skin' parameter in the 'dl-skin.php' file. This makes it possible for unauthenticated attackers to download any file within the server of the vulnerable service.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/06dcb84f-8293-403d-a3f2-7c5bea7aaae3?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/construct/"
+    google-query: inurl:"/wp-content/themes/construct/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,construct,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/construct/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "construct"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.4')

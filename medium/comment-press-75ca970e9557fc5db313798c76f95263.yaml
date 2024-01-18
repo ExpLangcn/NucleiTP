@@ -1,0 +1,59 @@
+id: comment-press-75ca970e9557fc5db313798c76f95263
+
+info:
+  name: "Comment Press  <=  2.7.1 - Cross-Frame Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Comment Press plugin for WordPress is vulnerable to Cross-Frame Scripting in versions up to, and including, 2.7.1. This is due to the plugin not validating user supplied inputs. This makes it possible for unauthenticated attackers to exploit the vulnerability by tricking users to clicking on URL links that hides invisible iFrames and make it possible to steal credentials and take over the victim's machine."
+  reference:
+    - https://codecanyon.net/item/commentpress-ajax-comments-insert-edit-and-delete-comments-for-wp/4542951
+    - https://vulners.com/wpexploit/WPEX-ID%3A9B4696C5-9B6F-41D3-9E22-5A3A5F701CDA
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-comment-system-for-wordpress-ajax-comments-comment-press-cross-frame-scripting-2-7-0/
+    - https://web.archive.org/web/20201017050017/https%3A//ex-mi.ru/exploit/%5B2020-08-28%5D-%5BWordPress%5D-comment-press-plugin-v2.7.0.txt
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 4.7
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/comment-press/"
+    google-query: inurl:"/wp-content/plugins/comment-press/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,comment-press,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/comment-press/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "comment-press"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.7.2')

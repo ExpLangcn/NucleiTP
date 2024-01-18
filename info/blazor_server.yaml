@@ -1,0 +1,23 @@
+id: blazor_server
+
+info:
+  name: Blazor wasm finder
+  author: fc aka Freakyclown @ cygenta
+  severity: info
+  description: This template tries to locate the blazor wasm json file and extracts out .dll file names
+    some .dll files can hold custom code including sensative information such as database config, user/passwords
+    and much more.
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/_framework/blazor.boot.json"
+    matchers:
+      - type: word
+        words:
+          - "Blazor"
+    extractors:
+      - type: regex # type of the extractor
+        part: body  # part of the response (header,body,all)
+        regex:
+          - \"([^"\r\n]+\.dll)\"

@@ -1,0 +1,27 @@
+id: extract-airtables-links
+
+info:
+  name: Airtables links extractor
+  author: cipher387
+  severity: info
+  description: Extract Airtables links from web page body
+  tags: osint,juicy-info
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          - 'airtable.com/((.|\n)*?)(\s|\"|\]|\,)'
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - 'airtable.com/((.|\n)*?)(\s|\"|\]|\,)'
+
+
+#url for test https://layoffs.fyi/

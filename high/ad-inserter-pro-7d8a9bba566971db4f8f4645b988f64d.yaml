@@ -1,0 +1,57 @@
+id: ad-inserter-pro-7d8a9bba566971db4f8f4645b988f64d
+
+info:
+  name: "Ad Inserter Pro <= 2.7.15 - Arbitrary File Modification"
+  author: topscoder
+  severity: high
+  description: "The Ad Inserter Pro plugin for WordPress is vulnerable to Arbitrary File Modification in versions 2.7.15 via unknown mechanisms. The Wordfence Threat Intelligence team conducted a thorough review of the vulnerable plugin and could not determine a vulnerable component in the plugin, which leads us to believe there may have been some element on the plugin developers management side that may have made file modification possible without the appropriate authorizations. Reports indicate that attackers were deleting wp-config.php files to reset the site, which leads us to believe the vulnerability made arbitrary file deletion or modification possible."
+  reference:
+    - https://wordpress.org/support/topic/possibly-security-issue/
+    - https://adinserter.pro/version-history
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ad-inserter-pro/"
+    google-query: inurl:"/wp-content/plugins/ad-inserter-pro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ad-inserter-pro,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ad-inserter-pro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ad-inserter-pro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.7.15')

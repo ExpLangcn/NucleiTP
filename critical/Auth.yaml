@@ -1,0 +1,24 @@
+id: Authorization
+
+info:
+  name: Authorization
+  author: lu3ky-13
+  severity: critical
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 401
+
+      - type: word
+        words:
+          - "Www-Authenticate:"
+          - "Authorization:"
+          - "Authorization: Basic"
+        part: header

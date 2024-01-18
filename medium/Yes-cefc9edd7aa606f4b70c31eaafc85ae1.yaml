@@ -1,0 +1,60 @@
+id: Yes-cefc9edd7aa606f4b70c31eaafc85ae1
+
+info:
+  name: "WordPress Core < 6.0.2 - Authenticated (Contributor+) Stored Cross-Site Scripting via use of the_meta(); function"
+  author: topscoder
+  severity: medium
+  description: "WordPress Core, in versions up to 6.0.2, is vulnerable to Authenticated Stored Cross-Site Scripting that can be exploited by users with access to the WordPress post and page editor, typically consisting of Authors, Contributors, and Editors making it possible to inject arbitrary web scripts into posts and pages that execute if the the_meta(); function is called on that page."
+  reference:
+    - https://core.trac.wordpress.org/changeset/53961
+    - https://wordpress.org/news/2022/08/wordpress-6-0-2-security-and-maintenance-release/
+    - https://www.wordfence.com/blog/2022/08/wordpress-core-6-0-2-security-maintenance-release-what-you-need-to-know/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 4.9
+    cve-id:
+  metadata:
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-core,medium
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/wp-admin/install.php"
+      - "{{BaseURL}}/feed/"
+      - "{{BaseURL}}/?feed=rss2" # alternative if /feed/ is blocked
+
+    redirects: true
+    max-redirects: 2
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: dsl
+        dsl:
+          - compare_versions(version_by_generator, '<= 3.6.1')
+          - compare_versions(version_by_js, '<= 3.6.1')
+          - compare_versions(version_by_css, '<= 3.6.1')
+
+      - type: status
+        status:
+          - 200
+
+    extractors:
+      - type: regex
+        name: version_by_generator
+        group: 1
+        regex:
+          - '(?m)https:\/\/wordpress.org\/\?v=([0-9.]+)'
+
+      - type: regex
+        name: version_by_js
+        group: 1
+        regex:
+          - 'wp-emoji-release\.min\.js\?ver=((\d+\.?)+)\b'
+
+      - type: regex
+        name: version_by_css
+        group: 1
+        regex:
+          - 'install\.min\.css\?ver=((\d+\.?)+)\b'

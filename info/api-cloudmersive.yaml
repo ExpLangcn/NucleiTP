@@ -1,0 +1,29 @@
+id: api-cloudmersive
+
+info:
+  name: Cloudmersive API Test
+  author: daffainfo
+  severity: info
+  reference:
+    - https://api.cloudmersive.com/
+    - https://github.com/daffainfo/all-about-apikey/tree/main/cloudmersive/
+  tags: token-spray,cloudmersive
+
+self-contained: true
+requests:
+  - raw:
+      - |
+        POST https://api.cloudmersive.com/barcode/lookup/ean HTTP/1.1
+        Host: api.cloudmersive.com
+        Content-Type: application/x-www-form-urlencoded
+        Apikey: {{token}}
+
+        0=<&1=s&2=t&3=r&4=i&5=n&6=g&7=>
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"Successful":true'
+          - '"Matches"'
+        condition: and

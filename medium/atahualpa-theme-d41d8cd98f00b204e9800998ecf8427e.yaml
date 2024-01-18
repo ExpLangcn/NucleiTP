@@ -1,0 +1,58 @@
+id: atahualpa-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Atahualpa <= 3.7.24 - Cross-Site Scripting via Cross-Site Request Forgery
+  author: topscoder
+  severity: medium
+  description: >
+    The Atahualpa theme for WordPress is vulnerable to Cross-Site Scripting via several parameters in versions up to, and including, 3.7.24 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser granted they can trick a site administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/fb2fffb1-cc8c-46a4-b3ea-2b1aac684fbd?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/atahualpa/"
+    google-query: inurl:"/wp-content/themes/atahualpa/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,atahualpa,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/atahualpa/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "atahualpa"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.7.24')

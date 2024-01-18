@@ -1,0 +1,57 @@
+id: bulletin-announcements-b4533d1a91b444457f2c5760c7eccced
+
+info:
+  name: "Announcement & Notification Banner – Bulletin <= 3.5.1 - Authenticated (Subscriber+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Announcement & Notification Banner – Bulletin plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the 'bulletinTitle' value found in the 'formData' parameters in versions up to, and including, 3.5.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers with subscriber level permissions and above to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2762194%40bulletin-announcements%2Ftrunk&old=2757738%40bulletin-announcements%2Ftrunk&sfp_email=&sfph_mail=
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2768376%40bulletin-announcements&new=2768376%40bulletin-announcements&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bulletin-announcements/"
+    google-query: inurl:"/wp-content/plugins/bulletin-announcements/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bulletin-announcements,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bulletin-announcements/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bulletin-announcements"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.5.2')

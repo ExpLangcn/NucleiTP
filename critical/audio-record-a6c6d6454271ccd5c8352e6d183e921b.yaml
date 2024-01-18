@@ -1,0 +1,59 @@
+id: audio-record-a6c6d6454271ccd5c8352e6d183e921b
+
+info:
+  name: "Audio Record <= 1.0 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Audio Record plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the save_record_callback function in versions up to, and including, 1.0. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-audio-record-arbitrary-file-upload-1-0/
+    - https://packetstormsecurity.com/files/150921/WordPress-Audio-Record-1.0-Shell-Upload.html
+    - https://wordpress.org/plugins/audio-record/#developers
+    - https://plugins.trac.wordpress.org/browser/audio-record/trunk/recorder.php#L239
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/audio-record/"
+    google-query: inurl:"/wp-content/plugins/audio-record/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,audio-record,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/audio-record/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "audio-record"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0')

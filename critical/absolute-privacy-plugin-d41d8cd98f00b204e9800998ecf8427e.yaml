@@ -1,0 +1,58 @@
+id: absolute-privacy-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Absolute Privacy <= 2.0.5 - Authentication Bypass
+  author: topscoder
+  severity: critical
+  description: >
+    The Absolute Privacy plugin for WordPress is vulnerable to Authentication Bypass in versions up to, and including, 2.0.5. This is due to improper handling of password verification. This makes it possible for unauthenticated attackers to log in with any legitimate username, including administrator accounts, and any password.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/b6c69a25-8986-4976-8753-ce8e5be311e2?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/absolute-privacy/"
+    google-query: inurl:"/wp-content/plugins/absolute-privacy/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,absolute-privacy,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/absolute-privacy/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "absolute-privacy"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.0.5')

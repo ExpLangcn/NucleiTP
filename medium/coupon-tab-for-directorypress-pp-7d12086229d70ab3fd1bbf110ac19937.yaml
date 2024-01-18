@@ -1,0 +1,57 @@
+id: coupon-tab-for-directorypress-pp-7d12086229d70ab3fd1bbf110ac19937
+
+info:
+  name: "Coupon Tab for DirectoryPress (pp-coupon-tab) <= 0.2.0 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Coupon Tab for DirectoryPress (pp-coupon-tab) plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the cfh, cc, cb, cd, ce, cdt, cdet, cs, cfw, & surl, parameters in versions up to, and including, 0.2.0 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://codevigilant.com/disclosure/wp-plugin-coupon-tab-for-directorypress-pp-a3-cross-site-scripting-xss/
+    - https://wordpress.org/plugins/coupon-tab-for-directorypress-pp/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/coupon-tab-for-directorypress-pp/"
+    google-query: inurl:"/wp-content/plugins/coupon-tab-for-directorypress-pp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,coupon-tab-for-directorypress-pp,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/coupon-tab-for-directorypress-pp/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "coupon-tab-for-directorypress-pp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.2.0')

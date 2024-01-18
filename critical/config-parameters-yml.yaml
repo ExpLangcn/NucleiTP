@@ -1,0 +1,22 @@
+id: custom-config-check
+
+info:
+  name: DataBase Configuration Check
+  author: SirBugs
+  severity: Critical
+  description: Check for common database configuration keys.
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/config/parameters.yml"
+
+    matchers:
+      - type: word
+        words:
+          - "database_driver"
+          - "database_host"
+          - "database_port"
+          - "database_name"
+          - "database_password"
+        part: body

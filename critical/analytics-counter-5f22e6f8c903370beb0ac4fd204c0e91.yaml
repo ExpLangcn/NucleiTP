@@ -1,0 +1,58 @@
+id: analytics-counter-5f22e6f8c903370beb0ac4fd204c0e91
+
+info:
+  name: "Google Analytics Counter Tracker <= 3.4.1 - Unauthenticated PHP Object Injection"
+  author: topscoder
+  severity: critical
+  description: "The Google Analytics Counter Tracker plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 3.4.1 via deserialization of untrusted input from the vulnerable wpadm_ga_request cookie parameter. This allows unauthenticated attackers to inject a PHP Object."
+  reference:
+    - https://sumofpwn.nl/advisory/2016/google_analytics_counter_tracker_wordpress_plugin_unauthenticed_php_object_injection_vulnerability.html
+    - https://seclists.org/fulldisclosure/2016/Dec/38
+    - https://plugins.trac.wordpress.org/changeset/1536434/analytics-counter
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/analytics-counter/"
+    google-query: inurl:"/wp-content/plugins/analytics-counter/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,analytics-counter,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/analytics-counter/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "analytics-counter"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.5.0')

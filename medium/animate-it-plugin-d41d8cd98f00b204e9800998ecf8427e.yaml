@@ -1,0 +1,58 @@
+id: animate-it-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Animate It! < 2.4.0 - Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Animate It! for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘onanimationend’ parameter in versions up to, and including, 2.3.9 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with contributor-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/a3335613-1206-4555-8e48-748a336548d4?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/animate-it/"
+    google-query: inurl:"/wp-content/plugins/animate-it/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,animate-it,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/animate-it/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "animate-it"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4.0')

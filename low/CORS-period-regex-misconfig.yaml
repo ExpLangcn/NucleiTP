@@ -1,0 +1,40 @@
+id: CORS-period-regex-misconfig
+
+info:
+  name: CORS Misconfiguration allowing for origin with any character in place of a period
+  author: jtcsec
+  severity: low
+  tags: cors
+
+requests:
+  - raw:
+      - |
+        GET / HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0
+        Accept-Language: en-US,en;q=0.9
+        Connection: close
+        Origin: {{replace(BaseURL,".","z")}}
+       
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "Access-Control-Allow-Origin:"
+          - "Access-Control-Allow-Credentials: true"
+        condition: and
+        part: header
+      - type: regex
+        part: header
+        negative: true
+        regex:
+                - Access\-Control\-Allow\-Origin\:[\s]+{{BaseURL}}}
+
+
+    extractors:
+      - type: regex
+        name: firstchunk
+        part: header
+        regex:
+                - Access\-Control\-Allow\-Origin\:[\s]+([^\s\.]+)
+

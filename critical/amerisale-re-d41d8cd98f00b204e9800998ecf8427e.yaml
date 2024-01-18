@@ -1,0 +1,56 @@
+id: amerisale-re-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "amerisale-re (All Versions) - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The amerisale-re plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation via the edit_agent.php file in all versions. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/amerisale-re/"
+    google-query: inurl:"/wp-content/plugins/amerisale-re/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,amerisale-re,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/amerisale-re/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "amerisale-re"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '*')

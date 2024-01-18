@@ -1,0 +1,56 @@
+id: cookie-params-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Cookie Params <=  0.2 - Reflected Cross-Site Scripting and Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The Cookie Params plugin for WordPress is vulnerable to Reflected Cross-Site Scripting and Cross-Site Request Forgery due to missing sanitization and nonce protection on the debug() and  options_page() function in versions up to, and including, 0.2."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cookie-params/"
+    google-query: inurl:"/wp-content/plugins/cookie-params/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cookie-params,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cookie-params/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cookie-params"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  0.2')

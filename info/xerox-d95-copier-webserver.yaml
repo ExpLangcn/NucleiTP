@@ -1,0 +1,22 @@
+id: xerox-d95-copier-webserver
+
+info:
+  name: Xerox D95 Copier-Printer Webserver 
+  author: alexrydzak
+  severity: info
+  tags: xerox,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/stat.htm"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<td id="productName">Xerox D95 Copier-Printer</td>'
+
+      - type: status
+        status:
+          - 200

@@ -1,0 +1,59 @@
+id: ajax-search-lite-10ace6f93adfc50bc7be12792e51ef21
+
+info:
+  name: "Ajax Search Lite < 3.11 - Remote Code Execution"
+  author: topscoder
+  severity: critical
+  description: "The Ajax Search Lite plugin for WordPress is vulnerable to Remote Code Execution in versions up to, and including, 3.10 via the TimThumb’s 'Webshot' feature. This allows unauthenticated attackers to execute code on the server."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-ajax-search-lite-remote-command-execution-3-1/
+    - https://plugins.trac.wordpress.org/changeset/1123682
+    - https://cxsecurity.com/issue/WLB-2014060134
+    - https://blog.sucuri.net/2014/06/timthumb-webshot-code-execution-exploit-0-day.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-search-lite/"
+    google-query: inurl:"/wp-content/plugins/ajax-search-lite/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-search-lite,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-search-lite/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-search-lite"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.11')

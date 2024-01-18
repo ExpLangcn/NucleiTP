@@ -1,0 +1,58 @@
+id: barelycorporate-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    ThemeBlvd Themes/Plugins (Various Versions) - Missing Authorization Checks
+  author: topscoder
+  severity: medium
+  description: >
+    The following plugins and themes for WordPress are vulnerable to arbitrary option deletion and user data manipulation: Theme Blvd Shortcodes plugin <= 1.5.2 , Theme Blvd Widget Areas plugin < = 1.2.2, Theme Blvd Layout Builder plugin <= 2.0.1, Theme Blvd Sliders plugin <= 1.2.3, WP Jump Start theme <= 1.2.4, Alyeska theme <= 3.1.4, Akita theme <= 2.1.4, Arcadian Responsive theme <= 2.0.5, Swagger theme <= 2.1.4, Commodore theme <= 3.0.2, and Barely Corporate theme <= 4.1.4. This is due to missing authorization on the themeblvd_clear_options() and themeblvd_disable_nag() functions called via 'admin_init' hooks. This makes it possible for unauthenticated attackers to delete any option from the 'wp_options' table and edit any of their user metadata to 'true.'
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/bb5178f4-356b-4352-96ca-500e49006f8a?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L
+    cvss-score: 6.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/barelycorporate/"
+    google-query: inurl:"/wp-content/themes/barelycorporate/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,barelycorporate,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/barelycorporate/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "barelycorporate"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.1.4')

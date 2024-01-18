@@ -1,0 +1,59 @@
+id: all_in_one_carousel-ae9fd60ca36c8df2c303aa1504aa68c1
+
+info:
+  name: "All In One Slider <= 1.2.20 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The All In One Slider plugin (formerly known as All In One Carousel) for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘id’ parameter in versions up to, and including 1.2.20 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://seclists.org/bugtraq/2014/Feb/38
+    - https://web.archive.org/web/20190713004733/https%3A//jetpack.com/features/security/library/all_in_one_carousel-plugin/
+    - https://patchstack.com/database/vulnerability/all-in-one-carousel/wordpress-all-in-one-carousel-plugin-1-2-20-reflected-xss
+    - https://codecanyon.net/item/all-in-one-slider-responsive-wordpress-slider-plugin/1903226
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all_in_one_carousel/"
+    google-query: inurl:"/wp-content/plugins/all_in_one_carousel/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all_in_one_carousel,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all_in_one_carousel/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all_in_one_carousel"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.20')

@@ -1,0 +1,57 @@
+id: all-in-one-wp-security-and-firewall-cca12243463426b7dbe72d2af07d9dce
+
+info:
+  name: "All In One WP Security & Firewall <= 4.1.2 - Captcha Bypass"
+  author: topscoder
+  severity: medium
+  description: "The All In One WP Security & Firewall for WordPress is vulnerable to Captcha Bypass via multiple routes, allowing automated login attempts to proceed"
+  reference:
+    - https://sumofpwn.nl/advisory/2016/multiple_vulnerabilities_in_all_in_one_wp_security___firewall_plugin_login_captcha.html
+    - https://seclists.org/fulldisclosure/2016/Jul/88
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-wp-security-and-firewall/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-wp-security-and-firewall/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-wp-security-and-firewall,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-wp-security-and-firewall/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-wp-security-and-firewall"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.1.2')

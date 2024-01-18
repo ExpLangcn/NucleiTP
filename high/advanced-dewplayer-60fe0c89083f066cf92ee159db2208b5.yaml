@@ -1,0 +1,59 @@
+id: advanced-dewplayer-60fe0c89083f066cf92ee159db2208b5
+
+info:
+  name: "Dewplayer <= 1.2 and Advanced Dewplayer < 1.5 - Content Spoofing/Injection"
+  author: topscoder
+  severity: high
+  description: "The Dewplayer plugin <= 1.2 and Advanced Dewplayer plugin < 1.5 for WordPress are vulnerable to Content Spoofing/Injection. This is due to lack of sanitization of the 'mp3', 'file', 'sound', and 'son' parameters in the dewplayer.swf file. This makes it possible for unauthenticated attackers to inject malicious content into legitimate content if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://packetstormsecurity.com/files/124582/
+    - https://seclists.org/fulldisclosure/2013/Dec/192
+    - https://wordpress.org/plugins/advanced-dewplayer/#developers
+    - https://plugins.trac.wordpress.org/changeset/1088136
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:N
+    cvss-score: 8.6
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-dewplayer/"
+    google-query: inurl:"/wp-content/plugins/advanced-dewplayer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-dewplayer,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-dewplayer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-dewplayer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.5')

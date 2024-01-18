@@ -1,0 +1,56 @@
+id: booster-plus-for-woocommerce-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Booster for WooCommerce (Free <= 5.6.2 and Premium <= 5.6.0) - Authenticated (Subscriber+) Order Modification"
+  author: topscoder
+  severity: low
+  description: "The Booster for WooCommerce plugin for WordPress is vulnerable to order modification due to a missing capability/authorization check in versions up to, and including, 5.6.2 (free) or 5.6.0 (premium). This makes it possible for authenticated attackers, with subscriber-level permissions and above, to modify their own orders, which includes the ability to mark them as paid."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/booster-plus-for-woocommerce/"
+    google-query: inurl:"/wp-content/plugins/booster-plus-for-woocommerce/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,booster-plus-for-woocommerce,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/booster-plus-for-woocommerce/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "booster-plus-for-woocommerce"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  5.6.0')

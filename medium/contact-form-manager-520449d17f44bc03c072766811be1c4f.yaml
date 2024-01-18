@@ -1,0 +1,59 @@
+id: contact-form-manager-520449d17f44bc03c072766811be1c4f
+
+info:
+  name: "Contact Form Manager <= 1.4.1 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Contact Form Manager plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the 'formId' parameter for Subscriber+ attackers and 'xyz_cfm_pagelimit', 'xyz_cfm_recaptchaPrivateKey', 'xyz_cfm_recaptchaPublicKey' parameters for Admin+ attackers in versions up to, and including, 1.4.1 due to insufficient input sanitization and output escaping. Attackers can inject arbitrary web scripts in pages that execute if they successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - http://cinu.pl/research/wp-plugins/mail_8b9735b4cf3b0d2468b17892a532e212.html
+    - http://blog.cinu.pl/2015/11/php-static-code-analysis-vs-top-1000-wordpress-plugins.html
+    - https://plugins.trac.wordpress.org/changeset/1355520/contact-form-manager
+    - https://wpscan.com/vulnerability/3b10eda7-f04f-4e34-b77f-b2c208bf75b4
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-manager/"
+    google-query: inurl:"/wp-content/plugins/contact-form-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-manager,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.4.1')

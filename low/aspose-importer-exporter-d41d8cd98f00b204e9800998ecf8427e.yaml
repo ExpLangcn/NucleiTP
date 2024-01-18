@@ -1,0 +1,56 @@
+id: aspose-importer-exporter-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Aspose Importer & Exporter (Discontinued) < 3.0 - Arbitrary File Download"
+  author: topscoder
+  severity: low
+  description: "The Aspose Importer & Exporter (Discontinued) plugin for WordPress is vulnerable to arbitrary file download in versions up to, and including, 2.0. This is due to lack of sanitization on the 'file' parameter. This makes it possible for unauthenticated attackers to download the contents of arbitrary files on the server, which can contain sensitive information."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/aspose-importer-exporter/"
+    google-query: inurl:"/wp-content/plugins/aspose-importer-exporter/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,aspose-importer-exporter,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/aspose-importer-exporter/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "aspose-importer-exporter"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.0')

@@ -1,0 +1,60 @@
+id: apocalypse-meow-a9ee2302255a0d7495e5ad8b9d7d88da
+
+info:
+  name: "Apocalypse Meow 21.1.3 - 21.2.7 - Authentication Bypass"
+  author: topscoder
+  severity: critical
+  description: "The Apocalypse Meow plugin for WordPress is vulnerable to Authentication Bypass in versions 21.1.3 - 21.2.7. This is due to improper validation via bcrypt. This makes it possible for unauthenticated attackers to bypass the authentication check."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1780072/apocalypse-meow
+    - https://twitter.com/Sc00bzT/status/937124418500866048
+    - https://wpscan.com/vulnerability/6d0f45cf-a122-491a-b192-aa627f038466
+    - https://patchstack.com/database/vulnerability/apocalypse-meow/wordpress-apocalypse-meow-plugin-21-2-7-bcrypt-authentication-bypass-vulnerability
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-apocalypse-meow-security-bypass-21-2-7/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/apocalypse-meow/"
+    google-query: inurl:"/wp-content/plugins/apocalypse-meow/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,apocalypse-meow,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/apocalypse-meow/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "apocalypse-meow"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 21.1.3', '<= 21.2.7')

@@ -1,0 +1,60 @@
+id: contact-form-by-supsystic-0ad7a3899f0a269b3fe2141799b9e49d
+
+info:
+  name: "Contact Form by Supsystic <= 1.7.10 - SQL Injections"
+  author: topscoder
+  severity: high
+  description: "The Contact Form by Supsystic plugin for WordPress is vulnerable to generic SQL Injection via the 'sidx' and 'sord' parameters in versions up to, and including, 1.7.10 due to insufficient escaping on the user-supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for authenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-roundup-february-2021-part-1/
+    - https://wpscan.com/vulnerability/36559cb2-854e-4306-bae9-30c7965f84e0
+    - https://wordpress.org/plugins/contact-form-by-supsystic/#developers
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2472456%40contact-form-by-supsystic&new=2472456%40contact-form-by-supsystic&sfp_email=&sfph_mail=
+    - https://www.exploit-db.com/exploits/49544
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-by-supsystic/"
+    google-query: inurl:"/wp-content/plugins/contact-form-by-supsystic/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-by-supsystic,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-by-supsystic/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-by-supsystic"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.10')

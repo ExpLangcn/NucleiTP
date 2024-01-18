@@ -1,0 +1,56 @@
+id: address-autocomplete-using-google-place-api-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Address Autocomplete Using Google Place Api <= 1.0.0 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The Address Autocomplete plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.0.0. This is due to missing or incorrect nonce validation on the gaaf_google_autocomplete_settings_tab function. This makes it possible for unauthenticated attackers to change plugin settings, via forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/address-autocomplete-using-google-place-api/"
+    google-query: inurl:"/wp-content/plugins/address-autocomplete-using-google-place-api/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,address-autocomplete-using-google-place-api,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/address-autocomplete-using-google-place-api/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "address-autocomplete-using-google-place-api"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.0.0')

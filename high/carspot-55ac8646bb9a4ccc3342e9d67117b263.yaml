@@ -1,0 +1,59 @@
+id: carspot-55ac8646bb9a4ccc3342e9d67117b263
+
+info:
+  name: "CarSpot – Dealership Wordpress Classified Theme <= 2.2.3 - Insecure Direct Object Reference"
+  author: topscoder
+  severity: high
+  description: "The CarSpot – Dealership Wordpress Classified Theme for WordPress is vulnerable to Insecure Direct Object References in versions up to, and including, 2.2.3 via the 'ad_id' parameter passed via the sb_remove_ad AJAX action. This makes it possible for unauthenticated attackers to delete any posting, page, or ad."
+  reference:
+    - https://wpscan.com/vulnerability/10047
+    - https://themeforest.net/item/carspot-automotive-car-dealer-wordpress-classified-theme/20195539
+    - https://scriptsbundle.gitbook.io/carspot-dealership-wordpress-classified-theme/
+    - https://patchstack.com/database/vulnerability/carspot/wordpress-carspot-premium-theme-2-2-2-insecure-direct-object-references-idor-vulnerability
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:H
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/carspot/"
+    google-query: inurl:"/wp-content/themes/carspot/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,carspot,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/carspot/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "carspot"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2.3')

@@ -1,0 +1,22 @@
+id: hp-color-laserjet-cp5225n-webserver
+
+info:
+  name: HP Color LaserJet CP5225n Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/info_deviceStatus.html?tab=Status&menu=DevStatus"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<h1>HP Color LaserJet CP5225n</h1>'
+
+      - type: status
+        status:
+          - 200

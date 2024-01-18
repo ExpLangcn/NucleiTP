@@ -1,0 +1,58 @@
+id: bp-better-messages-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Freemius SDK <= 2.4.2 - Missing Authorization Checks
+  author: topscoder
+  severity: medium
+  description: >
+    The Freemius SDK, as used by hundreds of WordPress plugin and theme developers, was vulnerable to Cross-Site Request Forgery and Information disclosure due to missing capability checks and nonce protection on the _get_debug_log, _get_db_option, and the _set_db_option functions in versions up to, and including 2.4.2. Any WordPress plugin or theme running a version of Freemius less than 2.4.2 is vulnerable.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/39fb0499-9ab4-4a2f-b0db-ece86bcf4d42?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 6.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/bp-better-messages/"
+    google-query: inurl:"/wp-content/plugins/bp-better-messages/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bp-better-messages,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bp-better-messages/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bp-better-messages"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.9.9.170')

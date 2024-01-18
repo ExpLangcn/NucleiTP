@@ -1,0 +1,58 @@
+id: blockonomics-bitcoin-payments-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    WordPress Bitcoin Payments – Blockonomics <= 3.2 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The WordPress Bitcoin Payments – Blockonomics plugin is vulnerable to reflected Cross-Site Scripting via the 'filter_by' parameter in versions before 3.3. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/a5bcf040-cc43-4b3d-a6fc-d41973725af6?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/blockonomics-bitcoin-payments/"
+    google-query: inurl:"/wp-content/plugins/blockonomics-bitcoin-payments/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,blockonomics-bitcoin-payments,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/blockonomics-bitcoin-payments/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "blockonomics-bitcoin-payments"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.3')

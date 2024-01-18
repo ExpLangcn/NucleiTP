@@ -1,0 +1,72 @@
+id: mass_48_open_redirect_check
+info:
+  name: Mass 48 Param For Open Redirect
+  author: SirBugs
+  severity: medium
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/https://bing.com/"
+      - "{{BaseURL}}//https://bing.com//"
+      - "{{BaseURL}}/?targetOrigin=https://bing.com/"
+      - "{{BaseURL}}/?fallback=https://bing.com/"
+      - "{{BaseURL}}/?query=https://bing.com/"
+      - "{{BaseURL}}/?redirection_url=https://bing.com/"
+      - "{{BaseURL}}/?next=https://bing.com/"
+      - "{{BaseURL}}/?ref_url=https://bing.com/"
+      - "{{BaseURL}}/?state=https://bing.com/"
+      - "{{BaseURL}}/?1=https://bing.com/"
+      - "{{BaseURL}}/?redirect_uri=https://bing.com/"
+      - "{{BaseURL}}/?forum_reg=https://bing.com/"
+      - "{{BaseURL}}/?return_to=https://bing.com/"
+      - "{{BaseURL}}/?redirect_url=https://bing.com/"
+      - "{{BaseURL}}/?return_url=https://bing.com/"
+      - "{{BaseURL}}/?host=https://bing.com/"
+      - "{{BaseURL}}/?url=https://bing.com/"
+      - "{{BaseURL}}/?redirectto=https://bing.com/"
+      - "{{BaseURL}}/?return=https://bing.com/"
+      - "{{BaseURL}}/?prejoin_data=https://bing.com/"
+      - "{{BaseURL}}/?callback_url=https://bing.com/"
+      - "{{BaseURL}}/?path=https://bing.com/"
+      - "{{BaseURL}}/?authorize_callback=https://bing.com/"
+      - "{{BaseURL}}/?email=https://bing.com/"
+      - "{{BaseURL}}/?origin=https://bing.com/"
+      - "{{BaseURL}}/?continue=https://bing.com/"
+      - "{{BaseURL}}/?domain_name=https://bing.com/"
+      - "{{BaseURL}}/?redir=https://bing.com/"
+      - "{{BaseURL}}/?wp_http_referer=https://bing.com/"
+      - "{{BaseURL}}/?endpoint=https://bing.com/"
+      - "{{BaseURL}}/?shop=https://bing.com/"
+      - "{{BaseURL}}/?qpt_question_url=https://bing.com/"
+      - "{{BaseURL}}/?checkout_url=https://bing.com/"
+      - "{{BaseURL}}/?ref_url=https://bing.com/"
+      - "{{BaseURL}}/?redirect_to=https://bing.com/"
+      - "{{BaseURL}}/?succUrl=https://bing.com/"
+      - "{{BaseURL}}/?file=https://bing.com/"
+      - "{{BaseURL}}/?link=https://bing.com/"
+      - "{{BaseURL}}/?referrer=https://bing.com/"
+      - "{{BaseURL}}/?recipient=https://bing.com/"
+      - "{{BaseURL}}/?redirect=https://bing.com/"
+      - "{{BaseURL}}/?u=https://bing.com/"
+      - "{{BaseURL}}/?hostname=https://bing.com/"
+      - "{{BaseURL}}/?returnTo=https://bing.com/"
+      - "{{BaseURL}}/?return_path=https://bing.com/"
+      - "{{BaseURL}}/?image=https://bing.com/"
+      - "{{BaseURL}}/?requestTokenAndRedirect=https://bing.com/"
+      - "{{BaseURL}}/?retURL=https://bing.com/"
+      - "{{BaseURL}}/?next_url=https://bing.com/"
+    redirects: false
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: header
+        words:
+          - "Location: https://bing.com"
+      - type: status
+        status:
+          - 301
+          - 302
+          - 303
+          - 304
+          - 307
+          - 308

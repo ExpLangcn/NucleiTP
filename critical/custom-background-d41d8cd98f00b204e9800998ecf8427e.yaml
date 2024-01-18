@@ -1,0 +1,56 @@
+id: custom-background-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Custom Background <= 3.2.2.67929 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Custom Background plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'uploadify.php' file in versions up to, and including, 3.2.2.67929. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/custom-background/"
+    google-query: inurl:"/wp-content/plugins/custom-background/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-background,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-background/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-background"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  3.2.2.67929')

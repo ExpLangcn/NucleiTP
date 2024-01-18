@@ -1,0 +1,56 @@
+id: a3-responsive-slider-8378208667ef8058cc7e5f3b02331813
+
+info:
+  name: "a3 Responsive Slider <= 2.1.0 - Cross-Site Request Forgery to Stored Cross-Site Scripting"
+  author: topscoder
+  severity: critical
+  description: "The a3 Responsive Slider plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.1.0. This is due to missing or incorrect nonce validation on the slider_form_action function. This makes it possible for unauthenticated attackers to inject malicious JavaScript, that will execute whenever a user accesses an injected page, via forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:H
+    cvss-score: 9.6
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/a3-responsive-slider/"
+    google-query: inurl:"/wp-content/plugins/a3-responsive-slider/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,a3-responsive-slider,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/a3-responsive-slider/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "a3-responsive-slider"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.1.0')

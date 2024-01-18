@@ -1,0 +1,57 @@
+id: blog2social-3c50eaad83400d180a7a1e849c918d50
+
+info:
+  name: "Blog2Social: Social Media Auto Post & Scheduler < 5.0.1 - PHP Object Injection"
+  author: topscoder
+  severity: high
+  description: "The Blog2Social: Social Media Auto Post & Scheduler plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 5.0.0 via deserialization of untrusted input in the vulnerable function named curationShare. This allows authenticated attackers to inject a PHP Object. No POP chain is present in the vulnerable plugin. If a POP chain is present via an additional plugin or theme installed on the target system, it could allow the attacker to delete arbitrary files, retrieve sensitive data, or execute code."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?reponame=&new=1944620%40blog2social&old=1942896%40blog2social
+    - https://web.archive.org/web/20210619021442/https%3A//www.pluginvulnerabilities.com/2018/09/21/our-proactive-monitoring-caught-an-authenticated-php-object-injection-vulnerability-in-blog2social-social-media-auto-post-scheduler/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:L
+    cvss-score: 7.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/blog2social/"
+    google-query: inurl:"/wp-content/plugins/blog2social/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,blog2social,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/blog2social/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "blog2social"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 5.0.1')

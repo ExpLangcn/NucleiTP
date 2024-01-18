@@ -1,0 +1,59 @@
+id: all-in-one-event-calendar-2e9050f5020d6f0a34b7ea7daa4911fe
+
+info:
+  name: "All-in-One Events Calendar < 1.10 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The All-in-One Events Calendar plugin for WordPress is vulnerable to SQL Injection via the “ai1ec_cat_ids”, “ai1ec_post_ids” and “ai1ec_tag_ids” parameters in versions up to, and including, 1.9 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://firefart.at/post/sql-injection-and-xss-in-all-in-one-event-calendar-wordpress-plugin/
+    - https://wpscan.com/vulnerability/aeacdda5-6039-4ce7-8b5a-f58a740cf4d1
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-all-in-one-event-calendar-multiple-vulnerabilities-1-9/
+    - https://patchstack.com/database/vulnerability/all-in-one-event-calendar/wordpress-all-in-one-event-calendar-plugin-1-9-sql-injection
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H
+    cvss-score: 10.0
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-event-calendar/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-event-calendar/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-event-calendar,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-event-calendar/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-event-calendar"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.10')

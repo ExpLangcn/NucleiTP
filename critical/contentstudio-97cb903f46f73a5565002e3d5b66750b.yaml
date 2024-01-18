@@ -1,0 +1,56 @@
+id: contentstudio-97cb903f46f73a5565002e3d5b66750b
+
+info:
+  name: "ContentStudio <= 1.1.8 - Missing Authorization"
+  author: topscoder
+  severity: critical
+  description: "The ContentStudio  plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the cstu_set_token functions in versions up to, and including, 1.1.8. This makes it possible for unauthenticated attackers to  set the plugin's API token (via cstu_set_token), which allows further actions such as creating posts."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2825867/contentstudio/trunk?contextall=1&old=2785963&old_path=%2Fcontentstudio%2Ftrunk
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contentstudio/"
+    google-query: inurl:"/wp-content/plugins/contentstudio/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contentstudio,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contentstudio/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contentstudio"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.8')

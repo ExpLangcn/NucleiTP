@@ -1,0 +1,59 @@
+id: Yes-a8712f3986b6bd0b43cc3e57d4cf9a16
+
+info:
+  name: "WordPress Core < 6.2.1 - Insufficient Sanitization of Block Attributes"
+  author: topscoder
+  severity: medium
+  description: "WordPress Core failed to sufficiently sanitize block attributes in versions up to, and including, 6.2. This makes it possible for authenticated attackers with contributor-level and above permissions to embed arbitrary content in HTML comments on the page, though Cross-Site Scripting may be possible when combined with an additional vulnerability."
+  reference:
+    - https://core.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=55767%40%2F&new=55767%40%2F&sfp_email=&sfph_mail=
+    - https://wordpress.org/news/2023/05/wordpress-6-2-1-maintenance-security-release/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-core,medium
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+      - "{{BaseURL}}/wp-admin/install.php"
+      - "{{BaseURL}}/feed/"
+      - "{{BaseURL}}/?feed=rss2" # alternative if /feed/ is blocked
+
+    redirects: true
+    max-redirects: 2
+    stop-at-first-match: true
+    matchers-condition: and
+    matchers:
+      - type: dsl
+        dsl:
+          - compare_versions(version_by_generator, '<= 4.1')
+          - compare_versions(version_by_js, '<= 4.1')
+          - compare_versions(version_by_css, '<= 4.1')
+
+      - type: status
+        status:
+          - 200
+
+    extractors:
+      - type: regex
+        name: version_by_generator
+        group: 1
+        regex:
+          - '(?m)https:\/\/wordpress.org\/\?v=([0-9.]+)'
+
+      - type: regex
+        name: version_by_js
+        group: 1
+        regex:
+          - 'wp-emoji-release\.min\.js\?ver=((\d+\.?)+)\b'
+
+      - type: regex
+        name: version_by_css
+        group: 1
+        regex:
+          - 'install\.min\.css\?ver=((\d+\.?)+)\b'

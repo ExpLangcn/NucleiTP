@@ -1,0 +1,25 @@
+id: api-marketstack
+
+info:
+  name: Marketstack API Test
+  author: daffainfo
+  severity: info
+  reference:
+    - https://marketstack.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/marketstack/
+  tags: token-spray,marketstack
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://api.marketstack.com/v1/eod?access_key={{token}}&symbols=AAPL"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"pagination":'
+          - '"limit"'
+          - '"offset"'
+        condition: and

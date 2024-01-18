@@ -1,0 +1,57 @@
+id: cm-pop-up-banners-722f8ba03356321f95c53edec54b2fcd
+
+info:
+  name: "CM Pop-Up banners <= 1.4.10 - Authenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The 'CM Pop-Up banners' plugin for WordPress is vulnerable to Stored Cross-Site Scripting in versions up to, and including, 1.4.10 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-cm-pop-up-banners-for-wordpress-cross-site-scripting-1-4-10/
+    - https://web.archive.org/web/20200328060006/https%3A//jrjmulder.nl/plugins/cm-pop-up-banners-for-wordpress-1-4-11-authenticated-stored-xss/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cm-pop-up-banners/"
+    google-query: inurl:"/wp-content/plugins/cm-pop-up-banners/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cm-pop-up-banners,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cm-pop-up-banners/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cm-pop-up-banners"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.4.10')

@@ -1,0 +1,57 @@
+id: appius-911a13044d77b03e871cefdb9f5e356d
+
+info:
+  name: "Appius Theme <= 1.0 - Full Path Disclosure"
+  author: topscoder
+  severity: medium
+  description: "The Appius theme for WordPress is vulnerable to Sensitive Data Exposure in versions up to, and including, 1.0. This could allow unauthenticated attackers to extract sensitive sensitive data including the full path of the WordPress installation."
+  reference:
+    - https://en.0day.today/exploits/20039
+    - https://patchstack.com/database/vulnerability/appius/wordpress-appius-theme-full-path-disclosure
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/appius/"
+    google-query: inurl:"/wp-content/themes/appius/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,appius,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/appius/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "appius"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.1')

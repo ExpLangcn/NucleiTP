@@ -1,0 +1,56 @@
+id: advanced-custom-fields-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Advanced Custom Fields <= 3.5.1 - Remote Code Execution via Remote File Inclusion"
+  author: topscoder
+  severity: critical
+  description: "Advanced Custom Fields up to 3.5.1 is vulnerable to Remote Code Execution. The vulnerability allows for remote file inclusion and remote code execution via the export.php script. This exploit only works when the php option allow_url_include is set to On (Default Off)."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-custom-fields/"
+    google-query: inurl:"/wp-content/plugins/advanced-custom-fields/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-custom-fields,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-custom-fields/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-custom-fields"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  3.5.1')

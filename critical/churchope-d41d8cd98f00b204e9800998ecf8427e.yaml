@@ -1,0 +1,56 @@
+id: churchope-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "ChurcHope <= 2.1 - Local File Inclusion"
+  author: topscoder
+  severity: critical
+  description: "The ChurcHope theme for WordPress is vulnerable to Local File Inclusion in versions up to, and including, 2.1 via the 'file' parameter in the 'downloadlink.php' file. This allows unauthenticated attackers to include and execute arbitrary files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where images and other “safe” file types can be uploaded and included."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/churchope/"
+    google-query: inurl:"/wp-content/unknown/churchope/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,churchope,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/churchope/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "churchope"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.1')

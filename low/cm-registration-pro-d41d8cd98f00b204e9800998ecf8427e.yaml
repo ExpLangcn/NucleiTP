@@ -1,0 +1,56 @@
+id: cm-registration-pro-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "CM Registration Pro <= 3.2.0 - PHP Object Injection"
+  author: topscoder
+  severity: low
+  description: "The CM Registration Pro plugin for WordPress is vulnerable to PHP Object Injection in versions up to, and including, 3.2.0 via deserialization of untrusted input. This allows attackers to inject a PHP Object."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cm-registration-pro/"
+    google-query: inurl:"/wp-content/plugins/cm-registration-pro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cm-registration-pro,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cm-registration-pro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cm-registration-pro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.2.1')

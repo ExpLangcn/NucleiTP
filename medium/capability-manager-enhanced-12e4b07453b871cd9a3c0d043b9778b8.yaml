@@ -1,0 +1,58 @@
+id: capability-manager-enhanced-12e4b07453b871cd9a3c0d043b9778b8
+
+info:
+  name: "PublishPress Capabilities <= 2.3.2 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The PublishPress Capabilities plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via a form action URL in versions up to, and including, 2.3.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2657383%40capability-manager-enhanced%2Ftrunk&old=2641502%40capability-manager-enhanced%2Ftrunk&sfp_email=&sfph_mail=
+    - https://patchstack.com/database/vulnerability/capability-manager-enhanced/wordpress-publishpress-capabilities-plugin-2-3-2-reflected-cross-site-scripting-xss-vulnerability
+    - https://wpscan.com/vulnerability/88a57716-6e8b-4e98-884d-5534074c601a
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/capability-manager-enhanced/"
+    google-query: inurl:"/wp-content/plugins/capability-manager-enhanced/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,capability-manager-enhanced,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/capability-manager-enhanced/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "capability-manager-enhanced"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.3.2')

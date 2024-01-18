@@ -1,0 +1,59 @@
+id: ajax-store-locator-b5ffcf7ab1e36aea2b5da38652d652df
+
+info:
+  name: "Ajax Store Locator <= 1.2 - Arbitrary File Download"
+  author: topscoder
+  severity: high
+  description: "The Ajax Store Locator plugin for WordPress is vulnerable to Arbitrary File Download in versions up to, and including, 1.2 via the 'download_file' parameter in the 'sl_file_download.php' file. This makes it possible for unauthenticated attackers to download arbitrary files from the vulnerable service."
+  reference:
+    - https://packetstormsecurity.com/files/129408/
+    - https://www.homelab.it/index.php/2014/12/06/wordpress-ajax-store-locator-arbitrary-file-download-vulnerability/
+    - http://flexdel.com/wp-content/plugins/codecanyon-5293356-ajax-store-locataor-wordpress1/changelog.txt
+    - http://web.archive.org/web/20140916145704/https%3A//codecanyon.net/item/ajax-store-locator/3448408
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-store-locator/"
+    google-query: inurl:"/wp-content/plugins/ajax-store-locator/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-store-locator,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-store-locator/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-store-locator"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2')

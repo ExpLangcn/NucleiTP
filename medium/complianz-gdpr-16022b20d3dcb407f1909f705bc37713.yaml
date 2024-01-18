@@ -1,0 +1,56 @@
+id: complianz-gdpr-16022b20d3dcb407f1909f705bc37713
+
+info:
+  name: "Complianz - GDPR/CCPA Cookie Consent <= 6.4.4 - Cross-Site Request Forgery via ajax_delete_snapshot"
+  author: topscoder
+  severity: medium
+  description: "The Complianz - GDPR/CCPA Cookie Consent plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 6.4.4. This is due to missing or incorrect nonce validation on the ajax_delete_snapshot function. This makes it possible for unauthenticated attackers to delete arbitrary files in the complianz 'snapshots' folder via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?old_path=%2Fcomplianz-gdpr%2Ftags%2F6.4.4&old=2911698&new_path=%2Fcomplianz-gdpr%2Ftags%2F6.4.5&new=2911698&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:L
+    cvss-score: 5.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/complianz-gdpr/"
+    google-query: inurl:"/wp-content/plugins/complianz-gdpr/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,complianz-gdpr,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/complianz-gdpr/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "complianz-gdpr"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 6.4.4')

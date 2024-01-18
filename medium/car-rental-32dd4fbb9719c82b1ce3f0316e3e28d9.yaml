@@ -1,0 +1,59 @@
+id: car-rental-32dd4fbb9719c82b1ce3f0316e3e28d9
+
+info:
+  name: "Car Rental by BestWebSoft < 1.0.5 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Car Rental by BestWebSoft plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘category’ parameter in versions before 1.0.5 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://web.archive.org/web/20191101101637/http%3A//www.defensecode.com%3A80/advisories/DC-2017-02-014_50_WordPress_plugins_by_BestWebSoft_Advisory.pdf
+    - http://jvn.jp/en/jp/JVN24834813/index.html
+    - https://wordpress.org/plugins/car-rental/#developers
+    - https://plugins.trac.wordpress.org/changeset/1641223
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/car-rental/"
+    google-query: inurl:"/wp-content/plugins/car-rental/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,car-rental,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/car-rental/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "car-rental"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.0.5')

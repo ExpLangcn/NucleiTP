@@ -1,0 +1,22 @@
+id: hp-designjet-z5200-webserver
+
+info:
+  name: HP Designjet Z5200 PostScript Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/webAccess/index.htm"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<td class="mastheadTitle">HP Designjet Z5200 PostScript</td>'
+
+      - type: status
+        status:
+          - 200

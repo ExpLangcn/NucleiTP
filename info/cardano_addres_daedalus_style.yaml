@@ -1,0 +1,27 @@
+id: extract-cardano-daedalus-wallet
+
+info:
+  name: Cardano daedalus style wallets addresses extractor
+  author: cipher387
+  severity: info
+  description: Extract Cardano daedalus style  wallets addresses from web page body
+  tags: osint,juicy-info,cryptocyrrency
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    matchers:
+      - type: regex
+        part: body
+        regex:
+          -  'DdzFF[1-9A-HJ-NP-Za-km-z]+'
+    extractors:
+      - type: regex
+        part: body
+        regex:
+          - 'DdzFF[1-9A-HJ-NP-Za-km-z]+'
+
+
+

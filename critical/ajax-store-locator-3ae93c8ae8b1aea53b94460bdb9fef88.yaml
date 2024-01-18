@@ -1,0 +1,58 @@
+id: ajax-store-locator-3ae93c8ae8b1aea53b94460bdb9fef88
+
+info:
+  name: "AJAX Store Locator <= 1.2 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The AJAX Store Locator plugin for WordPress is vulnerable to SQL Injection via the ‘StoreLocation’ parameter in versions up to, and including, 1.2 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://packetstormsecurity.com/files/131464/
+    - https://www.homelab.it/index.php/2015/04/15/wordpress-ajax-store-locator-sql-injection-vulnerability/
+    - https://codecanyon.net/item/ajax-store-locator/3448408
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-store-locator/"
+    google-query: inurl:"/wp-content/plugins/ajax-store-locator/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-store-locator,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-store-locator/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-store-locator"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2')

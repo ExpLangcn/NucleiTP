@@ -1,0 +1,58 @@
+id: bridge-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Bridge Theme <= 18.2, Qode Instagram Widget <=2.0.1, Qode Twitter Feed <= 2.0.0 - Open Redirect"
+  author: topscoder
+  severity: low
+  description: "Helper plugins packaged with Bridge theme possess an Open Redirect vulnerability, allowing a malicious actor to create links to the site that redirect people to malicious domains.
+
+The Bridge theme, Qode Instagram Widget plugin, and Qode Twitter Feed plugin for WordPress are vulnerable to open redirects via the url parameter due to missing validation on the redirect location, that makes it possible for attackers to redirect unsuspecting users to malicious sites. This affects versions up to 18.2.1 in the Bridge theme, versions up to 2.0.2 in the Instagram widget plugin, and versions up to 2.0.1 in the Twitter feed plugin, and can be exploited by unauthenticated users."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/bridge/"
+    google-query: inurl:"/wp-content/unknown/bridge/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,bridge,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/bridge/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bridge"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 18.2.1')

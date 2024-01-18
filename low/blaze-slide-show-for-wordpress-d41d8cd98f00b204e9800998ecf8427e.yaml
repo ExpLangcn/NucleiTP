@@ -1,0 +1,56 @@
+id: blaze-slide-show-for-wordpress-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Blaze Slide Show <= 2.7 - Arbitrary File upload"
+  author: topscoder
+  severity: low
+  description: "The Blaze Slide Show plugin for Wordpress is vulnerable to arbitrary file uploads due to missing file type validation in the 'handle_admin_request()' function in versions up to, and including, 2.7.  This makes it possible for attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/blaze-slide-show-for-wordpress/"
+    google-query: inurl:"/wp-content/plugins/blaze-slide-show-for-wordpress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,blaze-slide-show-for-wordpress,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/blaze-slide-show-for-wordpress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "blaze-slide-show-for-wordpress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.7')

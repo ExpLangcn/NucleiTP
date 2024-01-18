@@ -1,0 +1,58 @@
+id: ad-inserter-57ff9eca760acbadbae84f7c0e58d457
+
+info:
+  name: "Ad Inserter < 2.7.11 - Authenticated (Admin+) Remote Code Execution"
+  author: topscoder
+  severity: high
+  description: "The Ad Inserter plugin for WordPress is vulnerable to Remote Code Execution in versions before 2.7.11 via the settings.php file. This allows authenticated attackers with admin-level privileges to execute code on the server as well as perform stored cross-site scripting attacks."
+  reference:
+    - https://wordpress.org/plugins/ad-inserter/#developers
+    - https://wpscan.com/vulnerability/134ff1be-b80b-4cfa-9a7c-db4300a2a8d2
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2670374%40ad-inserter&old=2664811%40ad-inserter&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ad-inserter/"
+    google-query: inurl:"/wp-content/plugins/ad-inserter/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ad-inserter,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ad-inserter/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ad-inserter"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.7.11')

@@ -1,0 +1,58 @@
+id: bws-latest-posts-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Latest Posts by BestWebSoft < 0.3 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Latest Posts by BestWebSoft plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘category’ parameter in versions before 0.3 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/b8580107-bbc1-4d6e-bb72-f1efc404d7b3?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/bws-latest-posts/"
+    google-query: inurl:"/wp-content/plugins/bws-latest-posts/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bws-latest-posts,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bws-latest-posts/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bws-latest-posts"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.3')

@@ -1,0 +1,56 @@
+id: carspot-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "CarSpot – Dealership Wordpress Classified Theme <= 2.2.3 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The CarSpot – Dealership Wordpress Classified Theme for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘admin-ajax.php’ file in versions up to, and including, 2.2.3 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/carspot/"
+    google-query: inurl:"/wp-content/unknown/carspot/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,carspot,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/carspot/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "carspot"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.2.3')

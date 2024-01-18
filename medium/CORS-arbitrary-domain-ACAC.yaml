@@ -1,0 +1,32 @@
+id: CORS-arbitrary-domain-ACAC
+
+info:
+  name: CORS Misconfiguration allowing for arbitrary Domain to use ACAC
+  author: jtcsec
+  severity: medium
+  tags: cors
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      Origin: https://{{Hostname}}.evil.com
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "Access-Control-Allow-Origin:"
+          - "Access-Control-Allow-Credentials: true"
+          - "evil.com"
+        condition: and
+        part: header
+
+    extractors:
+      - type: regex
+        name: firstchunk
+        part: header
+        regex:
+                - Access\-Control\-Allow\-Origin\:[\s]+([^\s]+)
+

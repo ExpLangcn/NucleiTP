@@ -1,0 +1,58 @@
+id: afterpay-gateway-for-woocommerce-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Afterpay Gateway for WooCommerce <= 3.2.0 - Reflected Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Afterpay Gateway for WooCommerce plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘orderId’ parameter in versions up to, and including, 3.2.0 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/86e6a246-557a-42f7-8f1b-b1b914f9f928?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/afterpay-gateway-for-woocommerce/"
+    google-query: inurl:"/wp-content/plugins/afterpay-gateway-for-woocommerce/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,afterpay-gateway-for-woocommerce,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/afterpay-gateway-for-woocommerce/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "afterpay-gateway-for-woocommerce"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.2.0')

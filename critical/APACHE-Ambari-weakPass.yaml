@@ -1,0 +1,27 @@
+id: APACHE-Ambari-weakPass
+
+info:
+  name: APACHE-Ambari 弱口令(admin/admin)
+  author: Str1am
+  severity: critical
+  reference: https://github.com/atredispartners/advisories/blob/master/ATREDIS-2020-0010.md
+  tags: APACHE-Ambari,weakPass
+
+requests:
+  - raw:
+      - |
+        GET /api/v1/users/admin?fields=*,privileges/PrivilegeInfo/cluster_name,privileges/PrivilegeInfo/permission_name&_=1548599097448 HTTP/1.1
+        Host: {{Hostname}}
+        Authorization: Basic YWRtaW46YWRtaW4=
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "admin"
+          - "user_name"
+        part: body
+        condition: and

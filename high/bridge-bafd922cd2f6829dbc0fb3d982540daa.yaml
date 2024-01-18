@@ -1,0 +1,58 @@
+id: bridge-bafd922cd2f6829dbc0fb3d982540daa
+
+info:
+  name: "Bridge Theme <= 18.2, Qode Instagram Widget <=2.0.1, Qode Twitter Feed <= 2.0.0 - Open Redirect"
+  author: topscoder
+  severity: high
+  description: "Helper plugins packaged with Bridge theme possess an Open Redirect vulnerability, allowing a malicious actor to create links to the site that redirect people to malicious domains.
+
+The Bridge theme, Qode Instagram Widget plugin, and Qode Twitter Feed plugin for WordPress are vulnerable to open redirects via the url parameter due to missing validation on the redirect location, that makes it possible for attackers to redirect unsuspecting users to malicious sites. This affects versions up to 18.2.1 in the Bridge theme, versions up to 2.0.2 in the Instagram widget plugin, and versions up to 2.0.1 in the Twitter feed plugin, and can be exploited by unauthenticated users."
+  reference:
+    - https://www.wordfence.com/blog/2019/10/open-redirect-vulnerability-patched-in-bridge-theme/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L
+    cvss-score: 7.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/bridge/"
+    google-query: inurl:"/wp-content/themes/bridge/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,bridge,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/bridge/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bridge"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 18.2.1')

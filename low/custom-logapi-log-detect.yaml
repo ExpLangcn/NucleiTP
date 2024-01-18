@@ -1,0 +1,16 @@
+id: custom-logapi-log-detect
+
+info:
+        name: Custom-logapi-log-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/logapi/log"
+          matchers:
+                  - type: word
+                    words:
+                            - "Import Succeeded"

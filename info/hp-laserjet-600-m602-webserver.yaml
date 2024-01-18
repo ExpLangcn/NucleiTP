@@ -1,0 +1,22 @@
+id: hp-laserjet-600-m602-webserver
+
+info:
+  name: HP LaserJet 600 M602 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/DeviceStatus/Index"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<strong class="product">HP LaserJet 600 M602</strong>'
+
+      - type: status
+        status:
+          - 200

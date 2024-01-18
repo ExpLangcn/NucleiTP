@@ -1,0 +1,58 @@
+id: accesspress-store-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    AccessPress Themes and Plugin <= Various Versions - Cross-Site Request Forgery
+  author: topscoder
+  severity: high
+  description: >
+    A WordPress plugin and several WordPress themes developed by AccessPress Themes are vulnerable to cross-site request forgery via the plugin_activation_callback and plugin_deactivate_callback functions, called via AJAX actions, that were missing capability checks and nonce validation. This makes it possible for unauthenticated attackers to deactivate and activate arbitrary plugins, granted they could trick a site administrator into performing an action such as clicking a link. This could be used to deactivate security plugins and exploit other potential vulnerabilities.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/59bf14a9-5abe-4b83-9364-d318eedaba83?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/accesspress-store/"
+    google-query: inurl:"/wp-content/themes/accesspress-store/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,accesspress-store,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/accesspress-store/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "accesspress-store"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4.9')

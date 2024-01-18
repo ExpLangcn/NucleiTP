@@ -1,0 +1,58 @@
+id: buddypress-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    BuddyPress <= 7.2.0 - Authorization Bypass to Private Message Disclosure
+  author: topscoder
+  severity: medium
+  description: >
+    The BuddyPress plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the BuddyPress Nouveau and the BuddyPress REST API /buddypress/v1/messages endpoint in versions 5.0.0 - 7.2.0. This makes it possible for non-privileged attackers to read private messages in a thread they were not invited to.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/001a7d43-4b00-42e9-bb0c-94a9d5721166?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 6.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 7.2.0')

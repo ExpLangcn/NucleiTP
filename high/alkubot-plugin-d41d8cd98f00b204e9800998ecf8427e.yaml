@@ -1,0 +1,58 @@
+id: alkubot-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Alkubot – Gamify discounts, sell more and give less at the right time < 3.0.0 - Cross-Site Request Forgery
+  author: topscoder
+  severity: high
+  description: >
+    The Alkubot – Gamify discounts, sell more and give less at the right time plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.3.3. This is due to missing or incorrect nonce validation on the successfulBargain() function. This makes it possible for unauthenticated attackers to place arbitrary products in a shopping cart via a forged request granted they can trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/7193b373-a0c9-4cd7-8a53-4f35ceff8f23?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N
+    cvss-score: 7.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/alkubot/"
+    google-query: inurl:"/wp-content/plugins/alkubot/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,alkubot,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/alkubot/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "alkubot"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.0.0')

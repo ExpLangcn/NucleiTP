@@ -1,0 +1,58 @@
+id: better-font-awesome-85060fdd660e3c511f37e818a4dcd4bb
+
+info:
+  name: "Better Font Awesome <= 2.0.1 - Missing Authorization to Plugin Options Update"
+  author: topscoder
+  severity: medium
+  description: "The Better Font Awesome plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the save_options function in versions up to, and including, 2.0.1. This makes it possible for authenticated attackers, with subscriber-level permissions and above, to update the plugin's settings."
+  reference:
+    - https://plugins.trac.wordpress.org/browser/better-font-awesome/tags/2.0.1/better-font-awesome.php#L489
+    - https://wpscan.com/vulnerability/1a4e952e-dd6d-4cf9-aec7-525180e7ba8e
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2782645%40better-font-awesome%2Ftrunk&old=2492883%40better-font-awesome%2Ftrunk&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-font-awesome/"
+    google-query: inurl:"/wp-content/plugins/better-font-awesome/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-font-awesome,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-font-awesome/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-font-awesome"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 2.0.1', '<= 2.0.1')

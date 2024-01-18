@@ -1,0 +1,17 @@
+id: custom-arcgis-portal-detect-ACPV
+
+info:
+        name: custom-arcgis-portal-detect
+        author: 0xParthJ
+        severity: low
+        tags: panel
+
+requests:
+         - method: GET
+           path:
+                   - "{{BaseURL}}/portal/sharing/rest/"
+           matchers:
+                   - type: word
+                     words:
+                             - "<title>Root</title>"
+

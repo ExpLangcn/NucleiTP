@@ -1,0 +1,58 @@
+id: clockstone-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Clockstone <= 1.2 - Arbitrary File Upload
+  author: topscoder
+  severity: critical
+  description: >
+    The Clockstone theme for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'upload.php' file in versions up to, and including, 1.2. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/eee9d564-5d52-47fa-a6a5-b908bb64a2ba?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/clockstone/"
+    google-query: inurl:"/wp-content/themes/clockstone/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,clockstone,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/clockstone/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "clockstone"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2')

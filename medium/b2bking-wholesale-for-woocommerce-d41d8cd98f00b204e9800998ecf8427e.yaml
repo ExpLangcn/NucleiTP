@@ -1,0 +1,56 @@
+id: b2bking-wholesale-for-woocommerce-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "B2BKing <= 4.6.00 - Missing Authorization to Authenticated(Subscriber+) Price Modification"
+  author: topscoder
+  severity: medium
+  description: "The B2BKing plugin for WordPress is vulnerable to unauthorized modification of data due to a missing capability check on the 'b2bking_save_price_import' function in versions up to, and including, 4.6.00. This makes it possible for Authenticated attackers with subscriber or customer-level permissions to modify the pricing of any product on the site."
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/b3f2c4c3-73d6-4b3b-8eb3-c494f52dc183?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:H/A:N
+    cvss-score: 6.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/b2bking-wholesale-for-woocommerce/"
+    google-query: inurl:"/wp-content/plugins/b2bking-wholesale-for-woocommerce/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,b2bking-wholesale-for-woocommerce,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/b2bking-wholesale-for-woocommerce/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "b2bking-wholesale-for-woocommerce"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.6.00')

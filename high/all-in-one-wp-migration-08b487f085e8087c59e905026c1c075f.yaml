@@ -1,0 +1,58 @@
+id: all-in-one-wp-migration-08b487f085e8087c59e905026c1c075f
+
+info:
+  name: "All-in-One WP Migration <= 2.0.4 - Missing Authorization to Database Export"
+  author: topscoder
+  severity: high
+  description: "The All-in-One WP Migration plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the 'router()' function in versions up to, and including, 2.0.4. This makes it possible for unauthenticated attackers to export a complete copy of the vulnerable service's database."
+  reference:
+    - https://www.pritect.net/blog/all-in-one-wp-migration-2-0-4-security-vulnerability
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-all-in-one-wp-migration-security-bypass-2-0-4/
+    - https://wpscan.com/vulnerability/4f78d821-036b-4d0c-8cc9-397dcdbc9c21
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-wp-migration/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-wp-migration/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-wp-migration,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-wp-migration/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-wp-migration"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.0.4')

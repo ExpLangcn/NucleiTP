@@ -1,0 +1,56 @@
+id: admin-custom-login-3b71b9a5cfded4d5daa2ae855f354761
+
+info:
+  name: "Admin Custom Login <= 2.4.7 - Cross-Site Request Forgery to Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Admin Custom Login plugin for WordPress is vulnerable to Cross-Site Request Forgery to Stored Cross-Site Scripting via the ‘logo_url’ parameter in versions before 2.4.8 due to insufficient input sanitization and output escaping and missing nonce validation. This makes it possible for unauthenticated attackers to inject malicious JavaScript via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://sumofpwn.nl/advisory/2016/admin_custom_login_wordpress_plugin_affected_by_persistent_cross_site_scripting_via_logo_url_field.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/admin-custom-login/"
+    google-query: inurl:"/wp-content/plugins/admin-custom-login/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,admin-custom-login,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/admin-custom-login/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "admin-custom-login"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.4.8')

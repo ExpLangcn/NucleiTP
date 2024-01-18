@@ -1,0 +1,58 @@
+id: buddypress-media-52193452be1b7ff714846f4724f8ae85
+
+info:
+  name: "rtMedia for WordPress, BuddyPress and bbPress < 3.7.19 - Local File Inclusion"
+  author: topscoder
+  severity: high
+  description: "The rtMedia for WordPress, BuddyPress and bbPress plugin for WordPress is vulnerable to Local File Inclusion in versions up to, and including, 3.7.18 via the 'template' parameter. This allows authenticated attackers to include and execute arbitrary files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where images and other “safe” file types can be uploaded and included."
+  reference:
+    - https://wordpress.org/plugins/buddypress-media/#developers
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-rtmedia-for-wordpress-buddypress-and-bbpress-unspecified-vulnerability-3-7-18/
+    - https://plugins.trac.wordpress.org/changeset/1031791/buddypress-media/trunk/app/main/controllers/template/RTMediaTemplate.php
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress-media/"
+    google-query: inurl:"/wp-content/plugins/buddypress-media/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress-media,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress-media/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress-media"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.7.18')

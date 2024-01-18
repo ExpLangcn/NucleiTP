@@ -1,0 +1,58 @@
+id: buddypress-26cd09463a563f5bdbf1737d253ac338
+
+info:
+  name: "BuddyPress <= 2.3.4 - Privilege Escalation"
+  author: topscoder
+  severity: high
+  description: "The BuddyPress plugin for WordPress is vulnerable to Privilege Escalation in versions up to, and including, 2.3.4. This makes it possible for authenticated attackers to execute otherwise privilege restricted actions and bypass capability checks."
+  reference:
+    - https://buddypress.org/2015/11/buddypress-2-3-5/
+    - https://wpscan.com/vulnerability/55e3484e-6b92-451f-8dc0-fe7544497a1a
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-buddypress-security-bypass-2-3-4/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.3.4')

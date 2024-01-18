@@ -1,0 +1,61 @@
+id: contus-video-gallery-91fbed477e72ae61d5f92352f5cf88eb
+
+info:
+  name: "WORDPRESS VIDEO GALLERY <= 2.8 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The WORDPRESS VIDEO GALLERY Plugin for WordPress is vulnerable to SQL Injection via the ‘vid' parameter in versions up to, and including, 2.8 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://www.homelab.it/index.php/2015/04/13/wordpress-video-gallery-2-8-sql-injection-vulnerability/
+    - https://plugins.trac.wordpress.org/changeset/1129320/contus-video-gallery
+    - https://packetstormsecurity.com/files/131418/
+    - https://wpscan.com/vulnerability/b625aee5-8fd1-4f3e-9a9c-d41bdec13243
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-wordpress-video-gallery-sql-injection-2-8/
+    - https://www.exploit-db.com/exploits/36751
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contus-video-gallery/"
+    google-query: inurl:"/wp-content/plugins/contus-video-gallery/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contus-video-gallery,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contus-video-gallery/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contus-video-gallery"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.8')

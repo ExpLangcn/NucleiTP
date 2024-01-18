@@ -1,0 +1,56 @@
+id: cryptocurrency-donation-box-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Cool Plugins (Various Versions) - Arbitrary Plugin Installation and Activation"
+  author: topscoder
+  severity: low
+  description: "Several WordPress plugins developed by Cool Plugins are vulnerable to arbitrary plugin installation and activation that can lead to remote code execution by authenticated attackers."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cryptocurrency-donation-box/"
+    google-query: inurl:"/wp-content/plugins/cryptocurrency-donation-box/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cryptocurrency-donation-box,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cryptocurrency-donation-box/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cryptocurrency-donation-box"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.7')

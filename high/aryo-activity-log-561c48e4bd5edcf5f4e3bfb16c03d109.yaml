@@ -1,0 +1,57 @@
+id: aryo-activity-log-561c48e4bd5edcf5f4e3bfb16c03d109
+
+info:
+  name: "Activity Log Plugin < 2.0.4 - Fulle Path Disclosure"
+  author: topscoder
+  severity: high
+  description: "The Activity Log plugin for WordPress is vulnerable to Sensitive Data Exposure in versions up to, and including, 2.0.3 via direct calls to the ~/class-aal-integration-woocommerce.php file. This can allow unauthenticated attackers to extract sensitive data including the full path of the WordPress installation."
+  reference:
+    - https://github.com/KingYes/wordpress-aryo-activity-log/pull/27
+    - https://plugins.trac.wordpress.org/changeset/865972
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 7.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/aryo-activity-log/"
+    google-query: inurl:"/wp-content/plugins/aryo-activity-log/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,aryo-activity-log,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/aryo-activity-log/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "aryo-activity-log"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.0.4')

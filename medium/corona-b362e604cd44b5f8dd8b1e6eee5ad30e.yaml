@@ -1,0 +1,59 @@
+id: corona-b362e604cd44b5f8dd8b1e6eee5ad30e
+
+info:
+  name: "Corona (All Versions) - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Corona theme for WordPress is vulnerable to Cross-Site Scripting due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://jannefi.blogspot.com/2012/10/xss-vulnerability-in-wp-themes-by-kriesi.html
+    - https://wpscan.com/vulnerability/c27d61f1-9367-45f0-9dfc-b61e587c77b0
+    - https://kriesi.at/archives/corona-worpress-theme
+    - http://web.archive.org/web/20160607002930/https%3A//themeforest.net/item/corona-business-portfolio-theme/533913?ref=Kriesi
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/corona/"
+    google-query: inurl:"/wp-content/themes/corona/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,corona,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/corona/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "corona"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')

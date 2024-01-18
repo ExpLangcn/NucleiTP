@@ -1,0 +1,58 @@
+id: barclaycart-e2c7747732780cbb22ac5c28c3c4ac71
+
+info:
+  name: "Barclaycart (All Versions) - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Barclaycart plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'uploadify.php' file. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible."
+  reference:
+    - https://packetstormsecurity.com/files/125552/
+    - https://vigilance.fr/vulnerability/WordPress-Barclaycart-file-upload-14372
+    - https://wpscan.com/vulnerability/5c143d20-267f-4fd3-afaa-a0892a8fcb9f
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/barclaycart/"
+    google-query: inurl:"/wp-content/plugins/barclaycart/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,barclaycart,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/barclaycart/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "barclaycart"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')

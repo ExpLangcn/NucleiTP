@@ -1,0 +1,58 @@
+id: cf7-zoho-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Integration for Contact Form 7 and Zoho CRM, Bigin <= 1.1.7 - Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Integration for Contact Form 7 and Zoho CRM, Bigin plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘start_date’ and ‘end_date’ parameters in versions up to, and including, 1.1.7 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/c4a649b0-d5b2-4e4c-833c-01ecf12611a5?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/cf7-zoho/"
+    google-query: inurl:"/wp-content/plugins/cf7-zoho/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cf7-zoho,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cf7-zoho/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cf7-zoho"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.7')

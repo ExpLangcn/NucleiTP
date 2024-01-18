@@ -1,0 +1,58 @@
+id: add-to-any-fbfa59422d3ee961cc2146deb28c1df8
+
+info:
+  name: "AddToAny Share Buttons <= 1.7.14 - HTTP Host Header Injection"
+  author: topscoder
+  severity: medium
+  description: "The AddToAny Share Buttons plugin for WordPress is vulnerable to Host Header Injections in versions up to, and including, 1.7.14. This is due to a failure to properly validate the HTTP request header. This makes it possible for unauthorized attackers to poison the website cache and log users credentials."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1713858/add-to-any
+    - https://wpscan.com/vulnerability/469e8aa7-b689-438c-8421-fba8ae5972fb
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-addtoany-share-buttons-host-header-injection-1-7-14/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:L/A:N
+    cvss-score: 4.7
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/add-to-any/"
+    google-query: inurl:"/wp-content/plugins/add-to-any/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,add-to-any,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/add-to-any/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "add-to-any"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.14')

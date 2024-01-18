@@ -1,0 +1,57 @@
+id: booking-calendar-contact-form-a1cf1b8974c4b0f0e16e021791a69175
+
+info:
+  name: "Booking Calendar Contact Form <= 1.2.34 - Cross-Site Request Forgery via cpdexbccf_feedback"
+  author: topscoder
+  severity: medium
+  description: "The Booking Calendar Contact Form plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.2.34. This is due to missing or incorrect nonce validation on the cpdexbccf_feedback function called via the cpdexbccf_feedback AJAX action. This makes it possible for unauthenticated attackers to perform an unauthorized feedback form submission via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://patchstack.com/database/vulnerability/booking-calendar-contact-form/wordpress-booking-calendar-contact-form-plugin-1-2-34-broken-access-control
+    - https://plugins.trac.wordpress.org/changeset/2801964/booking-calendar-contact-form
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/booking-calendar-contact-form/"
+    google-query: inurl:"/wp-content/plugins/booking-calendar-contact-form/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,booking-calendar-contact-form,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/booking-calendar-contact-form/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "booking-calendar-contact-form"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.34')

@@ -1,0 +1,59 @@
+id: cm-ad-changer-a7c53137049fcd26587cfb7bf3bdbc75
+
+info:
+  name: "CM Ad Changer < 1.7.6 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The CM Ad Changer plugin for WordPress is vulnerable to Cross-Site Scripting via several parameters in versions before 1.7.6 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://0x62626262.wordpress.com/2016/04/21/cm-ad-changer-xss-vulnerability/
+    - https://ad-changer.cminds.com/cm-ad-changer-plugin-free-edition-release-notes/
+    - https://wordpress.org/plugins/cm-ad-changer/#developers
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=1396662%40cm-ad-changer&old=1392022%40cm-ad-changer&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cm-ad-changer/"
+    google-query: inurl:"/wp-content/plugins/cm-ad-changer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cm-ad-changer,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cm-ad-changer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cm-ad-changer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.7.6')

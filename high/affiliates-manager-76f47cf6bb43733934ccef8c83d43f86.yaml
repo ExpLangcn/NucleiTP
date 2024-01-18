@@ -1,0 +1,59 @@
+id: affiliates-manager-76f47cf6bb43733934ccef8c83d43f86
+
+info:
+  name: "Affiliates Manager <= 2.9.13 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The Affiliates Manager plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.9.13. This is due to missing or incorrect nonce validation on the process_individual_action function. This makes it possible for unauthenticated attackers to delete affiliates and commissions, via forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2770155/affiliates-manager/trunk/classes/ListAffiliatesTable.php?old=2709025&old_path=affiliates-manager%2Ftrunk%2Fclasses%2FListAffiliatesTable.php
+    - https://plugins.trac.wordpress.org/changeset/2770155/affiliates-manager/trunk/classes/ListCommissionTable.php?contextall=1&old=2727740&old_path=%2Faffiliates-manager%2Ftrunk%2Fclasses%2FListCommissionTable.php
+    - https://patchstack.com/database/vulnerability/affiliates-manager-/wordpress-affiliates-manager-plugin-2-9-13-arbitrary-affiliates-creatives-deletion-via-csrf
+    - https://wpscan.com/vulnerability/e4328bb5-cf74-496f-a66d-5b3f83a9ef51
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/affiliates-manager/"
+    google-query: inurl:"/wp-content/plugins/affiliates-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,affiliates-manager,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/affiliates-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "affiliates-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.9.13')

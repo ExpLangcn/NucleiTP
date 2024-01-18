@@ -1,0 +1,56 @@
+id: authors-list-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Authors List <= 2.0.2 - Reflected Cross-Site Scripting via al_id"
+  author: topscoder
+  severity: medium
+  description: "The Authors List plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the al_id parameter in versions up to, and including, 2.0.2 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/09f590ad-c99a-4577-a709-98c88d3acc87?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/authors-list/"
+    google-query: inurl:"/wp-content/plugins/authors-list/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,authors-list,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/authors-list/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "authors-list"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.0.3')

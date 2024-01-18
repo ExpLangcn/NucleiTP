@@ -1,0 +1,58 @@
+id: branda-white-labeling-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Branda – White Label WordPress <= 3.4.8.1 - Authenticated (Administrator+) Stored Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Branda plugin for WordPress is vulnerable to Stored Cross-Site Scripting via admin settings in versions up to, and including, 3.4.8.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers, with administrator-level permissions and above, to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. This only affects multi-site installations and installations where unfiltered_html has been disabled.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/c3508b46-6920-48b9-9acb-620ea34e07e2?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 4.4
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/branda-white-labeling/"
+    google-query: inurl:"/wp-content/plugins/branda-white-labeling/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,branda-white-labeling,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/branda-white-labeling/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "branda-white-labeling"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.4.8.1')

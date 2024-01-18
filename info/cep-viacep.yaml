@@ -1,0 +1,30 @@
+id: osint-consulta-cep-receitaws
+
+info:
+  name: OSINT Consulta CEP Receitaws
+  author: Mrcl0wn / OSINT Brazuca
+  severity: info
+  description: Consulta dados de CEP via API viacep.com.br
+  tags: cep,consulta,osint
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://viacep.com.br/ws/{{CEP}}/json/"
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "cep"
+      - type: status
+        status:
+          - 200
+    extractors:
+          - type: json
+            part: body
+            json:
+              - '.'  # JQ like syntax for extraction
+
+
+

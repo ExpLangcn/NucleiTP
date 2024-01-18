@@ -1,0 +1,56 @@
+id: amazon-product-in-a-post-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Amazon Product in a Post Plugin < 3.5.3 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The Amazon Product in a Post plugin for WordPress is vulnerable to generic SQL Injection via the ‘appip-cache-id’ parameter in versions up to, and including, 3.5.2 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for unauthenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/amazon-product-in-a-post-plugin/"
+    google-query: inurl:"/wp-content/plugins/amazon-product-in-a-post-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,amazon-product-in-a-post-plugin,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/amazon-product-in-a-post-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "amazon-product-in-a-post-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.5.3')

@@ -1,0 +1,58 @@
+id: clickdesk-live-support-chat-plugin-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Live Chat from ClickDesk – Live Chat – Help Desk Plugin for Websites <= 4.3 - Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The Live Chat from ClickDesk – Live Chat – Help Desk Plugin for Websites plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 4.3 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser. Note that
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/860ce27b-749d-497f-9038-7e035cb3fe1d?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/clickdesk-live-support-chat-plugin/"
+    google-query: inurl:"/wp-content/plugins/clickdesk-live-support-chat-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,clickdesk-live-support-chat-plugin,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/clickdesk-live-support-chat-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "clickdesk-live-support-chat-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.3')

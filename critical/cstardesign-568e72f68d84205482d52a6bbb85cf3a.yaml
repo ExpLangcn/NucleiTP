@@ -1,0 +1,59 @@
+id: cstardesign-568e72f68d84205482d52a6bbb85cf3a
+
+info:
+  name: "CStar Design WordPress Theme <= 4.9 - SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The 'CStar Design WordPress Theme' theme for WordPress is vulnerable to SQL Injection via the ‘id’ parameter in versions up to, and including 4.9 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://www.exploit-db.com/exploits/38064
+    - https://themeforest.net/item/cstar-design-wordpress-theme/2490278
+    - https://web.archive.org/web/20130101013038/https%3A//www.securityfocus.com/bid/56694/
+    - https://wpscan.com/vulnerability/292b4b2d-a323-44b5-a5dd-35bf1236e0c3
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/cstardesign/"
+    google-query: inurl:"/wp-content/themes/cstardesign/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,cstardesign,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/cstardesign/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cstardesign"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.9')

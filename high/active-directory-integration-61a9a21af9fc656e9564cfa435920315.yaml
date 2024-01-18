@@ -1,0 +1,57 @@
+id: active-directory-integration-61a9a21af9fc656e9564cfa435920315
+
+info:
+  name: "Active Directory Integration <= 1.1.8 - Authenticated (Admin+) SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Active Directory Integration plugin for WordPress is vulnerable to SQL Injection via the ‘userid’ parameter in versions up to, and including, 1.1.8 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers with admin-level privileges to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://lenonleite.com.br/en/2017/09/11/english-active-directory-integration-wordpress-plugin-sql-injection/
+    - https://wordpress.org/plugins/active-directory-integration/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/active-directory-integration/"
+    google-query: inurl:"/wp-content/plugins/active-directory-integration/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,active-directory-integration,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/active-directory-integration/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "active-directory-integration"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.8')

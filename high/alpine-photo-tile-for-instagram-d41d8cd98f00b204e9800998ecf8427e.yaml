@@ -1,0 +1,56 @@
+id: alpine-photo-tile-for-instagram-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Alpine PhotoTile For Instagram < 1.2.9  - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Alpine PhotoTile For Instagram plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to 1.2.9 due to insufficient input sanitization and output escaping on the 'general_lightbox_params' parameter. This makes it possible for unauthenticated attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/alpine-photo-tile-for-instagram/"
+    google-query: inurl:"/wp-content/plugins/alpine-photo-tile-for-instagram/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,alpine-photo-tile-for-instagram,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/alpine-photo-tile-for-instagram/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "alpine-photo-tile-for-instagram"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.9')

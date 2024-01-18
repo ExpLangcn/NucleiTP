@@ -1,0 +1,22 @@
+id: wpengine-config-check
+
+info:
+  name: WP Engine Config Check
+  author: SirBugs
+  severity: high
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/wpeprivate/config.json"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        condition: or
+        words:
+          - "WPENGINE_SESSION_DB_USERNAME"
+          - "WPENGINE_SESSION_DB_PASSWORD"
+          - "WPENGINE_SESSION"
+          - "wpengine_apikey"
+          - "WP_CACHE_KEY_SALT"

@@ -1,0 +1,58 @@
+id: coming-soon-maintenance-mode-ready-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Ready! Coming Soon <= 0.5.0 Stored Cross-Site Scripting and Cross-Site Request Forgery
+  author: topscoder
+  severity: medium
+  description: >
+    The Ready! Coming Soon plugin for WordPress is vulnerable to Cross-Site Scripting and Cross-Site Request Forgery in versions up to, and including, 0.5.0. This allows unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page. Additionally unauthenticated attackers can perform actions in the plugin if they can trick an administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/569c8faf-bd2a-4c61-a8c7-d4cab36e5727?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/coming-soon-maintenance-mode-ready/"
+    google-query: inurl:"/wp-content/plugins/coming-soon-maintenance-mode-ready/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,coming-soon-maintenance-mode-ready,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/coming-soon-maintenance-mode-ready/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "coming-soon-maintenance-mode-ready"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.5.1')

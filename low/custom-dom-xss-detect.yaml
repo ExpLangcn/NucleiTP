@@ -1,0 +1,16 @@
+id: custom-dom-xss-detect
+
+info:
+        name: custom-dom-xss-detect
+        author: 0xParthJ
+        severity: low
+        tags: panel
+
+requests:
+         - method: GET
+           path:
+                   - "{{BaseURL}}/authorize.html#access_token=1122&state=javascript:alert(document.domain)&expires_in=1s"
+           matchers:
+                   - type: word
+                     words:
+                             - "Redirection in progress..."

@@ -1,0 +1,18 @@
+id: cookie-detect
+info:
+  name: Cookies-extractor
+  author: Nagli
+  description: Extract cookies
+  severity: info
+  tags: cookies
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+
+    extractors:
+      - type: kval
+        part: header
+        kval:
+          - Set_Cookie

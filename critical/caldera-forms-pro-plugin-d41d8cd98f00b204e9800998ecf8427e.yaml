@@ -1,0 +1,58 @@
+id: caldera-forms-pro-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Caldera Forms Pro < 1.8.2 - Missing Authorization
+  author: topscoder
+  severity: critical
+  description: >
+    The Caldera Forms Pro plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the register_rest_route function in versions, up to and including, 1.7.6 in the 1.7.x branch, and 1.8.1 in the 1.8.x branch. This makes it possible for unauthenticated attackers to read arbitrary files, including wp-config.php.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/ce834ae1-e05a-4b0e-9d7f-144669437d70?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/caldera-forms-pro/"
+    google-query: inurl:"/wp-content/plugins/caldera-forms-pro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,caldera-forms-pro,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/caldera-forms-pro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "caldera-forms-pro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.8.2')

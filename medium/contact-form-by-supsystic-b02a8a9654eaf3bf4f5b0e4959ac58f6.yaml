@@ -1,0 +1,58 @@
+id: contact-form-by-supsystic-b02a8a9654eaf3bf4f5b0e4959ac58f6
+
+info:
+  name: "Contact Form by Supsystic < 1.7.20 - Authenticated (Admin+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Contact Form by Supsystic plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the fields label in versions before 1.7.20 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers with admin-level privileges to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://wpscan.com/vulnerability/79e00086-d0f0-4db2-9e3b-6d773fe73ef0
+    - https://wordpress.org/plugins/contact-form-by-supsystic/#developers
+    - https://plugins.trac.wordpress.org/changeset/2624527
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-by-supsystic/"
+    google-query: inurl:"/wp-content/plugins/contact-form-by-supsystic/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-by-supsystic,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-by-supsystic/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-by-supsystic"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.7.20')

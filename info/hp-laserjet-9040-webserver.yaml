@@ -1,0 +1,22 @@
+id: hp-laserjet-9040-webserver
+
+info:
+  name: HP LaserJet 9040 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<span class="hpBannerTextBig">hp LaserJet 9040</span>'
+
+      - type: status
+        status:
+          - 200

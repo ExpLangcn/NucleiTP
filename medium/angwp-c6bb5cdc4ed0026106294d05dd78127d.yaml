@@ -1,0 +1,58 @@
+id: angwp-c6bb5cdc4ed0026106294d05dd78127d
+
+info:
+  name: "Adning Advertising <= 1.5.5 - Unauthenticated Arbitrary File Deletion via Path Traversal"
+  author: topscoder
+  severity: medium
+  description: "The Adning Advertising plugin for WordPress is vulnerable to file deletion via path traversal in versions up to, and including, 1.5.5. This allows unauthenticated attackers to delete arbitrary files which can be used to reset and gain full control of a site."
+  reference:
+    - https://blog.nintechnet.com/critical-vulnerability-in-adning-advertising-plugin-actively-exploited-in-the-wild/
+    - https://www.wordfence.com/blog/2020/07/critical-vulnerabilities-patched-in-adning-advertising-plugin/
+    - https://codecanyon.net/item/wp-pro-advertising-system-all-in-one-ad-manager/269693
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:N/I:H/A:N
+    cvss-score: 5.9
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/angwp/"
+    google-query: inurl:"/wp-content/plugins/angwp/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,angwp,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/angwp/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "angwp"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.5.5')

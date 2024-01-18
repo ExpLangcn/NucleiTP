@@ -1,0 +1,66 @@
+id: a3-lazy-load-fa1b594d153abde0b910b3cb149678db
+
+info:
+  name: "a3rev Multiple Plugins <= Various Versions - Cross-Site Request Forgery to Settings Changes"
+  author: topscoder
+  severity: high
+  description: "The a3 Lazy Load, a3 Portfolio, Contact Us Page – Contact People, Dynamic Product Gallery for WooCommerce, a3 Responsive Slider, and Compare Products for WooCommerce plugins for WordPress are vulnerable to Cross-Site Request Forgery respectively in versions up to, and including, 2.5.0, 3.0.0, 3.6.0, 2.9.0, 2.0.12, 2.8.0. This is due to missing nonce validation on the save_settings function present in all three plugins. This makes it possible for unauthenticated attackers to to update the plugins settings via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.
+
+It is also worth noting that there were several additional changes in the plugins related to sanitization and escaping so there may be other vulnerabilities that were fixed as part of these releases."
+  reference:
+    - https://wordpress.org/plugins/contact-us-page-contact-people/#developers
+    - https://wordpress.org/plugins/a3-portfolio/#developers
+    - https://wordpress.org/plugins/a3-lazy-load/#developers
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2729166%40a3-lazy-load&new=2729166%40a3-lazy-load&sfp_email=&sfph_mail=
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2729172%40a3-portfolio&new=2729172%40a3-portfolio&sfp_email=&sfph_mail=
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2729176%40contact-us-page-contact-people&new=2729176%40contact-us-page-contact-people&sfp_email=&sfph_mail=
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2730126%40woocommerce-dynamic-gallery&new=2730126%40woocommerce-dynamic-gallery&sfp_email=&sfph_mail=
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2730113%40a3-responsive-slider&new=2730113%40a3-responsive-slider&sfp_email=&sfph_mail=
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2730118%40woocommerce-compare-products&new=2730118%40woocommerce-compare-products&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/a3-lazy-load/"
+    google-query: inurl:"/wp-content/plugins/a3-lazy-load/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,a3-lazy-load,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/a3-lazy-load/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "a3-lazy-load"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4.9')

@@ -1,0 +1,58 @@
+id: bsk-pdf-manager-7d3a12cd85a719ee4898ba1c83ad8b95
+
+info:
+  name: "BSK PDF Manager 1.3 - 2.9 - Authenticated Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The BSK PDF Manager plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘cat_title’ parameter from versions 1.3 to 2.9 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://packetstormsecurity.com/files/125422/
+    - https://wpscan.com/vulnerability/bfab3125-7dea-4da1-8a38-b8f041d1caa3
+    - http://hauntit.blogspot.com/2014/02/en-xss-in-bsk-pdf-manager.html
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bsk-pdf-manager/"
+    google-query: inurl:"/wp-content/plugins/bsk-pdf-manager/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bsk-pdf-manager,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bsk-pdf-manager/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bsk-pdf-manager"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 1.3', '<= 2.9')

@@ -1,0 +1,57 @@
+id: all-in-one-seo-pack-9d3e88ec885237826dabdc99ad70ce5d
+
+info:
+  name: "All in One SEO <= 2.2.4.1 - Privilege Escalation to Arbitrary Post Modification"
+  author: topscoder
+  severity: unknown
+  description: "The All in One SEO plugin for WordPress is vulnerable to Authenticated Privilege Escalation leading to Post Changes in versions up to, and including, 2.2.4.1. This is due to certain actions being available to low-privileged users. This makes it possible for Subscriber-level attackers to add or modify certain parameters used by the plugin.  This includes the post’s SEO title, description and keyword meta tags.  This could be used to decrease a site's Search Engine Results Page (SERP) ranking."
+  reference:
+    - https://blog.sucuri.net/2014/05/vulnerability-found-in-the-all-in-one-seo-pack-wordpress-plugin.html
+    - https://aioseo.com/changelog/5/
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-seo-pack/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-seo-pack/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-seo-pack,
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-seo-pack/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-seo-pack"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.2.4.1')

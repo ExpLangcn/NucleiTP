@@ -1,0 +1,27 @@
+id: api-zipcodebase
+
+info:
+  name: Zipcodebase API Test
+  author: daffainfo
+  severity: info
+  description: Lookup postal codes, calculate distances and much more with our free zip code api.
+  reference:
+    - https://app.zipcodebase.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/zipcodebase
+  tags: token-spray,zipcodebase
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://app.zipcodebase.com/api/v1/search?apikey={{token}}&codes=10005%2C51503"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"postal_code"'
+          - '"country_code"'
+          - '"latitude"'
+          - '"longitude"'
+        condition: and

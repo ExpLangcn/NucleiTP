@@ -12,11 +12,13 @@ info:
     - https://www.cnvd.org.cn/flaw/show/CNVD-2022-03672
   classification:
     cvss-metrics: CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H
-    cvss-score: 10.0
+    cvss-score: 10
     cwe-id: CWE-77
+  metadata:
+    max-request: 2
   tags: cnvd,cnvd2020,sunflower,rce
 
-requests:
+http:
   - raw:
       - |
         POST /cgi-bin/rpc HTTP/1.1
@@ -34,9 +36,7 @@ requests:
         internal: true
         group: 1
         regex:
-          - '"verify_string":"(.*)"'
-
-    req-condition: true
+          - '"verify_string":"(.*?)"'
     matchers:
       - type: dsl
         dsl:
@@ -46,4 +46,4 @@ requests:
           - "contains(body_2, 'Windows IP')"
         condition: and
 
-# Enhanced by mp on 2022/05/12
+# digest: 4b0a00483046022100e0b8a978d4631823ced989441ed9dc7f4787e0865117f3774c90e5f27393ad3b022100a2f5705860233f76a0fd9a7a6cb44ff3db36963f9c04f4d8f57b519133f77112:922c64590222798bb761d5b6d8e72950

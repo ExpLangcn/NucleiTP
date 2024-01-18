@@ -1,0 +1,59 @@
+id: advanced-booking-calendar-d34bb20f729d6e960376fc5bb06fcce2
+
+info:
+  name: "Advanced Booking Calendar <= 1.6.1 - Unauthenticated SQL Injection"
+  author: topscoder
+  severity: critical
+  description: "The Advanced Booking Calendar plugin for WordPress is vulnerable to SQL Injection via the ‘calendarId’ parameter in versions up to, and including, 1.6.1 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2202805
+    - https://www.cybersecurity-help.cz/vdb/SB2020102306
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-advanced-booking-calendar-sql-injection-1-6-1/
+    - https://twitter.com/lenonleite/status/1319304903186128896
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-booking-calendar/"
+    google-query: inurl:"/wp-content/plugins/advanced-booking-calendar/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-booking-calendar,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-booking-calendar/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-booking-calendar"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.6.2')

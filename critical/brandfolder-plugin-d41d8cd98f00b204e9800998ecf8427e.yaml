@@ -1,0 +1,58 @@
+id: brandfolder-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Brandfolder – Digital Asset Management Simplified. < 3.0.1 - Local/Remote File Inclusion
+  author: topscoder
+  severity: critical
+  description: >
+    The Brandfolder – Digital Asset Management Simplified. plugin for WordPress is vulnerable to Local and Remote File Inclusion in versions up to, and including, 3.0 via the 'wp_abspath' parameter. This allows unauthenticated attackers to include remote files on the server, resulting in code execution.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/240cc19a-9bae-4e69-a16f-46901daaa945?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/brandfolder/"
+    google-query: inurl:"/wp-content/plugins/brandfolder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,brandfolder,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/brandfolder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "brandfolder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.0.1')

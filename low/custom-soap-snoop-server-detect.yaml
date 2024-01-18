@@ -1,0 +1,17 @@
+id: custom-soap-snoop-server-detect
+
+info:
+        name: custom-soap-snoop-server-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/shprod/servlet/snoop"
+          matchers:
+                  - type: word
+                    words:
+                            - "<TITLE>Snoop Servlet</TITLE>"

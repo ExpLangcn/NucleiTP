@@ -1,0 +1,57 @@
+id: age-verify-7c1428d756e2869a23f89e4a2ae67b8b
+
+info:
+  name: "Age Verify <= 0.2.8 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Age Verify plugin for WordPress is vulnerable to Reflected Cross-Site Scripting in versions up to, and including, 0.2.8 due to insufficient input sanitization and output escaping on add_query_arg and remove_query_arg. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://make.wordpress.org/plugins/2015/04/20/fixing-add_query_arg-and-remove_query_arg-usage/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-age-verify-cross-site-scripting-0-2-8/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/age-verify/"
+    google-query: inurl:"/wp-content/plugins/age-verify/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,age-verify,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/age-verify/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "age-verify"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.2.8')

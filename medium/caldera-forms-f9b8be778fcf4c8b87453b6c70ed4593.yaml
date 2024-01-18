@@ -1,0 +1,56 @@
+id: caldera-forms-f9b8be778fcf4c8b87453b6c70ed4593
+
+info:
+  name: "Caldera Forms – More Than Contact Forms < 1.4.0 - Sensitive Information Disclosure"
+  author: topscoder
+  severity: medium
+  description: "The Caldera Forms – More Than Contact Forms plugin for WordPress is vulnerable to Sensitive Information Disclosure due to missing capability checks on the browse_entries() function that makes it possible for low-level authenticated attackers to retrieve form entries in versions up to 1.4.0."
+  reference:
+    - https://www.wordfence.com/blog/2016/05/3-plugin-vulnerabilities-disclosed-yesterday/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/caldera-forms/"
+    google-query: inurl:"/wp-content/plugins/caldera-forms/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,caldera-forms,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/caldera-forms/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "caldera-forms"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.4.0')

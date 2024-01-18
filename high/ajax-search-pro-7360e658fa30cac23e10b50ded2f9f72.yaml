@@ -1,0 +1,57 @@
+id: ajax-search-pro-7360e658fa30cac23e10b50ded2f9f72
+
+info:
+  name: "Ajax Search Pro <= 4.18.7 - Authenticated (Subscriber+) SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Ajax Search Pro plugin for WordPress is vulnerable to SQL Injection via the ‘p_blogid’ parameter in versions up to, and including, 4.18.7 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query. This makes it possible for authenticated attackers, with subscriber-level access or higher, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://changelog.ajaxsearchpro.com/#4.19-2020-08.03
+    - https://wpscan.com/vulnerability/2c04d49a-d9e1-4913-a9d8-4042b6547ae7
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/ajax-search-pro/"
+    google-query: inurl:"/wp-content/plugins/ajax-search-pro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ajax-search-pro,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ajax-search-pro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ajax-search-pro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.18.7')

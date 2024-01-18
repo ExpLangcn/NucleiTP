@@ -1,0 +1,56 @@
+id: countdown-builder-466d118ca8f9a3617f4ecdb86e11688a
+
+info:
+  name: "Countdown, Coming Soon, Maintenance – Countdown & Clock <= 2.3.9.5 - Authenticated Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The plugin Countdown, Coming Soon, Maintenance – Countdown & Clock for WordPress is vulnerable to Stored Cross-Site Scripting. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2729789%40countdown-builder%2Ftrunk&old=2729668%40countdown-builder%2Ftrunk&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/countdown-builder/"
+    google-query: inurl:"/wp-content/plugins/countdown-builder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,countdown-builder,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/countdown-builder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "countdown-builder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.3.9.5')

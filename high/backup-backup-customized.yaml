@@ -1,0 +1,65 @@
+id: backup-backup-customized
+
+info:
+  name: "WordPress Backup Migration 1.2.8 Plugin - Unauthenticated Database Backup Vulnerability "
+  author: topscoder,wadeek
+  severity: high
+  description: ""
+  reference:
+    - https://downloads.wordpress.org/plugin/backup-backup.1.2.8.zip
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/backup-backup/"
+    google-query: inurl:"/wp-content/plugins/backup-backup/"
+  tags: cve,wordpress,wp-plugin,backup-backup,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/backup-backup/readme.txt"
+
+      # 1. Get the name of the backup file from
+      # - "{{BaseURL}}/wp-content/backup-migration/config.json"
+      # for example: backup-migration-ZAUX9SmuJP
+      # 2. Get the name of the archive containing the backups.
+      # - BM_Backup_YYYY-MM-DD_00_00_00_xXxXxxXxXxxXxXxx.zip
+      # 3. Build the path for the download.
+      # - "{{BaseURL}}/wp-content/backup-migration-xXxXxxXxXx/backups/BM_Backup_YYYY-MM-DD_00_00_00_xXxXxxXxXxxXxXxx.zip"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "backup-backup"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.8')
+
+# Enhanced

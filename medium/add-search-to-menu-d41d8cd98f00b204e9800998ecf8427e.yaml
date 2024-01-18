@@ -1,0 +1,56 @@
+id: add-search-to-menu-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Ivory Search <= 4.7.1 - Authenticated (Contributor+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Ivory Search plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘id’ parameter in versions up to, and including, 4.7.1 due to insufficient input sanitization and output escaping. This makes it possible for authenticated Contributor+ attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/add-search-to-menu/"
+    google-query: inurl:"/wp-content/plugins/add-search-to-menu/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,add-search-to-menu,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/add-search-to-menu/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "add-search-to-menu"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  4.7.1')

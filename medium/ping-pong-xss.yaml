@@ -1,0 +1,21 @@
+id: ping-pong-xss
+
+info:
+  name: Ping Pong Path Reflected-XSS Check
+  author: SirBugs
+  description: this xss was found by twitter@19who_am_i19 and the template made by twitter@SirBagoza
+  severity: medium
+  tags: http, xss, rxss, ping
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/ping/\"><script>alert(1)</script>"
+      - "{{BaseURL}}/ping?jd=a'\"><script>alert(1)</script>"
+    matchers:
+      - type: word
+        condition: and
+        words:
+          - "pong"
+          - "<script>alert(1)</script>"
+        part: body

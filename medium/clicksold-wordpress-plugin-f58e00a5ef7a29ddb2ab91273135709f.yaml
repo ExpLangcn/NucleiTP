@@ -1,0 +1,57 @@
+id: clicksold-wordpress-plugin-f58e00a5ef7a29ddb2ab91273135709f
+
+info:
+  name: "ClickSold IDX < 1.49 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The ClickSold IDX for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘id’ parameter in versions up to, and including, 1.48 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://codevigilant.com/disclosure/wp-plugin-clicksold-wordpress-plugin-a3-cross-site-scripting-xss/
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=834036%40clicksold-wordpress-plugin&old=820059%40clicksold-wordpress-plugin&sfp_email=&sfph_mail=#file2
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/clicksold-wordpress-plugin/"
+    google-query: inurl:"/wp-content/plugins/clicksold-wordpress-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,clicksold-wordpress-plugin,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/clicksold-wordpress-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "clicksold-wordpress-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.48')

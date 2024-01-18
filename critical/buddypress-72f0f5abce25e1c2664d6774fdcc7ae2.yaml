@@ -1,0 +1,59 @@
+id: buddypress-72f0f5abce25e1c2664d6774fdcc7ae2
+
+info:
+  name: "BuddyPress 2.0 - 2.7.3 - Unauthenticated Arbitrary File Deletion"
+  author: topscoder
+  severity: critical
+  description: "The BuddyPress plugin for WordPress is vulnerable to Arbitrary File Deletion in versions 2.0 - 2.7.3. This allows unauthenticated attackers to delete the contents of arbitrary files on the server, which can lead to site takeover"
+  reference:
+    - https://wptavern.com/buddypress-2-7-4-patches-security-vulnerability-that-could-allow-arbitrary-file-deletion
+    - https://buddypress.org/2016/12/buddypress-2-7-4-security-release/
+    - https://wpscan.com/vulnerability/797fc2f3-64f8-4e94-be5e-d5a12d859609
+    - https://patchstack.com/database/vulnerability/buddypress/wordpress-buddypress-plugin-2-7-3-arbitrary-file-deletion
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H
+    cvss-score: 10.0
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>= 2.0', '<= 2.7.3')

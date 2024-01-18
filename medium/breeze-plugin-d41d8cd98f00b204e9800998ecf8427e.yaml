@@ -1,0 +1,58 @@
+id: breeze-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Breeze <= 2.0.8 - Cross-Site Request Forgery via import_json_settings
+  author: topscoder
+  severity: medium
+  description: >
+    The Breeze plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.0.8. This is due to missing or incorrect nonce validation on the 'import_json_settings' function. This makes it possible for unauthenticated attackers to import plugin settings via a forged request granted they can trick a site administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/80192348-dcf4-4bab-80d1-ae7a4d194270?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/breeze/"
+    google-query: inurl:"/wp-content/plugins/breeze/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,breeze,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/breeze/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "breeze"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.0.8')

@@ -1,0 +1,57 @@
+id: better-search-ebad1db8ed17507d99b4a98af4fb41ad
+
+info:
+  name: "Better Search <= 1.3.4 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Better Search plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the search field in versions up to, and including, 1.3.4 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://wordpress.org/plugins/better-search/changelog/
+    - https://github.com/WebberZone/better-search/blob/master/changelog.txt#L155
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-search/"
+    google-query: inurl:"/wp-content/plugins/better-search/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-search,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-search/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-search"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.3.4')

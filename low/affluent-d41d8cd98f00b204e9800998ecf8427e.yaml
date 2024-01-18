@@ -1,0 +1,56 @@
+id: affluent-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Epsilon Framework Themes (Various Versions) - Function Injection"
+  author: topscoder
+  severity: low
+  description: "The following themes for WordPress are vulnerable to Function Injections in versions up to and including Shapely <= 1.2.7, NewsMag <= 2.4.1, Activello <= 1.4.0, Illdy <= 2.1.4, Allegiant <= 1.2.2, Newspaper X <= 1.3.1, Pixova Lite <= 2.0.5, Brilliance <= 1.2.7, MedZone Lite <= 1.2.4, Regina Lite <= 2.0.4, Transcend <= 1.1.8, Affluent <= 1.1.0, Bonkers <= 1.0.4, Antreas <= 1.0.2, Sparkling <= 2.4.8, and NatureMag Lite <= 1.0.4. This is due to epsilon_framework_ajax_action. This makes it possible for unauthenticated attackers to call functions and achieve remote code execution."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/affluent/"
+    google-query: inurl:"/wp-content/unknown/affluent/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,affluent,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/affluent/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "affluent"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.1.0')

@@ -1,0 +1,23 @@
+id: api-zenserp
+
+info:
+  name: Zenserp API Test
+  author: daffainfo
+  severity: info
+  description: Scrape search engine result pages in realtime
+  reference:
+    - https://app.zenserp.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/zenserp
+  tags: token-spray,zenserp
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "https://app.zenserp.com/api/v2/status?apikey={{token}}"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"remaining_requests"'

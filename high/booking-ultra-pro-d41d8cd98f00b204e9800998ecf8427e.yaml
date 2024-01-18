@@ -1,0 +1,56 @@
+id: booking-ultra-pro-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Booking Ultra Pro <= 1.1.4 - Missing Authorization"
+  author: topscoder
+  severity: high
+  description: "The Booking Ultra Pro plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on most AJAX actions in versions up to, and including, 1.1.4. This makes it possible for authenticated attackers, with subscriber-level permissions and above, to update user profiles, change opening hours and modify a variety of other settings."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/booking-ultra-pro/"
+    google-query: inurl:"/wp-content/plugins/booking-ultra-pro/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,booking-ultra-pro,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/booking-ultra-pro/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "booking-ultra-pro"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.1.4')

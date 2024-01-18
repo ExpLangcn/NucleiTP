@@ -1,0 +1,17 @@
+id: custom-soap-server-detect
+
+info:
+        name: custom-soap-server-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/shprod/servlet/SoapAdapter"
+          matchers:
+                  - type: word
+                    words:
+                            - "<title>SOAP RPC Router</title>"

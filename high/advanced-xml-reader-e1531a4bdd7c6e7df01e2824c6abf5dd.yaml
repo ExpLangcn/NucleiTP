@@ -1,0 +1,56 @@
+id: advanced-xml-reader-e1531a4bdd7c6e7df01e2824c6abf5dd
+
+info:
+  name: "Advanced XML Reader Plugin <= 0.3.4 - XML External Entity Injection"
+  author: topscoder
+  severity: high
+  description: "The Advanced XML Reader plugin for WordPress is vulnerable to XML External Entity Injection (XXE) in versions up to, and including, 0.3.4. This can allow authenticated attackers to extract sensitive data or achieve code execution in vulnerable configurations."
+  reference:
+    - https://packetstormsecurity.com/files/121492/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-xml-reader/"
+    google-query: inurl:"/wp-content/plugins/advanced-xml-reader/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-xml-reader,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-xml-reader/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-xml-reader"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 0.3.4')

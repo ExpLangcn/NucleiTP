@@ -1,0 +1,56 @@
+id: automatic-domain-changer-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Automatic Domain Changer <= 2.0.2 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Automatic Domain Changer plugin for WordPress is vulnerable to Reflected Cross-Site Scripting due to the use of add_query_arg without appropriate escaping on the URL in versions up to, and including, 2.0.2. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/automatic-domain-changer/"
+    google-query: inurl:"/wp-content/plugins/automatic-domain-changer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,automatic-domain-changer,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/automatic-domain-changer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "automatic-domain-changer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.0.2')

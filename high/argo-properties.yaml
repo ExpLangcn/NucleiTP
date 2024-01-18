@@ -1,0 +1,23 @@
+id: argo-properties-exposed
+
+info:
+  name: Argo Properties Exposed
+  author: dk4trin
+  severity: high
+  tags: argo,exposure,dk4trin
+
+http:
+  - method: GET
+    path:
+      - "{{BaseURL}}/WEB-INF/classes/argo.properties"
+      - "{{BaseURL}}/classes/argo.properties"
+      - "{{BaseURL}}/argo.properties"
+      - "{{BaseURL}}/WEB-INF/argo.properties"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "argo.database"
+          - "argo.database.host"

@@ -1,0 +1,58 @@
+id: contact-form-entries-ed190509b331c481b6fa31f1438c71da
+
+info:
+  name: "Contact Form Entries – Contact Form 7, WPforms and more <= 1.2.0 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Contact Form Entries – Contact Form 7, WPforms and more plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘start_date’ and ‘end_date’ parameters in versions up to, and including, 1.2.0 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-september-2021-part-1/
+    - https://wpscan.com/vulnerability/294c0c21-fd28-4727-8be6-406b1dd0b213
+    - https://plugins.trac.wordpress.org/changeset/2584356
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-entries/"
+    google-query: inurl:"/wp-content/plugins/contact-form-entries/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-entries,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-entries/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-entries"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.0')

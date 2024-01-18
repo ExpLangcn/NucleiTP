@@ -4,9 +4,11 @@ info:
   name: HPE System Management Anonymous Access
   author: divya_mudgal
   severity: low
-  tags: hp,unauth
+  metadata:
+    max-request: 1
+  tags: hp,unauth,misconfig
 
-requests:
+http:
   - method: GET
     path:
       - "{{BaseURL}}/chpstrt.php?chppath=Home"
@@ -19,3 +21,5 @@ requests:
           - "username = \"hpsmh_anonymous\";"
           - "var host_addr = '"
           - "var ip_addr   = '"
+
+# digest: 4a0a0047304502204665bc936535563aba4b4cbcf8a3dc2771f88de957d5084518398c8fd1802808022100df9ae541e4476c29b534fac5c2228c2dd2649908a3f3ca4f614b69fe8c687503:922c64590222798bb761d5b6d8e72950

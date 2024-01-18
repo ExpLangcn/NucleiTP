@@ -1,0 +1,59 @@
+id: add-search-to-menu-57b5aed76d8c5b28cc1b392f1e818e3d
+
+info:
+  name: "Ivory Search – WordPress Search Plugin <= 4.5.10 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The 'Ivory Search – WordPress Search Plugin' plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the ‘post’ parameter in versions up to, and including, 4.5.10 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-roundup-february-2021-part-1/
+    - https://wpscan.com/vulnerability/7794b721-bbd5-43f6-b3af-b86426b359a2
+    - https://wordpress.org/plugins/add-search-to-menu/#developers
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=2465110%40add-search-to-menu&new=2465110%40add-search-to-menu&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/add-search-to-menu/"
+    google-query: inurl:"/wp-content/plugins/add-search-to-menu/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,add-search-to-menu,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/add-search-to-menu/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "add-search-to-menu"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 4.5.10')

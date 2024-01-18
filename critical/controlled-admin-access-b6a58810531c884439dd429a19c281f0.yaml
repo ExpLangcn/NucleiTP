@@ -1,0 +1,58 @@
+id: controlled-admin-access-b6a58810531c884439dd429a19c281f0
+
+info:
+  name: "Controlled Admin Access < 1.5.6 - Privilege Escalation"
+  author: topscoder
+  severity: critical
+  description: "The Controlled Admin Access plugin for WordPress is vulnerable to Privilege Escalation in versions up to, and including, 1.5.5 by not properly restricting access to the configuration page. This makes it possible for attackers to create a new administrator role with unrestricted access."
+  reference:
+    - https://blog.nintechnet.com/vulnerabilities-fixed-in-wordpress-controlled-admin-access-plugin/
+    - https://plugins.svn.wordpress.org/controlled-admin-access/trunk/readme.txt
+    - https://wpscan.com/vulnerability/5ddc0a9d-c081-4bef-aa87-3b10d037379c
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H
+    cvss-score: 9.9
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/controlled-admin-access/"
+    google-query: inurl:"/wp-content/plugins/controlled-admin-access/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,controlled-admin-access,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/controlled-admin-access/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "controlled-admin-access"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.5.6')

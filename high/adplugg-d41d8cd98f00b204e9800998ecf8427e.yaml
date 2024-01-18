@@ -1,0 +1,56 @@
+id: adplugg-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "AdPlugg WordPress Ad Plugin < 1.1.34 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The AdPlugg WordPress Ad Plugin for WordPress is vulnerable to Cross-Site Scripting in versions before 1.1.34 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/adplugg/"
+    google-query: inurl:"/wp-content/plugins/adplugg/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,adplugg,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/adplugg/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "adplugg"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.34')

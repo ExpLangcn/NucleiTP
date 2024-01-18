@@ -1,0 +1,58 @@
+id: beaver-builder-lite-version-61ae33d7c990a629b171160654bc6e2e
+
+info:
+  name: "Beaver Builder – WordPress Page Builder (Free & Pro) <= 1.7 - Authorization Bypass"
+  author: topscoder
+  severity: medium
+  description: "The Beaver Builder – WordPress Page Builder plugin for WordPress is vulnerable to authorization bypass in versions up to, and including, 1.7 due to bypass in how the capability checking functionality works in the call_action() function. An attacker is able to supply '0' for the 'post_id' parameter which makes the check that a current user can edit the supplied post ID true. This makes it possible for authenticated attackers, with minimal permissions like a subscriber, to call any of the 40+ AJAX action available and perform many unauthorized actions."
+  reference:
+    - https://www.pritect.net/blog/beaver-builder-1-7-1-security-issues
+    - https://www.wpbeaverbuilder.com/change-logs/?utm_medium=bb-lite&utm_source=repo-readme&utm_campaign=repo-changelog-page
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=1335245%40beaver-builder-lite-version&new=1335245%40beaver-builder-lite-version&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 6.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/beaver-builder-lite-version/"
+    google-query: inurl:"/wp-content/plugins/beaver-builder-lite-version/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,beaver-builder-lite-version,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/beaver-builder-lite-version/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "beaver-builder-lite-version"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7')

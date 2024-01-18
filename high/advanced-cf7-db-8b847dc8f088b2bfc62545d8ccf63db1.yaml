@@ -1,0 +1,57 @@
+id: advanced-cf7-db-8b847dc8f088b2bfc62545d8ccf63db1
+
+info:
+  name: "Advanced Contact form 7 DB <= 1.6.0 - SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Advanced Contact form 7 DB plugin for WordPress is vulnerable to SQL Injection via the 'acf7db' shortcode in versions before 1.6.1 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on the existing SQL query.  This makes it possible for authenticated attackers to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://blog.sucuri.net/2019/04/sql-injection-in-advance-contact-form-7-db.html
+    - https://plugins.trac.wordpress.org/changeset/2066512/advanced-cf7-db
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:N
+    cvss-score: 8.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/advanced-cf7-db/"
+    google-query: inurl:"/wp-content/plugins/advanced-cf7-db/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,advanced-cf7-db,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/advanced-cf7-db/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "advanced-cf7-db"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.6.1')

@@ -1,0 +1,56 @@
+id: custom-searchable-data-entry-system-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Custom Searchable Data Entry System <= 1.7.1 - Unauthenticated Database Wiping"
+  author: topscoder
+  severity: low
+  description: "The Custom Searchable Data Entry System plugin for WordPress is vulnerable to unauthenticated database wiping in versions up to, and including 1.7.1, due to a missing capability check and lack of sufficient validation on the ghazale_sds_delete_entries_table_row() function. This makes it possible for unauthenticated attackers to completely wipe database tables such as wp_users."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/custom-searchable-data-entry-system/"
+    google-query: inurl:"/wp-content/plugins/custom-searchable-data-entry-system/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-searchable-data-entry-system,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-searchable-data-entry-system/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-searchable-data-entry-system"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.7.1')

@@ -1,0 +1,58 @@
+id: anthology-theme-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Anthology < 1.4.5 - Arbitrary File Upload
+  author: topscoder
+  severity: critical
+  description: >
+    The Anthology Theme for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the via the upload-handler.php file in versions up to, and including, 1.4.4. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected sites server which may make remote code execution possible.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/373b51f0-92ad-4c9e-87b9-96b4e57cc05d?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/themes/anthology/"
+    google-query: inurl:"/wp-content/themes/anthology/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,anthology,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/anthology/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "anthology"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.4.4')

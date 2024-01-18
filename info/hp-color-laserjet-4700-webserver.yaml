@@ -1,0 +1,22 @@
+id: hp-color-laserjet-4700-webserver
+
+info:
+  name: HP Color LaserJet 4700 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: hp,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/this.LCDispatcher?nav=hp.DeviceStatus"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - 'HP Color LaserJet 4700 Printers'
+
+      - type: status
+        status:
+          - 200

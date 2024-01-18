@@ -1,0 +1,26 @@
+id: api-positionstack
+
+info:
+  name: positionstack API Test
+  author: daffainfo
+  severity: info
+  description: Accurate Forward & Reverse Batch Geocoding REST API
+  reference:
+    - https://positionstack.com/documentation
+    - https://github.com/daffainfo/all-about-apikey/tree/main/positionstack
+  tags: token-spray,positionstack
+
+self-contained: true
+requests:
+  - method: GET
+    path:
+      - "http://api.positionstack.com/v1/forward?access_key={{token}}&query=1600%20Pennsylvania%20Ave%20NW,%20Washington%20DC"
+
+    matchers:
+      - type: word
+        part: body
+        words:
+          - '"latitude"'
+          - '"longitude"'
+          - '"label"'
+        condition: and

@@ -1,0 +1,58 @@
+id: blaze-slide-show-for-wordpress-333e184853154ea98d8c0d1c366738a7
+
+info:
+  name: "Blaze Slideshow <= 2.4 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Blaze Slideshow plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the '/js/swfupload/js/upload.php' file in versions up to, and including, 2.4. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-blaze-slideshow-upload-php-arbitrary-file-upload-2-4/
+    - http://web.archive.org/web/20170211025230/http%3A//www.opensyscom.fr/Actualites/wordpress-plugins-blaze-slideshow-arbitrary-file-upload-vulnerability.html
+    - https://wordpress.org/plugins/blaze-slide-show-for-wordpress/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/blaze-slide-show-for-wordpress/"
+    google-query: inurl:"/wp-content/plugins/blaze-slide-show-for-wordpress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,blaze-slide-show-for-wordpress,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/blaze-slide-show-for-wordpress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "blaze-slide-show-for-wordpress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.4')

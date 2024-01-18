@@ -1,0 +1,56 @@
+id: adsanity-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "AdSanity < 1.8.2 - Authenticated Arbitrary File Upload"
+  author: topscoder
+  severity: high
+  description: "The AdSanity plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'ajax_upload' function in versions up to, and including, 1.8.1. This makes it possible for authenticated attackers with Contributor+ level privileges to upload arbitrary files on the affected sites server which makes remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/adsanity/"
+    google-query: inurl:"/wp-content/plugins/adsanity/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,adsanity,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/adsanity/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "adsanity"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.8.2')

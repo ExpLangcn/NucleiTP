@@ -1,0 +1,17 @@
+id: custom-api-server-detect
+
+info:
+        name: custom-api-server-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/shprod/RTS_HTML_Pages/administration/apis.jsp"
+          matchers:
+                  - type: word
+                    words:
+                            - "<TITLE>Test API service</TITLE>"

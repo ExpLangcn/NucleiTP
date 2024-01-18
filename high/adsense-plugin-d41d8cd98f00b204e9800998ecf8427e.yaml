@@ -1,0 +1,56 @@
+id: adsense-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "AdPush <= 1.29 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The AdPush plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the custom email filed in versions up to, and including, 1.29 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/adsense-plugin/"
+    google-query: inurl:"/wp-content/plugins/adsense-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,adsense-plugin,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/adsense-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "adsense-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.29')

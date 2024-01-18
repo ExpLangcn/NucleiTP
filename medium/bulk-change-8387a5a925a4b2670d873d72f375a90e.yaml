@@ -1,0 +1,58 @@
+id: bulk-change-8387a5a925a4b2670d873d72f375a90e
+
+info:
+  name: "Bulk change of posts terms and post types <= 1.0 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Bulk change of posts terms and post types plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘s’ parameter in versions up to, and including, 1.0 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-bulk-change-of-posts-terms-and-post-types-cross-site-scripting-1-0/
+    - http://www.vapidlabs.com/wp/wp_advisory.php?v=700
+    - https://web.archive.org/web/20200901050009/https%3A//zeroaptitude.com/misha/wordpress-plugin-bug-hunting-part-2/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bulk-change/"
+    google-query: inurl:"/wp-content/plugins/bulk-change/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bulk-change,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bulk-change/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bulk-change"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0')

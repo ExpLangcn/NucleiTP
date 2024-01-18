@@ -1,0 +1,59 @@
+id: all-in-one-event-calendar-162d7209ef03152c732c9f2f340b313c
+
+info:
+  name: "Timely All-in-One Events Calendar <= 2.5.38 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Timely All-in-One Events Calendar plugin for WordPress is vulnerable to Cross-Site Scripting via several parameters related to event input in versions up to, and including, 2.5.38 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-all-in-one-event-calendar-cross-site-scripting-2-5-38/
+    - https://wpscan.com/vulnerability/94f37b56-4ca1-4b8f-9511-6125043b4763
+    - https://wordpress.org/plugins/all-in-one-event-calendar/#developers
+    - https://plugins.trac.wordpress.org/changeset/2079393
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-event-calendar/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-event-calendar/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-event-calendar,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-event-calendar/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-event-calendar"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.5.38')

@@ -1,0 +1,56 @@
+id: Avada-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Avada <= 7.4.1 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Avada theme for WordPress is vulnerable to Reflected Cross-Site Scripting via improper escaping of bbPress searches in versions up to, and including, 7.4.1 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that execute if they can successfully trick a user into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/unknown/Avada/"
+    google-query: inurl:"/wp-content/unknown/Avada/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,Avada,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/Avada/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "Avada"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  7.4.1')

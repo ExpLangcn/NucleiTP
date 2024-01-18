@@ -1,0 +1,58 @@
+id: cip4-folder-download-widget-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    CIP4 Folder Download Widget < 1.11 - Local File Inclusion
+  author: topscoder
+  severity: critical
+  description: >
+    The CIP4 Folder Download Widget plugin for WordPress is vulnerable to Local File Inclusion in versions up to, and including, 1.10 via the 'target' and 'info' parameters. This allows unauthenticated attackers to include and execute arbitrary files on the server, allowing the execution of any PHP code in those files. This can be used to bypass access controls, obtain sensitive data, or achieve code execution in cases where images and other “safe” file types can be uploaded and included.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/8b783b94-7135-49c1-aff2-1c2ea24bbfcd?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/cip4-folder-download-widget/"
+    google-query: inurl:"/wp-content/plugins/cip4-folder-download-widget/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cip4-folder-download-widget,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cip4-folder-download-widget/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cip4-folder-download-widget"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.11')

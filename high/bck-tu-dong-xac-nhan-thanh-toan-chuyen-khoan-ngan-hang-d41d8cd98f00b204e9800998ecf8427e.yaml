@@ -1,0 +1,56 @@
+id: bck-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Thanh Toán Quét Mã QR Code Tự Động – MoMo, ViettelPay, VNPay và 40 ngân hàng Việt Nam <= 2.0.0 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Thanh Toán Quét Mã QR Code Tự Động – MoMo, ViettelPay, VNPay và 40 ngân hàng Việt Nam plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to an including 2.0.0. This is due to missing input sanitization and escaping on several parameters that make it possible for attackers to inject arbitrary web scripts in web pages that execute when users access those pages."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bck-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang/"
+    google-query: inurl:"/wp-content/plugins/bck-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bck-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bck-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bck-tu-dong-xac-nhan-thanh-toan-chuyen-khoan-ngan-hang"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  2.0.0')

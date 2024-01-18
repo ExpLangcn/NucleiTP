@@ -1,0 +1,60 @@
+id: brandfolder-18b7b4a445aa1dd01f7656bd85f147bb
+
+info:
+  name: "Brandfolder – Digital Asset Management Simplified. < 3.0.1 - Local/Remote File Inclusion"
+  author: topscoder
+  severity: critical
+  description: "The Brandfolder – Digital Asset Management Simplified. plugin for WordPress is vulnerable to Local and Remote File Inclusion in versions up to, and including, 3.0 via the 'wp_abspath' parameter. This allows unauthenticated attackers to include remote files on the server, resulting in code execution."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1377152/brandfolder
+    - https://wpscan.com/vulnerability/8424
+    - https://packetstormsecurity.com/files/136372/WordPress-Brandfolder-3.0-Remote-Local-File-Inclusion.html
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-brandfolder-digital-asset-management-simplified-local-remote-file-inclusion-3-0/
+    - https://patchstack.com/database/vulnerability/brandfolder/wordpress-brandfolder-plugin-3-0-remote-and-local-file-inclusion
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/brandfolder/"
+    google-query: inurl:"/wp-content/plugins/brandfolder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,brandfolder,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/brandfolder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "brandfolder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.0.1')

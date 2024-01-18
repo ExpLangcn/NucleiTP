@@ -1,0 +1,56 @@
+id: better-click-to-tweet-a7b7b8e3f12aa58d634bb011ab4ff6be
+
+info:
+  name: "Better Click To Tweet <= 5.10.3 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The Better Click To Tweet plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 5.10.3. This is due to missing or incorrect nonce validation on the welcome_page function. This makes it possible for unauthenticated attackers to invoke this function, via forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2823285/better-click-to-tweet/trunk?contextall=1&old=2802998&old_path=%2Fbetter-click-to-tweet%2Ftrunk
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-click-to-tweet/"
+    google-query: inurl:"/wp-content/plugins/better-click-to-tweet/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-click-to-tweet,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-click-to-tweet/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-click-to-tweet"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.10.3')

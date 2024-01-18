@@ -1,0 +1,56 @@
+id: better-wp-security-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "iThemes Security <= 5.6.1 - Sensitive Information Exposure via Diff Response"
+  author: topscoder
+  severity: low
+  description: "The iThemes Security plugin for WordPress is vulnerable to sensitive information disclosure in versions up to, and including 5.6.1, due to invalid username/password combinations returning different HTTP headers on response. This makes it possible for attackers to observe differences in responses to determine valid usernames on the site (username enumeration)."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-wp-security/"
+    google-query: inurl:"/wp-content/plugins/better-wp-security/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-wp-security,low
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-wp-security/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-wp-security"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  5.6.1')

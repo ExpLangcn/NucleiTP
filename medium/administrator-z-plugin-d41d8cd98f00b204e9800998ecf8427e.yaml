@@ -1,0 +1,58 @@
+id: administrator-z-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Administrator Z <= 2022.9.28 - Unauthorized File Upload via ACF
+  author: topscoder
+  severity: medium
+  description: >
+    The Administrator Z plugin for WordPress uses Advanced Custom Fields which has a file upload vulnerability in versions up to, and including, 5.12.2. This makes it possible for users without the upload_files capability, such as contributors, or unauthenticated users in cases where a frontend form is added to the site, to upload allowed file types. The upload is handled by WordPress so file type and extension checks still occur, though this could potentially be used by high-privileged users in certain locked-down configurations to bypass other security mechanisms and upload dangerous file types. This affects versions up to, and including, 2022.9.28 in the Administrator Z plugin.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/2061a442-eccd-4a57-a5c5-a432fcea8394?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N
+    cvss-score: 4.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/administrator-z/"
+    google-query: inurl:"/wp-content/plugins/administrator-z/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,administrator-z,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/administrator-z/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "administrator-z"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2022.9.28')

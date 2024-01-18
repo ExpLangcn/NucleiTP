@@ -1,0 +1,2170 @@
+id: anchor_cms
+
+info:
+  name: anchor_cms_version_fingerprint
+  severity: info
+  author: glatisant & erwan
+
+requests:
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/readme.md"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"353ea3b6cfd127423dc47d1040df58d6\" == md5(body))"
+      - type: dsl
+        name: 0.12.3
+        dsl:
+          - "(\"169b6af3808e15e8f9423ceefce21f83\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"dc85125a20158d6ac4bdc919700ff578\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"b28d1818ff25f0e3b1eae4ba6d4cd0dd\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"9dcb9aef0c930068f4d9f7ce983fcb64\" == md5(body))"
+      - type: dsl
+        name: 0.9.2
+        dsl:
+          - "(\"0619ac0d5919dc0c3e1776b079ab04df\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.1
+        dsl:
+          - "(\"1ab7bb36b2bc410c524307b13532f6b7\" == md5(body))"
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"139df4a91cddb5a492f62db85665aa02\" == md5(body))"
+      - type: dsl
+        name: 0.4 - 0.6
+        dsl:
+          - "(\"6097e0c681d4a86ee40a6e90dca6e4f1\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"823f8b331a2964a5883b71709608553e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/composer.json"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"ff4df1a8d4d0f5bf7cc4a0efa6eeb6eb\" == md5(body))"
+      - type: dsl
+        name: 0.12.3
+        dsl:
+          - "(\"95dce3fbb88ecd5d11d289295b58c015\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"f1d36c894ceea346355e35fadec47e0d\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"1326098651e38e93a98670b1c51580ac\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"fc02c8571309bd275e22b1b5c363679c\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"add93cbe77fe7eddc6b8b02bbfb3080d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/admin.css"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3
+        dsl:
+          - "(\"287a881a131ba66beb60c0e4dd5ad9e8\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"662218b2a08b554189a163b83f3d5b76\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"2d8f7e8446aab42579c725e59fd307c5\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"1671310260fa380c6e142fda2d24e975\" == md5(body))"
+      - type: dsl
+        name: 0.9.1 - 0.9.2
+        dsl:
+          - "(\"2708ec898838b1bfd010632492722b5e\" == md5(body))"
+      - type: dsl
+        name: 0.9
+        dsl:
+          - "(\"0cb0c2a0fcfc392b985541e67fc5dbfe\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"cdc913eb62e028737c0b0387ec11c076\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/anchor.sql"
+
+    matchers:
+      - type: dsl
+        name: 0.6
+        dsl:
+          - "(\"61f36531f48bbae449d02f2c260bf78e\" == md5(body))"
+      - type: dsl
+        name: 0.5
+        dsl:
+          - "(\"f1196285697a00d738f49349eb284773\" == md5(body))"
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"eb2d308dbca88a5b9ae1da11c5c46b27\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/htaccess.txt"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"c04183710f35836e36c74064c060e4db\" == md5(body))"
+      - type: dsl
+        name: 0.6
+        dsl:
+          - "(\"28821b2fa2aa68255c3039242f679b61\" == md5(body))"
+      - type: dsl
+        name: 0.5
+        dsl:
+          - "(\"3090a3460e4f79ffb9c5a8b4c4f7960f\" == md5(body))"
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"d93ee3c25c5afc22bfaa5d39693c8593\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_notifications.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"38f6c7c63c77d1022d8c32b5f14fe3ff\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"abd82a48df0fd813db788cd0359b11ff\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/admin.min.css"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"856646f2186e35ece3f5e4b202bb1dde\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"8aa90561b830b1714c8adffdac9af080\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/composer.lock"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"dd7e6f6d8a1b9eec6d52dc7c69c18ea3\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.3
+        dsl:
+          - "(\"46a248f5f73869ddeb76710b7c0e3d1c\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"611d95ca38ec63f6e1b619dfba7db08e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/package.json"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"4457a52100d39f95cd828c383ff075b1\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"ab8999093ff6eaa36cae3fbe53edc68e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/js/app.js"
+
+    matchers:
+      - type: dsl
+        name: 0.6
+        dsl:
+          - "(\"72296a1c61dcdb8fc36d3f661cb00ec1\" == md5(body))"
+      - type: dsl
+        name: 0.5
+        dsl:
+          - "(\"86a27386eca99f4e0c9d9722ff4c8808\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/css/admin.css"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"8e6d7f7ddae964acaaaf917d425691a4\" == md5(body))"
+      - type: dsl
+        name: 0.6
+        dsl:
+          - "(\"163e8029462e46abfc173519cce7c1f0\" == md5(body))"
+      - type: dsl
+        name: 0.5
+        dsl:
+          - "(\"11cdbe6d8c3eec7142838539bf9a4f4e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/lib.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7.2
+        dsl:
+          - "(\"8de4cdf7ee713e3b5d4f3c8260f80236\" == md5(body))"
+      - type: dsl
+        name: 0.7
+        dsl:
+          - "(\"df59d554a71f1023277617038f4a27c9\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/comments.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7.2
+        dsl:
+          - "(\"483d6d9e9907ce388016ac7bdcd50a78\" == md5(body))"
+      - type: dsl
+        name: 0.7
+        dsl:
+          - "(\"6c9cdfcb7fae8227d87d73781765323c\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"0a18962aaa67342f8858b8541726ebc1\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/contributing.md"
+
+    matchers:
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"7f2ebb9144cce0dec4edb7f0a64aae3a\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"9791c565d44784c55d2b45f1ecabc871\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/text-resize.js"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"d71b7b72c1b67afc5e538a65248354d2\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"9ad5b84fd05e693acd409f6c3fbb7660\" == md5(body))"
+      - type: dsl
+        name: 0.9.2
+        dsl:
+          - "(\"3596af51ed953ecacbc65d7c9e98f59f\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.1
+        dsl:
+          - "(\"a954e6de7bc258c2130325b6b3532fe5\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/css/style.css"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.7
+        dsl:
+          - "(\"a3f0716f4d1188c2377c662f6d082ca6\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"f60135fb5b50399e80a2992f55e9ade4\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"e4ac768b2c669da5f6e691e4d20cb3dc\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"46759c958f31927efe9fce2ae8ed1ee9\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"671685c465b5215c5855db0fe2967988\" == md5(body))"
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"bfc08b4668b37a3a5ae3a7a618093d6a\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"e61f6ad002f33b7cd1eb5a410108f09f\" == md5(body))"
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"621543088b5fdb844e8a92ade81ab661\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/storage/anchor.sql"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.7
+        dsl:
+          - "(\"4e3cff0d12a53c3ffc6043a3ef99c401\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"d57ec3a3c63cc101ea411d7801ae531c\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"9eff1947a50de3215999ad2f48c8a311\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"ce9cde0c299ce83e360d2c737cb21b01\" == md5(body))"
+      - type: dsl
+        name: 0.8.3
+        dsl:
+          - "(\"271aa5d6a99a9ccf18a5fc9909f0c77f\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.2
+        dsl:
+          - "(\"910b7f3b6e5d5f45626d4eef5933111d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/main.min.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"bf4d08ab0745c3fdcfb4fb355c8f68ee\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/main.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"625508bdf235b2ac990a7665fcb63937\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/jest.config.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"3a9dae63ba0ddcfacb9b85f9c7c245b6\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/environment.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"12dc59ee12ce985d2e8832a4a688a77c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/setup.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"973d4610ecb422ac0cc2826b90a72678\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/README.md"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"131017a402dadc5011ed3835d5da9d3a\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/integration/installation.test.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"b7d824218474c198d1c948d8d726e15b\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/integration/README.md"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"c89794bcd9f42f085a0b679f207f41e5\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/teardown.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"91222fcbfd6530abb71cc26c74b399f8\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/travis-ci/setup-php-fpm.sh"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"5eebda0dc279a565bd0feb461fde8d28\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/travis-ci/apache_vhost"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"13b50c77a0fb5dd23b42c661d93319e3\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/travis-ci/setup-apache.sh"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"9a66654e0bf76cace4a53a4fbcbbc74f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/index.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"4fc2b8720e7ab6c7cf02a15f9ef21780\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/test/unit/README.md"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"35f3f2c860c3e4390a816e07ae6daf06\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/docker-compose.yml"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"79cb678f011666dbdcd9445867f4a2ac\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/Dockerfile"
+
+    matchers:
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"1199f0305e2aaea25ef7a5e926e1d3de\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/css/install.css"
+
+    matchers:
+      - type: dsl
+        name: 0.9.3 - 0.12.6
+        dsl:
+          - "(\"a933befe71c3205b6eab8f0a1b39fc60\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.2
+        dsl:
+          - "(\"898531df19c1a65c05f10b9dff792168\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"1898e53093e1595bc84aa29ba40f9c7e\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"f5c87adb5796b4e56dc57503d9382ec7\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/storage/htaccess.distro"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.6
+        dsl:
+          - "(\"d2ae8ddbcc6e5f681d11b527e4106b4e\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.12.1
+        dsl:
+          - "(\"419b15404b9cfd73796dd1f352d0d60d\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"d292ac673f0e11c588f0e6b4cedcf938\" == md5(body))"
+      - type: dsl
+        name: 0.12.7
+        dsl:
+          - "(\"2cb279dc8a95c78f2c2e58c4e742a067\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/img/attribution.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"6ab2895f603d4d06bd251491c36b2a80\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/img/search.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"c8da5f340eda69f9795b1fea1bdc0b7f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/img/search_old.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"ccaf06ff0f94e442fd06d379d6c0e155\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/img/close.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"b49b8246bc238a9eb932ec050e77e5f6\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/css/style.css"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"2327d75e704a268352474af302fcdc2a\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/css/reset.css"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"8366a0957ff662a0cafea503f4ffe4a2\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/js/main.js"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"d55f26d0e2233e4cf0996d7a7fa32fff\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/dark-bar/about.txt"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"2153d0a487e7cc8dc6cdb0ffd92e8ad3\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/untitled/img/anchor.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"c8a9ed2f72e646856fa29a887ebaa5a0\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/untitled/css/normalize.css"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"72ef95e9d7f5925bdfe534177aa04533\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/untitled/css/styles.css"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"d524ed6c88f2ada135fa1480725128b2\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/untitled/about.txt"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"8d79a32c7e9557439839ac74188de35d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/img/bg.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"ef12ef93bc31ef96063d01988b29345d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/img/active.png"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"db3ff6deb0751d0dbfd0efcf8aa1a9fb\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/img/logo.png"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"3992dea6a6001375ac2cf3e64315ab4c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/css/admin.css"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"4168d72b8263ae0d1f231376a9b5dcef\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/js/helpers.js"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"d4bd8df7a78e30a3e1c831b3c783b793\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/img/logo.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"c8a9ed2f72e646856fa29a887ebaa5a0\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/css/install.css"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"13248e2aa2499dc9c6763eeba5cec145\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/js/install.js"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"dc07b16c02ee80127366b7dfde76e07a\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/js/jquery.js"
+
+    matchers:
+      - type: dsl
+        name: 0.4
+        dsl:
+          - "(\"c5b58cbfac36b593ba894ae14921835a\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/dark/attribution.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.5
+        dsl:
+          - "(\"d0f47e96476f4605b49f125de5f135d7\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/css/dark.css"
+
+    matchers:
+      - type: dsl
+        name: 0.5
+        dsl:
+          - "(\"41609c7fa2b69ff6716b711399ce2f6f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/css/app.css"
+
+    matchers:
+      - type: dsl
+        name: 0.6
+        dsl:
+          - "(\"add65a07c5c12eb8a97fa32a92331299\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/img/logo.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"d2f4beef236f6acf1716ac32c6fc95c1\" == md5(body))"
+      - type: dsl
+        name: 0.6
+        dsl:
+          - "(\"c8a9ed2f72e646856fa29a887ebaa5a0\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/license.txt"
+
+    matchers:
+      - type: dsl
+        name: 0.8.3
+        dsl:
+          - "(\"18d640805535e40bb28ca9005d5b9636\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/language/de_DE/README.md"
+
+    matchers:
+      - type: dsl
+        name: 0.9.1
+        dsl:
+          - "(\"4bf70799c53a8a797ea8c0ac37911e7d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/forms.css"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3
+        dsl:
+          - "(\"2bb78daf28093598f76a166366d8155e\" == md5(body))"
+      - type: dsl
+        name: 0.11 - 0.12.1
+        dsl:
+          - "(\"11cdaafe455d652a6e1f1dbf535e5012\" == md5(body))"
+      - type: dsl
+        name: 0.9.2 - 0.9.3
+        dsl:
+          - "(\"ccb54e6d1b7f2960c87fb55eecc56ca9\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.1
+        dsl:
+          - "(\"b75340fce6ab7f643683562ee8225256\" == md5(body))"
+      - type: dsl
+        name: 0.8.2 - 0.8.3
+        dsl:
+          - "(\"72ad91497ac3fa5bc10d7bd4f2227cf4\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.1
+        dsl:
+          - "(\"13c755495c527d8f67f3e72c4438699c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/notifications.css"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3
+        dsl:
+          - "(\"496ccf91781ba4807b02e8783399566f\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.12.1
+        dsl:
+          - "(\"cc197f372607a7628a59c82339bed8d0\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"7261c4c5a247533482189a1ead55e5e0\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/slug.js"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"7bd632e8e57e888ed95c1481e9044d4a\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"b82bdf3878f7fb70fa68270896df9cea\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.2
+        dsl:
+          - "(\"cde1cb17b84c4a6d944838099c9053c8\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"a2449313a1c58f73969d7c8b52d09984\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/editor.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.7
+        dsl:
+          - "(\"d0fa0c0742d4f2a73650411a912d2f75\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"bc82a3ff14de806f99a720bdd092a76c\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"649a670e00107e13b5733bddf7b582e4\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"4f36fbcf1ac6394abbe3cc07654e4a9b\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/dragdrop.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.7
+        dsl:
+          - "(\"6e86ee936c81dc80837b379e6eb82bcd\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"152760cb328a3d19bb82269d2be72bc5\" == md5(body))"
+      - type: dsl
+        name: 0.11
+        dsl:
+          - "(\"a037f9f85e731e2090df98cbf2e9b8ce\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"86da960b3c2fdbc81ea71f730a6c521c\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"2335344d430ac0f2c1efdc9be9151945\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/CODE_OF_CONDUCT.md"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6
+        dsl:
+          - "(\"ec81808febeaf4dfb6d3a9bea55a1c5b\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/img/chosen-sprite.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"8b55a822e72b8fd5e2ee069236f2d797\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"25b9acb1b504c95c6b95c33986b7317e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/img/chosen-sprite@2x.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"614fad616d014daf5367e068505cad35\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"cb0d09c93b99c5cab6848147fdb3d7e4\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/js/main.js"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"3eb169d068c9155d720fbd1a56117a3f\" == md5(body))"
+      - type: dsl
+        name: 0.9.3
+        dsl:
+          - "(\"df3b412f3c653890a81a527b752e5570\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/mootools.js"
+
+    matchers:
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"0fd68792cf88a261bca0b4086a7e20c4\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/img/logo.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"c8a9ed2f72e646856fa29a887ebaa5a0\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/css/app.css"
+
+    matchers:
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"add65a07c5c12eb8a97fa32a92331299\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/js/jquery.js"
+
+    matchers:
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"c5b58cbfac36b593ba894ae14921835a\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/img/icons.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"9b486185657ad64e8d52af0e9ce5b59e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/img/button.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"e6e5a9bc1f17049eb8ce3e11137dbecf\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/img/logo.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"1ff6e465bfe88fd3a8e8e3cc7f77ec36\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/img/error.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"a1879368dce49df67a70ef25eda434a2\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/assets/css/upgrade.css"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"0949622f17d0fccdfe02bbaea4269421\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/attribution.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"24ad04fb566cf13d5581dc39ace642d5\" == md5(body))"
+      - type: dsl
+        name: 0.4 - 0.6
+        dsl:
+          - "(\"6ab2895f603d4d06bd251491c36b2a80\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/search.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4 - 0.7.2
+        dsl:
+          - "(\"ccaf06ff0f94e442fd06d379d6c0e155\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/close.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.4 - 0.7.2
+        dsl:
+          - "(\"6d6b2d240fecfdffc94d922eb758f251\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/img/bg.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"629f8fcb067b4239d498e5e79c067b17\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"ef12ef93bc31ef96063d01988b29345d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/img/active.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"2a5ae76671522f223e9617d2f1da8450\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"db3ff6deb0751d0dbfd0efcf8aa1a9fb\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/img/logo.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"f201bd44b15fe8cff569e9d30a339614\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"3992dea6a6001375ac2cf3e64315ab4c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/css/popup.css"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"fe90ac834676e128e6469c353b2b17d6\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"b20ae8b79925db4717123cd806e4474b\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/custom_fields.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"ec21549d22f743db3fb40cc1aa5d79b0\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"77adc37f1f690e13c4c63d8943531dc8\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/helpers.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"b530aa8785d6729ec965c8624905df9f\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"ad123cf7ffea0a305eeeb2bfe625ece1\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/popup.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"89b9e5f4c07d7c085e1d31f119fb92fc\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"1e86e8504ee88dfe31d79c4f49e79498\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/tabs.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"915dc2ea27b8cbb416c7b74467c1ad1f\" == md5(body))"
+      - type: dsl
+        name: 0.5 - 0.6
+        dsl:
+          - "(\"e0db3c4bcec52a84ec38df0d17f29874\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/lang.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"0a2331e89901208b5c1946ad860c7dff\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/confirm.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"1afd7ba5668fea761000b182e9b142aa\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/redirect.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"c8c2ba1d0a4ee533d2523ca86390c835\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/system/admin/theme/assets/js/textareas.js"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"f74f00c3a41dff97979f999eea07d085\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/sql/anchor.sql"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"556b96b8a781025d1f18a2af132cfadb\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/img/icons.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"9eb197d2bb58d6e4bf6fe869a8afc493\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/img/button.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"adb30bd7c3cc2bb4fa6c40d281cc2136\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/img/pointer.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"440ab5aa31822d070c53c3517c573b09\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/img/logo.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"02715a74e16a39fd537f71e222342d52\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/img/error.png"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"223fc7ca307262c81984c9b8716d76d1\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/assets/css/install.css"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"92bd0b735bf689b6219b1d213e30a1b5\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/readme.md"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.8.1
+        dsl:
+          - "(\"12ecbce57c7f8dec3fd5b40a4fd14c17\" == md5(body))"
+      - type: dsl
+        name: 0.6 - 0.7.2
+        dsl:
+          - "(\"c1829058a5c1abd512acc5fa2aa1ff3f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/upgrade/views/assets/css/upgrade.css"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.8.1
+        dsl:
+          - "(\"1898e53093e1595bc84aa29ba40f9c7e\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/admin.js"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"59d636808c9e08381cb54ba850aad49f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/favicon.ico"
+
+    matchers:
+      - type: dsl
+        name: 0.8.3 - 0.9.3
+        dsl:
+          - "(\"1cec4882e4d59586e1febefa3bd57647\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/login.css"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.12.3
+        dsl:
+          - "(\"fa089d99e9d2e0b4daa52fdae04a5fa5\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/small.css"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.12.3
+        dsl:
+          - "(\"80588b7b6eb0f301a12a4da9022c08b2\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/css/reset.css"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.3
+        dsl:
+          - "(\"3d1751269019cd32a55ee25213cad518\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.3
+        dsl:
+          - "(\"caeba2862b9e4e6cf89e9c97481a027f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/cloud.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"1771442d0fd91815c8b612ee785a4869\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.3
+        dsl:
+          - "(\"ee780cdc77af3b4060b37d30a6328a7c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/icons.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"d35a02b4ee1f93511b8936bd5b1c65a7\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.3
+        dsl:
+          - "(\"1ee864a237344ecd8cebdeb4bb405d13\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/logo.png"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.12.7
+        dsl:
+          - "(\"caf7cee2c7f5efb1c88b35dcf6495044\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/favicon.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"5c97604f493d3d140281bc2d478515f5\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/statuses.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"554fcad62b6330a8c1cb39fb0bcc8d0f\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"9e41a06372feffa763e838b2705024a9\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/tick.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"2cef8198d6b462434db65860ba1d3466\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.3
+        dsl:
+          - "(\"46c2634c9e499b99bd05bafc9da9b768\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/change-saver.js"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"402145946843c336651546659c138d66\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/focus-mode.js"
+
+    matchers:
+      - type: dsl
+        name: 0.9 - 0.12.7
+        dsl:
+          - "(\"f0704f26c8baef4004f506f47a5033c6\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"34e1c841ca0ee689c92eee25065d5283\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/zepto.js"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.12.7
+        dsl:
+          - "(\"61e66962daedd0943adc35a97b0eaa27\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/autosave.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12 - 0.12.7
+        dsl:
+          - "(\"767d1cc527247fdafcbbd3d645ba77ce\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/upload-fields.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12 - 0.12.7
+        dsl:
+          - "(\"d63bf93b5a1f4aa7da310f0f4ff4ecf7\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.11
+        dsl:
+          - "(\"253d76b373f7b4bd7a4442c850c80286\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"6a7a4d4006c2c0966330296246446bea\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/redirect.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.7
+        dsl:
+          - "(\"e87e0baae7bfbc8a1592cd01f93fb63f\" == md5(body))"
+      - type: dsl
+        name: 0.12 - 0.12.1
+        dsl:
+          - "(\"75c15d56ee4279310b543316e3bbd104\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.11
+        dsl:
+          - "(\"17fa7375a7f62d387d9eddaa0220710f\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"8ddc1df598578e102fdb896eabaa5ab7\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/page-name.js"
+
+    matchers:
+      - type: dsl
+        name: 0.9 - 0.12.7
+        dsl:
+          - "(\"544a522370db9a3533328911584464ec\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/sortable.js"
+
+    matchers:
+      - type: dsl
+        name: 0.9 - 0.12.7
+        dsl:
+          - "(\"e72e0637b88f33efed97c59b0c971f77\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/js/custom-fields.js"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"3e766b47840cc1d4ad6e1124c10a4f8d\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.3
+        dsl:
+          - "(\"6bfbb3be3b03f5567b16ddb60164451a\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"9e72084819ef9ac648724759b85fd7bc\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/migrations/220_alter_meta_field"
+
+    matchers:
+      - type: dsl
+        name: 0.12.3 - 0.12.6
+        dsl:
+          - "(\"96ca453abc356196faab35f6db85dff7\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/search.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"1e5e24e6b1f87ea17e9b30147fe39f48\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.3
+        dsl:
+          - "(\"c3a866bec3801f7e586450392c398c8d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/categories.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"51c20568313754589a34ac2487ac7922\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.9.3
+        dsl:
+          - "(\"f324bf31bd76ed3f35796fa280223d48\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/favicon.png"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"5c97604f493d3d140281bc2d478515f5\" == md5(body))"
+      - type: dsl
+        name: 0.7 - 0.9.3
+        dsl:
+          - "(\"1cec4882e4d59586e1febefa3bd57647\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/img/og_image.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.7 - 0.12.7
+        dsl:
+          - "(\"6c2abb0cdd80c06e35cf1d288e40c363\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/css/small.css"
+
+    matchers:
+      - type: dsl
+        name: 0.9 - 0.12.7
+        dsl:
+          - "(\"439334f90c14585118781b6ad6a81965\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"32fd05c9c0ac8c286d92c5f98c6ffbd6\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/css/reset.css"
+
+    matchers:
+      - type: dsl
+        name: 0.9 - 0.12.7
+        dsl:
+          - "(\"1e6320ddd3f24d7a012362b81e57c1ea\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"c69e776cfe1969f3a3ecc94282a0999f\" == md5(body))"
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"c4b4519b788c617e1922af9371cc9af4\" == md5(body))"
+      - type: dsl
+        name: 0.4 - 0.6
+        dsl:
+          - "(\"8366a0957ff662a0cafea503f4ffe4a2\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/js/main.js"
+
+    matchers:
+      - type: dsl
+        name: 0.9.2 - 0.12.7
+        dsl:
+          - "(\"2993fd799ba447e00abd3f5c7de274b7\" == md5(body))"
+      - type: dsl
+        name: 0.9 - 0.9.1
+        dsl:
+          - "(\"855363875b61abd81fd0a4bd879a0a6f\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.8.3
+        dsl:
+          - "(\"1461b7987575c7c622d25442e3314b0d\" == md5(body))"
+      - type: dsl
+        name: 0.7 - 0.7.2
+        dsl:
+          - "(\"d792349eb172c2cb4653901293bf9649\" == md5(body))"
+      - type: dsl
+        name: 0.4 - 0.6
+        dsl:
+          - "(\"d55f26d0e2233e4cf0996d7a7fa32fff\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/themes/default/about.txt"
+
+    matchers:
+      - type: dsl
+        name: 0.8 - 0.12.7
+        dsl:
+          - "(\"046b92b43108ddb759bb96d9caa56ece\" == md5(body))"
+      - type: dsl
+        name: 0.6 - 0.7.2
+        dsl:
+          - "(\"e2a351f7c9abb6d9d4baa2156adcb2bd\" == md5(body))"
+      - type: dsl
+        name: 0.4 - 0.5
+        dsl:
+          - "(\"2c0c1538c8fac7628cfe5408fd103e59\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/license.md"
+
+    matchers:
+      - type: dsl
+        name: 0.11 - 0.12.7
+        dsl:
+          - "(\"783b7e40cdfb4a1344d15b1f7081af66\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/readme.md"
+
+    matchers:
+      - type: dsl
+        name: 0.8.2 - 0.12.7
+        dsl:
+          - "(\"66d595ffff8bb97ce7da1a23217d472a\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/img/logo.png"
+
+    matchers:
+      - type: dsl
+        name: 0.9 - 0.12.7
+        dsl:
+          - "(\"caf7cee2c7f5efb1c88b35dcf6495044\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/css/chosen.css"
+
+    matchers:
+      - type: dsl
+        name: 0.9.3 - 0.12.7
+        dsl:
+          - "(\"4fff8af1caba5e6ca2c208371e65ac43\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/install/views/assets/js/chosen.jquery.min.js"
+
+    matchers:
+      - type: dsl
+        name: 0.9.3 - 0.12.7
+        dsl:
+          - "(\"4fabe14fb10d99c4b432db5ce9847c06\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_login.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"e5617d7eee622df1195f791db92c896b\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_variables.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"40747a27e7009a379cae62bb56cceeef\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/mixins/_contrast.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"b9f6b0b8f991c43d43bdadc2557cb33f\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/mixins/_breakpoints.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"33f043a14e39da7c84bb4fd1d3fa1067\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/mixins/_brightness.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"49a503dc96eaf227a4185cb0dd2b35f7\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_typography.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"bbf4a2140a2b3f2d63f6d2b3ae296454\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_layout.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"6eda888e4fae9f5f94c60d1e556a5846\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_colors.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"672a73949338ca5fde338b5b0b9cd938\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_footer.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"8e949f43a0c74abad37e053251080339\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_lists.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"13f8f4981ab55463bc2d49d76df84c45\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_panel.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"ef28357353c8523c5066c6558501e1ea\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_buttons.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"ee7d5696b71a5e303705f9317881c402\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_forms.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"58676b702ed734a82ba41056e2ae6d81\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/editor/_preview.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"599944510a89cdfeccf1e8ecd70d1722\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/editor/_split.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"d071f7d513869dc9a21ff11e7941b05c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/editor/_redirect.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"2c3ebdda75c1890738f03c72a3bd3ff5\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/editor/_files.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"d69e16bcd834c0de5f83a1bbbb721389\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/editor/_half.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"083f79cc97f60c983a899c69de8ce09c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_paging.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"622573de041d9fade85d4ddc31b17936\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_fileUpload.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"c7c27291bc68192707ffc2a383923889\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_editor.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"a3d457019a12c88993ddcfc660424c04\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_sidebar.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"9c7c6e6bd030eb37e4fe326676f660cb\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/components/_header.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"9e33b6c4b6bb60800104c3a4ba2eedd7\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_focusMode.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"3239245601be9891979b821135ab2d3b\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/admin.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"7f12fc5d62f8cf0e5651250893164ea0\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/scss/_components.scss"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"58959621f3f483a310fc51a0ab2b308d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/cross.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"1e0c97ca4c0ecdb3f625df19b2ca232b\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.12.3
+        dsl:
+          - "(\"0fb68169b17044bbe0a601685806c405\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/tick.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"e0aa3c1937b6664ff684feed2de53756\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.12.3
+        dsl:
+          - "(\"b32c026662b9a5df6092f842b916646c\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/anchor/views/assets/img/piggy.gif"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"6d9b31aaca18fd64e99f3df3d551fea1\" == md5(body))"
+      - type: dsl
+        name: 0.8 - 0.12.3
+        dsl:
+          - "(\"2756233c99cd8d2e3856991415c1be4d\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/gulpfile.js"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"edb0a98266d50d6de4adc5afa4dff6b3\" == md5(body))"
+
+  - method: GET
+    path:
+      - "{{BaseURL}}/scss-lint.yml"
+
+    matchers:
+      - type: dsl
+        name: 0.12.6 - 0.12.7
+        dsl:
+          - "(\"68b329da9893e34099c7d8ad5cb9c940\" == md5(body))"

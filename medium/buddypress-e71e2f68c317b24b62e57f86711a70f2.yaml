@@ -1,0 +1,57 @@
+id: buddypress-e71e2f68c317b24b62e57f86711a70f2
+
+info:
+  name: "BuddyPress <= 6.3.0 - Insufficient Input Validation"
+  author: topscoder
+  severity: medium
+  description: "The BuddyPress plugin for WordPress is vulnerable to Insufficient Input Validation in versions up to, and including, 6.3.0. This is due to missing authorization checks and proper sanitization on a users profile page. This makes it possible for authenticated attackers to add style attributes to the 'span' and 'p' elements when using the rich text fields which makes Cross-Site Scripting possible."
+  reference:
+    - https://buddypress.org/2020/11/buddypress-6-4-0-maintenance-and-security-release/
+    - https://codex.buddypress.org/releases/version-6-4-0/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/buddypress/"
+    google-query: inurl:"/wp-content/plugins/buddypress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,buddypress,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/buddypress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "buddypress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 6.4.0')

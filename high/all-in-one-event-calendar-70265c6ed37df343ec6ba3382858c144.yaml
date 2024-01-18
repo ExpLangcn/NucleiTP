@@ -1,0 +1,59 @@
+id: all-in-one-event-calendar-70265c6ed37df343ec6ba3382858c144
+
+info:
+  name: "Timely All-in-One Events Calendar < 1.10 - Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Timely All-in-One Events Calendar plugin for WordPress is vulnerable to Cross-Site Scripting via several parameters in versions before 1.10 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://firefart.at/post/sql-injection-and-xss-in-all-in-one-event-calendar-wordpress-plugin/
+    - http://secunia.com/advisories/54038/
+    - https://wordpress.org/plugins/all-in-one-event-calendar/#developers
+    - https://plugins.trac.wordpress.org/changeset/745752
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:L
+    cvss-score: 7.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-event-calendar/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-event-calendar/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-event-calendar,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-event-calendar/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-event-calendar"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.10')

@@ -1,0 +1,17 @@
+id: custom-cache-server-detect
+
+info:
+        name: Custom-cache-server-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/cache/"
+          matchers:
+                  - type: word
+                    words:
+                            - "<title>CacheServer</title>"
+                         

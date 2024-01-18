@@ -1,0 +1,59 @@
+id: accesspress-social-icons-052e300014d9eb688830de5fab7baed1
+
+info:
+  name: "AccessPress Social Icons <= 1.6.6 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The AccessPress Social Icons plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 1.6.6 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/1626368/accesspress-social-icons
+    - https://web.archive.org/web/20170420224453/https%3A//www.defensecode.com/advisories/DC-2017-03-005_WordPress_AccessPress_Social_Icons_Plugin_Advisory.pdf
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-accesspress-social-icons-cross-site-scripting-1-6-6/
+    - https://wordpress.org/plugins/accesspress-social-icons/#developers
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/accesspress-social-icons/"
+    google-query: inurl:"/wp-content/plugins/accesspress-social-icons/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,accesspress-social-icons,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/accesspress-social-icons/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "accesspress-social-icons"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.6.6')

@@ -1,0 +1,58 @@
+id: atarim-visual-collaboration-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Atarim - Client Interface <= 3.9.1 - Missing Authorization via AJAX actions
+  author: topscoder
+  severity: critical
+  description: >
+    The Atarim - Client Interface plugin for WordPress is vulnerable to unauthorized use of functionality due to a missing capability check on the avc_send_invitations and avc_delete_invitations functions in versions up to, and including, 3.9.1. This makes it possible for unauthenticated attackers to delete arbitrary accounts (and the content they created) on the site. The creation of accounts is also possible although new accounts are limited to the default role or subscriber, whichever is higher.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/15f3a6e1-6126-4825-b2b1-e40dc5694f43?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H
+    cvss-score: 9.1
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/atarim-visual-collaboration/"
+    google-query: inurl:"/wp-content/plugins/atarim-visual-collaboration/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,atarim-visual-collaboration,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/atarim-visual-collaboration/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "atarim-visual-collaboration"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.9.2')

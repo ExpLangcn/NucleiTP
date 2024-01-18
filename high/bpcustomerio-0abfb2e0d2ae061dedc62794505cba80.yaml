@@ -1,0 +1,58 @@
+id: bpcustomerio-0abfb2e0d2ae061dedc62794505cba80
+
+info:
+  name: "BuddyPress Customer.io Analytics Integration <= 1.1.6 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: high
+  description: "The BuddyPress Customer.io Analytics Integration pluginfor WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.1.6. This is due to missing or incorrect nonce validation on several functions. This makes it possible for unauthenticated attackers to change plugin settings and perform other administrator-level actions via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://ithemes.com/blog/wordpress-vulnerability-report-july-7-2021/
+    - https://wpscan.com/vulnerability/df1fdca8-d08f-4577-8cdf-67ca1ac741ba
+    - https://wordpress.org/plugins/bpcustomerio/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bpcustomerio/"
+    google-query: inurl:"/wp-content/plugins/bpcustomerio/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bpcustomerio,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bpcustomerio/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bpcustomerio"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.6')

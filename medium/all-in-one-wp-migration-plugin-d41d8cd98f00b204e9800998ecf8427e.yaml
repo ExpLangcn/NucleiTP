@@ -1,0 +1,58 @@
+id: all-in-one-wp-migration-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    All-in-One WP Migration <= 6.97 - Authenticated Stored Cross-Site Scripting
+  author: topscoder
+  severity: medium
+  description: >
+    The All-in-One WP Migration plugin for WordPress is vulnerable to Cross-Site Scripting due to the fact that the backup description on the backup history overview page does not sanitize/escape html entities when generating the input field.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/10a0abd6-1905-4a90-8488-29d44df7aeb9?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 5.5
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-wp-migration/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-wp-migration/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-wp-migration,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-wp-migration/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-wp-migration"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 7.0')

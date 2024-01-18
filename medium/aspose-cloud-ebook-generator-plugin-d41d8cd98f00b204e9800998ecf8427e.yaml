@@ -1,0 +1,58 @@
+id: aspose-cloud-ebook-generator-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Aspose Cloud eBook Generator <= 1.0 - Directory Traversal
+  author: topscoder
+  severity: medium
+  description: >
+    The Aspose Cloud eBook Generator plugin for WordPress is vulnerable to Directory Traversal in versions up to, and including, 1.0 via the 'file' parameter. This allows attackers to read the contents of arbitrary files on the server, which can contain sensitive information.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/abb41236-d711-41d3-a1cd-2c23467e269a?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/aspose-cloud-ebook-generator/"
+    google-query: inurl:"/wp-content/plugins/aspose-cloud-ebook-generator/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,aspose-cloud-ebook-generator,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/aspose-cloud-ebook-generator/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "aspose-cloud-ebook-generator"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0')

@@ -1,0 +1,56 @@
+id: cf7-google-map-99d90c9eb0219e406505131ed461e43f
+
+info:
+  name: "Contact Form 7 extension for Google Map fields <= 1.8.3 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Contact Form 7 extension for Google Map fields plugin for WordPress is vulnerable to Stored Cross-Site Scripting via multiple form fields in versions up to, and including, 1.8.3 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&new=2906629%40cf7-google-map%2Ftrunk&old=2902257%40cf7-google-map%2Ftrunk&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/cf7-google-map/"
+    google-query: inurl:"/wp-content/plugins/cf7-google-map/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cf7-google-map,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cf7-google-map/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cf7-google-map"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.8.3')

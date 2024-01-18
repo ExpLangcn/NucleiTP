@@ -1,0 +1,57 @@
+id: better-search-fc67438cfecd3e3b92262b421309e32f
+
+info:
+  name: "Better Search <= 2.5.2 - Cross-Site Request Forgery to Settings Import"
+  author: topscoder
+  severity: high
+  description: "The Better Search plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 2.5.2. This makes it possible for unauthenticated attackers to import settings via forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2473344
+    - https://blog.nintechnet.com/multiple-wordpress-plugins-fixed-csrf-vulnerabilities-part-1/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/better-search/"
+    google-query: inurl:"/wp-content/plugins/better-search/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,better-search,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/better-search/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "better-search"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.5.3')

@@ -1,0 +1,58 @@
+id: contus-video-comments-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Contus Video Comments <= 1.0 - Authorization Bypass
+  author: topscoder
+  severity: medium
+  description: >
+    The Contus Video Comments plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the file_put_contents function in versions up to, and including, 1.0. This makes it possible for unauthenticated attackers to upload .jpg images anywhere in the WordPress installation.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/69bdd5e6-1334-42bc-a13f-215eb61733e7?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N
+    cvss-score: 5.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/contus-video-comments/"
+    google-query: inurl:"/wp-content/plugins/contus-video-comments/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contus-video-comments,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contus-video-comments/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contus-video-comments"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.0')

@@ -1,0 +1,56 @@
+id: bulk-delete-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Bulk Delete <= 5.5.3 - Missing Authorization"
+  author: topscoder
+  severity: high
+  description: "The Bulk Delete plugin for WordPress is vulnerable to missing authorization due to missing capability checks on several functions in versions before 5.5.4. This makes it possible for authenticated attackers to perform restricted actions which could lead to the arbitrary deletion of site content including pages, posts and users."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bulk-delete/"
+    google-query: inurl:"/wp-content/plugins/bulk-delete/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bulk-delete,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bulk-delete/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bulk-delete"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 5.5.4')

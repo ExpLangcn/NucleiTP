@@ -1,0 +1,58 @@
+id: annonces-701e42d4ac1d386a1411ece3c4c8616b
+
+info:
+  name: "Annonces <= 1.2.0.1 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Annonces plugin for WordPress is vulnerable to arbitrary file uploads due to missing file type validation in the 'theme.php' file in versions up to, and including, 1.2.0.1. This makes it possible for unauthenticated attackers to upload arbitrary files on the affected site's server which may make remote code execution possible."
+  reference:
+    - https://packetstormsecurity.com/files/113637/
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-annonces-theme-php-arbitrary-file-upload-1-2-0-1/
+    - https://plugins.trac.wordpress.org/changeset?sfp_email=&sfph_mail=&reponame=&old=561064%40annonces&new=561064%40annonces&sfp_email=&sfph_mail=
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 9.8
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/annonces/"
+    google-query: inurl:"/wp-content/plugins/annonces/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,annonces,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/annonces/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "annonces"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.2.0.1')

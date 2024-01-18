@@ -1,0 +1,60 @@
+id: contact-us-page-contact-people-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "a3 Lazy Load <= 2.6.0 - Cross-Site Request Forgery to Settings Reset"
+  author: topscoder
+  severity: medium
+  description: "The following plugins for WordPress are vulnerable to Cross-Site Request Forgery:
+
+a3 Lazy Load (<= 2.6.0), Contact Us Page – Contact People (<= 3.6.1), a3 Portfolio (<= 3.0.1), Dynamic Product Gallery for WooCommerce (3.0.1), a3 Responsive Slider (<= 2.2.0), Compare Products for WooCommerce (<= 2.8.2), Products Quick View for WooCommerce (<= 2.0.1), Product Sort and Display for WooCommerce (<= 2.2.2), Product Widget Slider for WooCommerce (), WP Email Template (<= 2.6.2).
+
+This is due to missing nonce validation on the reset_settings() function. This makes it possible for unauthenticated attackers to reset the plugin's settings via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-us-page-contact-people/"
+    google-query: inurl:"/wp-content/plugins/contact-us-page-contact-people/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-us-page-contact-people,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-us-page-contact-people/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-us-page-contact-people"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  3.6.1')

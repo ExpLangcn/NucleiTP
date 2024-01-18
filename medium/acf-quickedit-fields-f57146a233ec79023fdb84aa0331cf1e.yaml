@@ -1,0 +1,57 @@
+id: acf-quickedit-fields-f57146a233ec79023fdb84aa0331cf1e
+
+info:
+  name: "ACF Quick Edit Fields <= 3.2.2 - Authenticated (Contributor+) Insecure Direct Object Reference"
+  author: topscoder
+  severity: medium
+  description: "The plugin ACF Quick Edit Fields for WordPress is vulnerable to Insecure Direct Object Reference in versions up to, and including, 3.2.2. This makes it possible for attackers without the edit_users capability to access metadata of other users, this includes contributor-level users and above."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?new=2828750%40acf-quickedit-fields&old=2816195%40acf-quickedit-fields#file89
+    - https://wpscan.com/vulnerability/3538e80e-c2c5-4e7b-97c3-b7debad7a136
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/acf-quickedit-fields/"
+    google-query: inurl:"/wp-content/plugins/acf-quickedit-fields/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,acf-quickedit-fields,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/acf-quickedit-fields/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "acf-quickedit-fields"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.2.2')

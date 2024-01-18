@@ -1,0 +1,60 @@
+id: acurax-social-media-widget-625d78d10a9ef6fdfaf2846da8c52b1c
+
+info:
+  name: "Social Media Widget by Acurax < 2.2 - Stored Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Social Media Widget by Acurax plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the ‘acx_si_theme, acx_si_twitter, acx_si_facebook, acx_si_youtube, acx_si_linkedin, acx_si_gplus, acx_si_credi, $acx_si_icon_size, acx_si_display, acx_si_pinterest, acx_si_feed’ parameters in versions up to, and including, 2.2 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - http://cinu.pl/research/wp-plugins/mail_32bca56557b17f0f39d026e85cd878ab.html
+    - http://blog.cinu.pl/2015/11/php-static-code-analysis-vs-top-1000-wordpress-plugins.html
+    - https://wpscan.com/vulnerability/599da7b4-ad1c-4b4e-8531-ec672d2cac54
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-social-media-flying-icons-floating-social-media-icon-cross-site-scripting-2-1/
+    - https://patchstack.com/database/vulnerability/floating-social-media-icon/wordpress-floating-social-media-icon-plugin-2-1-stored-xss
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/acurax-social-media-widget/"
+    google-query: inurl:"/wp-content/plugins/acurax-social-media-widget/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,acurax-social-media-widget,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/acurax-social-media-widget/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "acurax-social-media-widget"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.2')

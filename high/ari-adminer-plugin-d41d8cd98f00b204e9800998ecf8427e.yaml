@@ -1,0 +1,58 @@
+id: ari-adminer-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    ARI-Adminer <= 1.1.14 - Missing Authorization and No Direct File Access Restrictions
+  author: topscoder
+  severity: high
+  description: >
+    The ARI-Adminer plugin for WordPress is vulnerable to authorization bypass due to a lack of file access controls in nearly every file of the plugin in versions up to, and including, 1.1.14. This makes it possible for unauthenticated attackers to call the files directly and perform a wide variety of unauthorized actions such as accessing a site's database and making changes.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/67ad04d4-49ef-4bc4-b3b0-f2752566145e?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:L
+    cvss-score: 7.3
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/ari-adminer/"
+    google-query: inurl:"/wp-content/plugins/ari-adminer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,ari-adminer,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/ari-adminer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "ari-adminer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.1.14')

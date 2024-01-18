@@ -1,0 +1,59 @@
+id: bbpress-c76ee00a532f6818b11e86567fc80cc2
+
+info:
+  name: "bbPress <= 2.5.9 - Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The bbPress plugin for WordPress is vulnerable to Cross-Site Scripting in versions up to, and including, 2.5.9 due to insufficient input sanitization and output escaping on user profile fields. This makes it possible for unauthorized attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+    - https://wptavern.com/bbpress-2-5-10-patches-security-vulnerability
+    - https://bbpress.org/blog/2016/07/bbpress-2-5-10-security-release/
+    - https://plugins.trac.wordpress.org/changeset/1454184/bbpress
+    - https://wpscan.com/vulnerability/53de59c4-82d4-4e51-ba74-9a905dc1b89d
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:N/I:L/A:N
+    cvss-score: 4.7
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/bbpress/"
+    google-query: inurl:"/wp-content/plugins/bbpress/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,bbpress,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/bbpress/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "bbpress"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.5.9')

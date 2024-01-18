@@ -1,0 +1,58 @@
+id: addon-elements-for-elementor-page-builder-45c8c982e8d86a32d35f8c1b86fb2a7c
+
+info:
+  name: "Elementor Addon Elements <= 1.6.3 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Elementor Addon Elements plugin for WordPress is vulnerable to Reflected Cross-Site Scripting via the tab parameter in versions up to, and including 1.6.3. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in administrative pages that execute if they can successfully trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://blog.sucuri.net/2020/09/reflected-xss-in-wordpress-plugin-admin-pages.html
+    - https://wordpress.org/plugins/addon-elements-for-elementor-page-builder/#developers
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-elementor-addon-elements-cross-site-request-forgery-1-6-3/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N
+    cvss-score: 6.1
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/addon-elements-for-elementor-page-builder/"
+    google-query: inurl:"/wp-content/plugins/addon-elements-for-elementor-page-builder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,addon-elements-for-elementor-page-builder,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/addon-elements-for-elementor-page-builder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "addon-elements-for-elementor-page-builder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 1.6.4')

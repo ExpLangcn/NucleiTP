@@ -1,0 +1,58 @@
+id: contus-video-gallery-4d6a5d8dcad5847c8838f17d2ae718d9
+
+info:
+  name: "WORDPRESS VIDEO GALLERY <= 3.0 - Improper Access Control"
+  author: topscoder
+  severity: medium
+  description: "The WORDPRESS VIDEO GALLERY plugin for WordPress is vulnerable to authorization bypass due to a missing capability check on the 'email' ajax action in versions up to, and including, 3.0. This makes it possible for unauthorized attackers to perform various malicious actions such as Denial of Service, Phishing, spam, etc."
+  reference:
+    - https://www.homelab.it/index.php/2015/05/22/wordpress-video-gallery-2-8-unprotected-mail-page/
+    - https://packetstormsecurity.com/files/132015/
+    - https://wpscan.com/vulnerability/3b5aa1dc-8d56-49f7-a273-05b198a038e3
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contus-video-gallery/"
+    google-query: inurl:"/wp-content/plugins/contus-video-gallery/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contus-video-gallery,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contus-video-gallery/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contus-video-gallery"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')

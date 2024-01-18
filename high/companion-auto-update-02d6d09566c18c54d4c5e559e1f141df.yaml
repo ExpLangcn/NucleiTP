@@ -1,0 +1,56 @@
+id: companion-auto-update-02d6d09566c18c54d4c5e559e1f141df
+
+info:
+  name: "Companion Auto Update <= 3.3.5 - Authenticated (Admin+) SQL Injection"
+  author: topscoder
+  severity: high
+  description: "The Companion Auto Update plugin for WordPress is vulnerable to SQL Injection in versions up to, and including, 3.3.5 due to insufficient escaping on the user supplied parameter and lack of sufficient preparation on several existing SQL queries. This makes it possible for authenticated attackers, with administrative privileges and above, to append additional SQL queries into already existing queries that can be used to extract sensitive information from the database."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset?reponame=&new=2012158%40companion-auto-update&old=2006778%40companion-auto-update
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:H/I:H/A:H
+    cvss-score: 7.2
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/companion-auto-update/"
+    google-query: inurl:"/wp-content/plugins/companion-auto-update/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,companion-auto-update,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/companion-auto-update/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "companion-auto-update"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 3.3.6')

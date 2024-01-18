@@ -1,0 +1,16 @@
+id: custom-weblogic-SSRF-detect
+
+info:
+        name: Custom-logapi-log-detect
+        author: 0xunknown
+        severity: low
+        tags: panel
+
+requests:
+        - method: GET
+          path:
+                  - "{{BaseURL}}/uddiexplorer/SearchPublicRegistries.jsp?operator=http://127.0.0.1:7001&rdoSearch=name&txtSearchname=&txtSearchkey=&txtSearchfor=&selfor=Business+location&btnSubmit=Search"
+          matchers:
+                  - type: word
+                    words:
+                            - "weblogic.uddi.client.structures.exception.XML_SoapException:"

@@ -1,0 +1,59 @@
+id: computer-repair-shop-34ea74e81a4828837f1c1298c9543ed7
+
+info:
+  name: "Computer Repair Shop < 2.0 - Authenticated (Admin+) Stored Cross-Site Scripting"
+  author: topscoder
+  severity: medium
+  description: "The Computer Repair Shop plugin for WordPress is vulnerable to Stored Cross-Site Scripting via several parameters in versions before 2.0 due to insufficient input sanitization and output escaping. This makes it possible for authenticated attackers with admin-level privileges to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page."
+  reference:
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-computer-repair-shop-cross-site-scripting-1-0/
+    - https://wordpress.org/plugins/computer-repair-shop/#developers
+    - https://web.archive.org/web/20200114060005/https%3A//jrjmulder.nl/plugins/computer-repair-shop/
+    - https://plugins.trac.wordpress.org/changeset/2225815
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:L/I:L/A:L
+    cvss-score: 6.6
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/computer-repair-shop/"
+    google-query: inurl:"/wp-content/plugins/computer-repair-shop/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,computer-repair-shop,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/computer-repair-shop/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "computer-repair-shop"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 2.0')

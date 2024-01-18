@@ -1,0 +1,59 @@
+id: addon-elements-for-elementor-page-builder-1e2c44001e2dcc76cee7af0f278492db
+
+info:
+  name: "Elementor Addon Elements <= 1.11.7 - Cross-Site Request Forgery"
+  author: topscoder
+  severity: medium
+  description: "The Elementor Addon Elements plugin for WordPress is vulnerable to Cross-Site Request Forgery in versions up to, and including, 1.11.7. This is due to missing or incorrect nonce validation on the eae_review() and fv_download_box() functions. This makes it possible for unauthenticated attackers to gain administrative access and force unwanted actions on other users via a forged request granted they can trick a site administrator into performing an action such as clicking on a link."
+  reference:
+    - https://plugins.trac.wordpress.org/changeset/2567099/
+    - https://wpscan.com/vulnerability/d2280397-2029-41f3-b5eb-be94044c42a5
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-elementor-addon-elements-cross-site-request-forgery-1-11-7/
+    - https://plugins.svn.wordpress.org/addon-elements-for-elementor-page-builder/trunk/readme.txt
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N
+    cvss-score: 6.5
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/addon-elements-for-elementor-page-builder/"
+    google-query: inurl:"/wp-content/plugins/addon-elements-for-elementor-page-builder/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,addon-elements-for-elementor-page-builder,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/addon-elements-for-elementor-page-builder/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "addon-elements-for-elementor-page-builder"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.11.7')

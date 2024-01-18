@@ -1,0 +1,56 @@
+id: contact-bank-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Contact Bank <= 2.0.225 - Reflected Cross-Site Scripting"
+  author: topscoder
+  severity: high
+  description: "The Contact Bank plugin for WordPress is vulnerable to Cross-Site Scripting via the 'form_id' parameter in versions before 2.0.226 due to insufficient input sanitization and output escaping. This makes it possible for attackers to inject arbitrary web scripts that execute in a victim's browser."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-bank/"
+    google-query: inurl:"/wp-content/plugins/contact-bank/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-bank,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-bank/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-bank"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 2.0.226')

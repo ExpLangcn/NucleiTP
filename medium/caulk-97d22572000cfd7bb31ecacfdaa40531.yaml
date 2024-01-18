@@ -1,0 +1,57 @@
+id: caulk-97d22572000cfd7bb31ecacfdaa40531
+
+info:
+  name: "Caulk (Unknown Versions) - Full Path Disclosure"
+  author: topscoder
+  severity: medium
+  description: "The Caulk theme for WordPress is vulnerable to Sensitive Data Exposure in all versions. This could allow unauthenticated attackers to extract sensitive sensitive data including the full path of the WordPress installation."
+  reference:
+    - https://packetstormsecurity.com/files/120632/
+    - https://themeforest.net/item/caulk/76108
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N
+    cvss-score: 5.3
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/themes/caulk/"
+    google-query: inurl:"/wp-content/themes/caulk/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-theme,caulk,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/themes/caulk/style.css"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Version: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "caulk"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '>0')

@@ -1,0 +1,56 @@
+id: all-in-one-wp-migration-40d498bb215a53af77b045b1c1b53b98
+
+info:
+  name: "All-in-One WP Migration <= 7.14 - Unauthenticated Backup Download"
+  author: topscoder
+  severity: medium
+  description: "The All-in-One WP Migration plugin for WordPress is vulnerable to unauthenticated arbitrary back-up downloads due to insufficient filename randomization that made it possible for unauthenticated attackers to brute force back-up filenames in unique situations in versions up to, and including, 7.14. This would make it possible for unauthenticated attackers to discover information from files contained in the back-ups that could be used to aid further attacks or lead to simply sensitive information disclosure."
+  reference:
+    - https://vavkamil.cz/2020/03/25/all-in-one-wp-migration/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:N/A:N
+    cvss-score: 5.9
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/all-in-one-wp-migration/"
+    google-query: inurl:"/wp-content/plugins/all-in-one-wp-migration/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,all-in-one-wp-migration,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/all-in-one-wp-migration/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "all-in-one-wp-migration"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '< 7.15')

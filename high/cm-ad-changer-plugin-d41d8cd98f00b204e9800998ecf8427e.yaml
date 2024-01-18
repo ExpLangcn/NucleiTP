@@ -1,0 +1,58 @@
+id: cm-ad-changer-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    CM Ad Changer <= 1.7.7 - Cross-Site Request Forgery to Stored Cross-Site Scripting
+  author: topscoder
+  severity: high
+  description: >
+    The CM Ad Changer plugin for WordPress is vulnerable to Stored Cross-Site Scripting via the Banner Title field in versions up to, and including, 1.7.7 due to insufficient input sanitization and output escaping. This makes it possible for unauthenticated attackers to inject arbitrary web scripts in pages that will execute whenever a user accesses an injected page, granted they can trick a site's administrator into performing an action such as clicking on a link.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/d96c9b04-6850-40ab-8006-81cca8a9dffe?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/cm-ad-changer/"
+    google-query: inurl:"/wp-content/plugins/cm-ad-changer/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,cm-ad-changer,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/cm-ad-changer/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "cm-ad-changer"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.7')

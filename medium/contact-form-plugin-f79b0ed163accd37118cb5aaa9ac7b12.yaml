@@ -1,0 +1,59 @@
+id: contact-form-plugin-f79b0ed163accd37118cb5aaa9ac7b12
+
+info:
+  name: "Contact Form <= 3.82 - Authorization Bypass"
+  author: topscoder
+  severity: medium
+  description: "The Contact Form plugin WordPress is vulnerable to authorization bypass in versions up to, and including, 3.82. This is due to missing capability checks and nonce validation on the add and remove language AJAX functions. This makes it possible for authenticated subscriber+ attackers to use the AJAX actions to manipulate the language of the vulnerable service and potentially inject malicious web scripts."
+  reference:
+    - https://vexatioustendencies.com/wordpress-plugin-vulnerability-dump-part-1/
+    - https://wpscan.com/vulnerability/ec09b5aa-7c0a-452f-be66-a475095dd51f
+    - https://patchstack.com/database/vulnerability/contact-form/wordpress-contact-form-plugin-3-82-unauthorized-language-manipulation
+    - https://www.acunetix.com/vulnerabilities/web/wordpress-plugin-contact-form-by-bestwebsoft-cross-site-request-forgery-3-82/
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:L/A:N
+    cvss-score: 6.4
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contact-form-plugin/"
+    google-query: inurl:"/wp-content/plugins/contact-form-plugin/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contact-form-plugin,medium
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contact-form-plugin/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contact-form-plugin"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 3.82')

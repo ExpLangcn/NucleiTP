@@ -1,0 +1,22 @@
+id: hp-color-laserjet-m652-webserver
+
+info:
+  name: HP Color LaserJet M652 Web Server 
+  author: alexrydzak
+  severity: info
+  tags: ricoh,web,panel
+
+requests:
+  - method: GET
+    path:
+      - "{{BaseURL}}/hp/device/DeviceStatus/Index"
+
+    matchers-condition: and
+    matchers:
+      - type: word
+        words:
+          - '<strong class="product">HP Color LaserJet M652</strong>'
+
+      - type: status
+        status:
+          - 200

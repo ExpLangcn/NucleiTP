@@ -1,0 +1,56 @@
+id: contus-video-galleryversion-10-d41d8cd98f00b204e9800998ecf8427e
+
+info:
+  name: "Contus Video Gallery <= 1.3 - Arbitrary File Upload"
+  author: topscoder
+  severity: critical
+  description: "The Contus Video Gallery plugin for WordPress is vulnerable to Arbitrary File Upload due to missing file type validation via the upload1.php file in versions up to, and including, 1.3. This makes it possible for attackers to upload arbitrary files on the affected sites server which may make remote code execution possible."
+  reference:
+
+  classification:
+    cvss-metrics:
+    cvss-score:
+    cve-id:
+  metadata:
+    fofa-query: "wp-content/plugins/contus-video-galleryversion-10/"
+    google-query: inurl:"/wp-content/plugins/contus-video-galleryversion-10/"
+    shodan-query: 'vuln:'
+  tags: cve,wordpress,wp-plugin,contus-video-galleryversion-10,critical
+
+http:
+  - method: GET
+    redirects: true
+    max-redirects: 3
+    path:
+      - "{{BaseURL}}/wp-content/plugins/contus-video-galleryversion-10/readme.txt"
+
+    extractors:
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        internal: true
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+      - type: regex
+        name: version
+        part: body
+        group: 1
+        regex:
+          - "(?mi)Stable tag: ([0-9.]+)"
+
+    matchers-condition: and
+    matchers:
+      - type: status
+        status:
+          - 200
+
+      - type: word
+        words:
+          - "contus-video-galleryversion-10"
+        part: body
+
+      - type: dsl
+        dsl:
+          - compare_versions(version, '<=  1.3')
