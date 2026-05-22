@@ -13,19 +13,19 @@ requests:
         GET / HTTP/1.1
         Host: {{Hostname}}
         User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
-        §header§: https://9a7d-183-82-25-4.ngrok.io
+        §header§: https://{{interactsh-url}}
          
       - |
         POST / HTTP/1.1
         Host: {{Hostname}}
         User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
-        §header§: https://9a7d-183-82-25-4.ngrok.io
+        §header§: https://{{interactsh-url}}
 
       - |  
         PUT / HTTP/1.1
         Host: {{Hostname}}
         User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101 Firefox/78.0
-        §header§: https://9a7d-183-82-25-4.ngrok.io
+        §header§: https://{{interactsh-url}}
 
     payloads:
       header: helpers/payloads/request-headers.txt

